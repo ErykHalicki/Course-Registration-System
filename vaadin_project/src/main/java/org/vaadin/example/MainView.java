@@ -47,9 +47,9 @@ public class MainView extends VerticalLayout {
 
         // Sample data
         List<Course> courses = List.of(
-            new Course("Math 101", 30, 25),
-            new Course("Physics 201", 40, 38),
-            new Course("Computer Science 305", 50, 45)
+            new Course("MATH 101", 30, 25),
+            new Course("PHYS 201", 40, 38),
+            new Course("COSC 305", 50, 45)
         );
 
         // Set grid items

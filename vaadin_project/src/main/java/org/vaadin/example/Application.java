@@ -14,7 +14,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  *
  */
 @SpringBootApplication
-@PWA(name = "Project Base for Vaadin with Spring", shortName = "Project Base")
+@PWA(name = "RecordRangers", shortName = "RR")
 @Theme("my-theme")
 public class Application implements AppShellConfigurator {
 
