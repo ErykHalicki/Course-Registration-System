@@ -1,4 +1,5 @@
-package org.vaadin.example.models;
+package recordrangers.models;
+
 import java.util.*;
 //change to only be neccessary imports
 

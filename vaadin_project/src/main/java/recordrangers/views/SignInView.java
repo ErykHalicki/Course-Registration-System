@@ -1,4 +1,4 @@
-package org.vaadin.example.views;
+package recordrangers.views;
 
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.formlayout.FormLayout;

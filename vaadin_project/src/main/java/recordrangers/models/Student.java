@@ -1,4 +1,4 @@
-package org.vaadin.example.models;
+package recordrangers.models;
 public class Student extends User{
 	enum Standing {
 		Good,

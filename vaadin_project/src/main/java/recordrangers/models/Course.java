@@ -1,4 +1,4 @@
-package org.vaadin.example.models;
+package recordrangers.models;
 
 public class Course {
     private String name;

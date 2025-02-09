@@ -1,5 +1,6 @@
-package org.vaadin.example.views;
+package recordrangers.views;
 
+import recordrangers.models.Course;
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.button.Button;
