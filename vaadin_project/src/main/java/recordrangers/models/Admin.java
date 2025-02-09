@@ -1,4 +1,6 @@
 package recordrangers.models;
+import java.util.List;
+
 public class Admin extends User{
 	enum Level {
 		Super,
@@ -9,7 +11,6 @@ public class Admin extends User{
 	//enum allows for scaling to more types of admins (department head, TA, etc.)
 	
 	Level admin_level;
-	// List<Course> assigned_courses; 
+	List<Course> assigned_courses; 
 	// Super admins will have this field blank
-	// add once course class definition is merged
 }
