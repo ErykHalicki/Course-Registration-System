@@ -1,3 +1,4 @@
+package org.vaadin.example.models;
 public class Student extends User{
 	enum Standing {
 		Good,

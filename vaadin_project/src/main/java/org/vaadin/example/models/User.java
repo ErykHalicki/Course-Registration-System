@@ -1,3 +1,4 @@
+package org.vaadin.example.models;
 import java.util.*;
 //change to only be neccessary imports
 

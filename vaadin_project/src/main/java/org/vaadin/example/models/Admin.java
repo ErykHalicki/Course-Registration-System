@@ -1,3 +1,4 @@
+package org.vaadin.example.models;
 public class Admin extends User{
 	enum Level {
 		Super,
