@@ -21,13 +21,13 @@ public class StudentDatabaseExporter {
              ResultSet rs = stmt.executeQuery("SELECT * FROM students")) { // Selects everything from STUDENTS database.
 
             while (rs.next()) {
-                students.add(new Student(/* The getters will change based on Student attributes in the database.
-                
-                                         rs.getInt("id"),       
-                                         rs.getString("name"), 
-                                         rs.getInt("age"), 
-                                         rs.getString("grade")));
-                                         */
+                students.add(new Student());
+                // The getters will change based on Student attributes in the database.
+                // students.add(new Student(
+                //     rs.getInt("id"),       
+                //     rs.getString("name"), 
+                //     rs.getInt("age"), 
+                //     rs.getString("grade")));
             }
         } catch (Exception e) {
             e.printStackTrace();

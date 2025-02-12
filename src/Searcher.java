@@ -7,7 +7,7 @@ public class Searcher {
 	static public List<Course> searchCourseByName(String name, List<Course> courses){
 		List<Course> result = new ArrayList<Course>();
 		for(Course c: courses) {
-			if(c.name.contains(name)) {
+			if(c.courseName.contains(name)) {
 				result.add(c);
 			}
 		}
