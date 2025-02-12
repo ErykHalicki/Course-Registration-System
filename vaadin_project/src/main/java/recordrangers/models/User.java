@@ -1,3 +1,5 @@
+package recordrangers.models;
+
 import java.util.*;
 //change to only be neccessary imports
 
