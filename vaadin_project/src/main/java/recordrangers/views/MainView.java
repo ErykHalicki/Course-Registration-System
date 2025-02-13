@@ -41,16 +41,16 @@ public class MainView extends VerticalLayout {
     	Grid<Course> courseGrid = new Grid<>(Course.class);
         
         // Define columns (you can also customize column headers)
-        courseGrid.setColumns("name", "capacity", "enrollment");
-        courseGrid.getColumnByKey("name").setHeader("Course Name");
-        courseGrid.getColumnByKey("capacity").setHeader("Capacity");
+        courseGrid.setColumns("courseName", "maxCapacity", "enrollment");
+        courseGrid.getColumnByKey("courseName").setHeader("Course Name");
+        courseGrid.getColumnByKey("maxCapacity").setHeader("Capacity");
         courseGrid.getColumnByKey("enrollment").setHeader("Enrolled");
 
         // Sample data
         List<Course> courses = List.of(
-            new Course("MATH 101", 30, 25),
-            new Course("PHYS 201", 40, 38),
-            new Course("COSC 305", 50, 45)
+            new Course("MATH101", 30, 25),
+            new Course("PHYS201", 40, 38),
+            new Course("COSC305", 50, 45)
         );
 
         // Set grid items
