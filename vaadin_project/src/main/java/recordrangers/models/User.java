@@ -1,5 +1,7 @@
 package recordrangers.models;
 
+import java.sql.Timestamp;
+
 public class User {
     private int userId; // Primary key, auto-incremented
     private String firstName;
@@ -10,6 +12,9 @@ public class User {
     private Timestamp createdAt;
     private Timestamp updatedAt;
     
+    public User() {
+    
+    }
     // Constructor for creating a new user (without userId and timestamps)
     public User(String firstName, String lastName, String email, String password, String profilePhoto) {
         this.firstName = firstName;
