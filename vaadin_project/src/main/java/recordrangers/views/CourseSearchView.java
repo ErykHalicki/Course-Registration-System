@@ -61,4 +61,11 @@ public class CourseSearchView extends VerticalLayout {
                 .filter(course -> course.getCourseName().toLowerCase().contains(lowerCaseQuery))
                 .collect(Collectors.toList());
     }
+    public TextField getSearchField() {
+        return searchField;
+    }
+
+    public Grid<Course> getCourseGrid() {
+        return courseGrid;
+    }
 }
