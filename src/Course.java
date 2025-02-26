@@ -1,14 +1,20 @@
-import java.sql.*;
 
 class Course {
     public int courseId;
     public String courseCode;
     public String courseName;
+    public int numCredits;
+    public String description;
     public int maxCapacity;
     public String schedule;
+    public String location;
        
-	public Course(){}
-	public Course(String courseCode) {}
+	public Course(){
+
+    }
+	public Course(String courseCode) {
+        this.courseCode = courseCode;
+    }
     public Course(int courseId, String courseCode, String courseName, int maxCapacity, String schedule) {
         this.courseId = courseId;
         this.courseCode = courseCode;
@@ -16,38 +22,60 @@ class Course {
         this.maxCapacity = maxCapacity;
         this.schedule = schedule;
     }
-
-    public static Course getCourseDetails(int courseId) {
-        String query = "SELECT * FROM courses WHERE course_id = ?";
-        try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/your_database", "your_username", "your_password");
-             PreparedStatement stmt = conn.prepareStatement(query)) {
-            stmt.setInt(1, courseId);
-            ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                return new Course(
-                    rs.getInt("course_id"),
-                    rs.getString("course_code"),
-                    rs.getString("course_name"),
-                    rs.getInt("max_capacity"),
-                    rs.getString("schedule")
-                );
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
+    public int getCourseId() {
+        return courseId;
     }
-
-    public static boolean updateCourseCapacity(int courseId, int newCapacity) {
-        String query = "UPDATE courses SET max_capacity = ? WHERE course_id = ?";
-        try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/your_database", "your_username", "your_password");
-             PreparedStatement stmt = conn.prepareStatement(query)) {
-            stmt.setInt(1, newCapacity);
-            stmt.setInt(2, courseId);
-            return stmt.executeUpdate() > 0;
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return false;
+    public String getCourseCode() {
+        return courseCode;
+    }
+    public String getCourseName() {
+        return courseName;
+    }
+    public int getNumCredits() {
+        return numCredits;
+    }
+    public String getDescription() {
+        return description;
+    }
+    public int getMaxCapacity() {
+        return maxCapacity;
+    }
+    public String getSchedule() {
+        return schedule;
+    }
+    public String getLocation() {
+        return location;
+    }
+    public void setCourseId(int courseId) {
+        this.courseId = courseId;
+    }
+    public void setCourseCode(String courseCode) {
+        this.courseCode = courseCode;
+    }
+    public void setCourseName(String courseName) {
+        this.courseName = courseName;
+    }
+    public void setNumCredits(int numCredits) {
+        this.numCredits = numCredits;
+    }
+    public void setDescription(String description) {
+        this.description = description;
+    }
+    public void setMaxCapacity(int maxCapacity) {
+        this.maxCapacity = maxCapacity;
+    }
+    public void setSchedule(String schedule) {
+        this.schedule = schedule;
+    }
+    public void setLocation(String location) {
+        this.location = location;
+    }
+    @Override
+    public String toString() {
+        return "Course ID: " + courseId + "\n" +
+               "Course Code: " + courseCode + "\n" +
+               "Course Name: " + courseName + "\n" +
+               "Max Capacity: " + maxCapacity + "\n" +
+               "Schedule: " + schedule;
     }
 }
