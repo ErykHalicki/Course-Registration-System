@@ -7,6 +7,9 @@ import com.vaadin.flow.component.login.LoginOverlay;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.router.Route;
 
+import recordrangers.models.User;
+import recordrangers.models.Auth;
+
 @Route
 public class LoginView extends Composite<LoginOverlay> {
     
