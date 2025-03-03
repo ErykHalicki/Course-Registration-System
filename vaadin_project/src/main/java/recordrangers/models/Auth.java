@@ -6,12 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class Auth {
-    private final Connection con = ConnectionManager.getConnection();
-    public static void main(String[] args) {
-       
-    }
-
-   
+    private Connection con; // = ConnectionManager.getConnection();
 
     public User signIn(String email, String password) throws SQLException{
         String query = 
@@ -42,7 +37,7 @@ public class Auth {
         String updatedLast = rst.getString("updated_last");
 
         // create the user
-        User user = new User(userId, firstName, lastName, email, password, createdAt, updatedLast);
+        User user = new User(); //new User(userId, firstName, lastName, email, password, createdAt, updatedLast);
         
         return user;
     }
