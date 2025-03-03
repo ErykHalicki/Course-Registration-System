@@ -1,5 +1,7 @@
+package recordrangers.models;
 import java.sql.*;
 import java.util.ArrayList;
+
 public class CourseSearch {
 
     private static final String DB_URL = "jdbc:mysql://localhost:3306/your_database";

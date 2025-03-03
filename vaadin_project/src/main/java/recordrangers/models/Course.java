@@ -1,13 +1,14 @@
+package recordrangers.models;
 
-class Course {
+public class Course {
     public int courseId;
     public String courseCode;
-    public String courseName;
     public int numCredits;
     public String description;
     public int maxCapacity;
     public String schedule;
     public String location;
+    public int enrollment;
        
 	public Course(){
 
@@ -15,10 +16,14 @@ class Course {
 	public Course(String courseCode) {
         this.courseCode = courseCode;
     }
+	public Course(String courseCode, int max, int current) {
+        this.courseCode = courseCode;
+        this.maxCapacity = max;
+        this.enrollment = current;
+    }
     public Course(int courseId, String courseCode, String courseName, int maxCapacity, String schedule) {
         this.courseId = courseId;
         this.courseCode = courseCode;
-        this.courseName = courseName;
         this.maxCapacity = maxCapacity;
         this.schedule = schedule;
     }
@@ -28,9 +33,6 @@ class Course {
     public String getCourseCode() {
         return courseCode;
     }
-    public String getCourseName() {
-        return courseName;
-    }
     public int getNumCredits() {
         return numCredits;
     }
@@ -39,6 +41,9 @@ class Course {
     }
     public int getMaxCapacity() {
         return maxCapacity;
+    }
+    public int getEnrollment() {
+        return enrollment;
     }
     public String getSchedule() {
         return schedule;
@@ -52,9 +57,6 @@ class Course {
     public void setCourseCode(String courseCode) {
         this.courseCode = courseCode;
     }
-    public void setCourseName(String courseName) {
-        this.courseName = courseName;
-    }
     public void setNumCredits(int numCredits) {
         this.numCredits = numCredits;
     }
@@ -63,6 +65,9 @@ class Course {
     }
     public void setMaxCapacity(int maxCapacity) {
         this.maxCapacity = maxCapacity;
+    }
+    public void setEnrollment(int enrollment) {
+        this.enrollment = enrollment;
     }
     public void setSchedule(String schedule) {
         this.schedule = schedule;
@@ -74,7 +79,6 @@ class Course {
     public String toString() {
         return "Course ID: " + courseId + "\n" +
                "Course Code: " + courseCode + "\n" +
-               "Course Name: " + courseName + "\n" +
                "Max Capacity: " + maxCapacity + "\n" +
                "Schedule: " + schedule;
     }

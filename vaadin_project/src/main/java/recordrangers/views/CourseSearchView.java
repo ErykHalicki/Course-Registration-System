@@ -33,7 +33,7 @@ public class CourseSearchView extends VerticalLayout {
         searchLayout.setSpacing(true);
 
         // Configure grid
-        courseGrid.setColumns("courseName", "maxCapacity", "enrollment");
+        courseGrid.setColumns("courseCode", "maxCapacity", "enrollment");
         courseGrid.setItems(searchCoursesByString("")); // Initial dummy data
 
         // Add components to the layout
@@ -58,7 +58,7 @@ public class CourseSearchView extends VerticalLayout {
 
         // Filter courses where the name contains the search query
         return allCourses.stream()
-                .filter(course -> course.getCourseName().toLowerCase().contains(lowerCaseQuery))
+                .filter(course -> course.getCourseCode().toLowerCase().contains(lowerCaseQuery))
                 .collect(Collectors.toList());
     }
     public TextField getSearchField() {

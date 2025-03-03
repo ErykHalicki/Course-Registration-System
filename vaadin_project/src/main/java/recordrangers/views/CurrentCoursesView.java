@@ -13,7 +13,7 @@ public class CurrentCoursesView extends VerticalLayout {
 
     public CurrentCoursesView() {
         Grid<Course> courseGrid = new Grid<>(Course.class);
-        courseGrid.setColumns("courseName");
+        courseGrid.setColumns("courseCode");
 
         List<Course> enrolledCourses = List.of(
                 new Course("MATH101", 30, 25),

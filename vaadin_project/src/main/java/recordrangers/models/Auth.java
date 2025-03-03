@@ -1,4 +1,4 @@
-package cosc360.login;
+package recordrangers.models;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -39,10 +39,10 @@ public class Auth {
         String email = rst.getString("email");
         String password = rst.getString("password");
         String createdAt = rst.getString("created_at");
-        String udatedLast = rst.getString("updated_last");
+        String updatedLast = rst.getString("updated_last");
 
         // create the user
-        User user = new User(userId, firstName, lastName, email, password, createdAt, udatedLast);
+        User user = new User(userId, firstName, lastName, email, password, createdAt, updatedLast);
         
         return user;
     }

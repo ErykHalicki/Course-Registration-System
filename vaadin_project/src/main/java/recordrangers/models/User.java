@@ -1,6 +1,8 @@
+package recordrangers.models;
+
 import java.sql.*;
 
-class User {
+public class User {
     private int userId;
     private String firstName;
     private String lastName;

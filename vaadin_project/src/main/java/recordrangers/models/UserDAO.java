@@ -1,3 +1,4 @@
+package recordrangers.models;
 import java.sql.*;
 
 public class UserDAO extends User {
