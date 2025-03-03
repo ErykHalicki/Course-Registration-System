@@ -1,16 +1,25 @@
 package recordrangers.models;
-import java.util.List;
+import java.sql.*;
 
 public class Admin extends User{
-	enum Level {
-		Super,
-		Course
-	}
-	//Super admin: can assign and remove course admins, as well as students in all courses
-	//Course admin: can assign and remove students within their courses
-	//enum allows for scaling to more types of admins (department head, TA, etc.)
-	
-	Level admin_level;
-	List<Course> assigned_courses; 
-	// Super admins will have this field blank
+    private String role;
+    public Admin(){
+        super();
+    }
+    public Admin(int userId, String firstName, String lastName, String email, String password, UserType userType, byte[] profilePicture, Timestamp timeCreated, Timestamp timeUpdated, String role){
+        super(userId, firstName, lastName, email, password, User.UserType.ADMIN, profilePicture, timeCreated, timeUpdated);
+        this.role = role;
+    }
+    public String getRole() {
+        return role;
+    }
+    public void setRole(String role) {
+        this.role = role;
+    }
+    @Override
+    public String toString() {
+        return "Admin{" +
+                "role='" + role + '\'' +
+                '}';
+    }
 }

@@ -1,78 +1,85 @@
 package recordrangers.models;
 
-import java.util.List;
-import java.util.ArrayList;
-
 public class Course {
-    private int courseId;
-    private String courseCode;
-    private String courseName;
-    private int maxCapacity;
-    private String schedule;
-    private int enrollment;
-    private List<Student> enrolledStudents;
-    private List<Student> waitlistedStudents;
+    public int courseId;
+    public String courseCode;
+    public int numCredits;
+    public String description;
+    public int maxCapacity;
+    public String schedule;
+    public String location;
+    public int enrollment;
+       
+	public Course(){
 
-    public Course() {
-    	
     }
-    
-    public Course (String courseName, int maxCapacity, int enrolledStudentsAmount) {
-    	this.courseName = courseName;
-    	this.maxCapacity = maxCapacity;
-    	this.enrolledStudents = new ArrayList<Student>();
-    	for(int i = 0; i < enrolledStudentsAmount; i++) {
-    		this.enrolledStudents.add(new Student()); // adding dummy students
-    	}
-    	enrollment = enrolledStudentsAmount;
+	public Course(String courseCode) {
+        this.courseCode = courseCode;
     }
-    
-    // Getters and Setters
+	public Course(String courseCode, int max, int current) {
+        this.courseCode = courseCode;
+        this.maxCapacity = max;
+        this.enrollment = current;
+    }
+    public Course(int courseId, String courseCode, String courseName, int maxCapacity, String schedule) {
+        this.courseId = courseId;
+        this.courseCode = courseCode;
+        this.maxCapacity = maxCapacity;
+        this.schedule = schedule;
+    }
     public int getCourseId() {
         return courseId;
     }
-
-    public void setCourseId(int courseId) {
-        this.courseId = courseId;
-    }
-
     public String getCourseCode() {
         return courseCode;
     }
-
-    public void setCourseCode(String courseCode) {
-        this.courseCode = courseCode;
+    public int getNumCredits() {
+        return numCredits;
     }
-
-    public String getCourseName() {
-        return courseName;
+    public String getDescription() {
+        return description;
     }
-
-    public void setCourseName(String courseName) {
-        this.courseName = courseName;
-    }
-
     public int getMaxCapacity() {
         return maxCapacity;
     }
-
-    public void setMaxCapacity(int maxCapacity) {
-        this.maxCapacity = maxCapacity;
-    }
-    
     public int getEnrollment() {
         return enrollment;
     }
-
-    public void setEnrollment(int enrollment) {
-        this.enrollment = maxCapacity;
-    }
-
     public String getSchedule() {
         return schedule;
     }
-
+    public String getLocation() {
+        return location;
+    }
+    public void setCourseId(int courseId) {
+        this.courseId = courseId;
+    }
+    public void setCourseCode(String courseCode) {
+        this.courseCode = courseCode;
+    }
+    public void setNumCredits(int numCredits) {
+        this.numCredits = numCredits;
+    }
+    public void setDescription(String description) {
+        this.description = description;
+    }
+    public void setMaxCapacity(int maxCapacity) {
+        this.maxCapacity = maxCapacity;
+    }
+    public void setEnrollment(int enrollment) {
+        this.enrollment = enrollment;
+    }
     public void setSchedule(String schedule) {
         this.schedule = schedule;
+    }
+    public void setLocation(String location) {
+        this.location = location;
+    }
+    @Override
+    public String toString() {
+        return "Course ID: " + courseId + "\n" +
+               "Course Code: " + courseCode + "\n" +
+               "Max Capacity: " + maxCapacity + "\n" +
+               "Schedule: " + schedule;
     }
 }

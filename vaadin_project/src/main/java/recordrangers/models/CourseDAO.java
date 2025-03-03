@@ -1,12 +1,66 @@
 import java.sql.*;
-import org.junit.jupiter.api.*;
-import static org.junit.jupiter.api.Assertions.*;
+import java.util.*;
 
 public class CourseDAO {
-    private Connection connection;
+    private static Connection connection;
 
-    public CourseDAO(Connection connection) {
-        this.connection = connection;
+    public CourseDAO() throws SQLException{
+        CourseDAO.connection = DatabaseConnection.getConnection();
+    }
+    public CourseDAO(Connection connection){
+        CourseDAO.connection = connection;
+    }
+    public ArrayList<Course> searchByCourseName(String name) throws SQLException{
+        ArrayList<Course> courses = new ArrayList<>();
+        String sql = 
+        "SELECT code, name " + 
+        "FROM Courses " +
+        "WHERE code = ? OR name = ?";
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+        pstmt.setString(1, name);
+        pstmt.setString(1, name);
+            try (ResultSet rst = pstmt.executeQuery()){
+                while(rst.next()){
+                    String currentCode = rst.getString("code");
+                    Course currentCourse = new Course(currentCode);
+                    courses.add(currentCourse);
+                }
+            }
+        }
+
+        return courses;
+    }
+
+    public static Course getCourseDetails(int courseId) {
+        String query = "SELECT * FROM courses WHERE course_id = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setInt(1, courseId);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return new Course(
+                    rs.getInt("course_id"),
+                    rs.getString("course_code"),
+                    rs.getString("course_name"),
+                    rs.getInt("max_capacity"),
+                    rs.getString("schedule")
+                );
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static boolean updateCourseCapacity(int courseId, int newCapacity) {
+        String query = "UPDATE courses SET max_capacity = ? WHERE course_id = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setInt(1, newCapacity);
+            stmt.setInt(2, courseId);
+            return stmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     // Method to add a student to the waitlist if the course is full
@@ -40,49 +94,5 @@ public class CourseDAO {
             System.err.println("Error adding student to waitlist: " + e.getMessage());
         }
         return false;
-    }
-
-    // ================= UNIT TESTS BELOW =================
-
-    private static Connection testConnection;
-    private static CourseDAO courseDAO;
-
-    @BeforeAll
-    public static void setupDatabaseConnection() {
-        try {
-            testConnection = DriverManager.getConnection("jdbc:mysql://localhost:3306/your_database", "your_user", "your_password");
-            courseDAO = new CourseDAO(testConnection);
-        } catch (SQLException e) {
-            fail("Database connection failed: " + e.getMessage());
-        }
-    }
-
-    @AfterAll
-    public static void closeDatabaseConnection() {
-        try {
-            if (testConnection != null) {
-                testConnection.close();
-            }
-        } catch (SQLException e) {
-            System.err.println("Error closing database connection: " + e.getMessage());
-        }
-    }
-
-    @Test
-    public void testAddStudentToWaitlist() {
-        int studentId = 105;  // Example student ID
-        int courseId = 302;   // Example course ID that is full
-
-        boolean isWaitlisted = courseDAO.addStudentToWaitlist(studentId, courseId);
-        assertTrue(isWaitlisted, "Student should be added to the waitlist if the course is full");
-
-        // Cleanup: Remove test waitlist entry
-        try (PreparedStatement stmt = testConnection.prepareStatement("DELETE FROM waitlists WHERE student_id = ? AND course_id = ?")) {
-            stmt.setInt(1, studentId);
-            stmt.setInt(2, courseId);
-            stmt.executeUpdate();
-        } catch (SQLException e) {
-            System.err.println("Failed to delete test waitlist entry: " + e.getMessage());
-        }
     }
 }
