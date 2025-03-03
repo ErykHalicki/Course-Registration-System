@@ -28,7 +28,8 @@ public class MainLayout extends AppLayout {
         VerticalLayout menu = new VerticalLayout(
                 new RouterLink("Course Registration", CourseRegistrationView.class),
                 new RouterLink("Profile", ProfileView.class),
-                new RouterLink("Current Courses", CurrentCoursesView.class)
+                new RouterLink("Current Courses", CurrentCoursesView.class),
+                new RouterLink("Course Search", CourseSearchView.class)
         );
 
         addToDrawer(menu);

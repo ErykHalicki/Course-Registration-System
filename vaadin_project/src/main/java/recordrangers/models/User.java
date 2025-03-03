@@ -1,56 +1,105 @@
-package recordrangers.models;
+import java.sql.*;
 
-import java.sql.Timestamp;
-
-public class User {
-    private int userId; // Primary key, auto-incremented
+class User {
+    private int userId;
     private String firstName;
     private String lastName;
     private String email;
     private String password;
-    private String profilePhoto; // URL or file path
-    private Timestamp createdAt;
-    private Timestamp updatedAt;
-    
-    public User() {
-    
+    private UserType userType;
+    private byte[] profilePicture;
+    private Timestamp timeCreated;
+    private Timestamp timeUpdated;
+
+    public User(){
+        super();
     }
     
-    // Constructor for creating a new user (without userId and timestamps)
-    public User(String firstName, String lastName, String email, String password, String profilePhoto) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.password = password;
-        this.profilePhoto = profilePhoto;
-    }
-    
-    // Constructor for retrieving user from DB
-    public User(int userId, String firstName, String lastName, String email, String password, String profilePhoto, Timestamp createdAt, Timestamp updatedAt) {
+    public User(int userId, String firstName, String lastName, String email, String password, UserType userType, byte[] profilePicture, Timestamp timeCreated, Timestamp timeUpdated) {
         this.userId = userId;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.password = password;
-        this.profilePhoto = profilePhoto;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
+        this.userType = userType;
+        this.profilePicture = profilePicture;
+        this.timeCreated = timeCreated;
+        this.timeUpdated = timeUpdated;
+
+    }
+
+    public static enum UserType{
+        STUDENT, ADMIN
+    }
+    public UserType getUserType() {
+        return userType;
+    }
+    public static UserType getUserTypeFromResultSet(ResultSet rs) throws SQLException {
+        String typeStr = rs.getString("user_type"); // Read from column
+        return (typeStr != null) ? UserType.valueOf(typeStr) : null;
     }
     
-    // Getters and Setters
-    public int getUserId() { return userId; }
-    public String getFirstName() { return firstName; }
-    public String getLastName() { return lastName; }
-    public String getEmail() { return email; }
-    public String getPassword() { return password; }
-    public String getProfilePhoto() { return profilePhoto; }
-    public Timestamp getCreatedAt() { return createdAt; }
-    public Timestamp getUpdatedAt() { return updatedAt; }
-    
-    public void setFirstName(String firstName) { this.firstName = firstName; }
-    public void setLastName(String lastName) { this.lastName = lastName; }
-    public void setEmail(String email) { this.email = email; }
-    public void setPassword(String password) { this.password = password; }
-    public void setProfilePhoto(String profilePhoto) { this.profilePhoto = profilePhoto; }
-    public void setUpdatedAt(Timestamp updatedAt) { this.updatedAt = updatedAt; }
+    public void setUserType(UserType userType) {
+        this.userType = userType;
+    }
+    public int getUserId() {
+        return userId;
+    }
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+    public String getFirstName() {
+        return firstName;
+    }
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+    public String getLastName() {
+        return lastName;
+    }
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+    public String getEmail() {
+        return email;
+    }
+    public void setEmail(String email) {
+        this.email = email;
+    }
+    public String getPassword() {
+        return password;
+    }
+    public void setPassword(String password) {
+        this.password = password;
+    }
+    public byte[] getProfilePicture() {
+        return profilePicture;
+    }
+    public void setProfilePicture(byte[] profilePicture) {
+        this.profilePicture = profilePicture;
+    }
+    public Timestamp getTimeCreated() {
+        return timeCreated;
+    }
+    public void setTimeCreated(Timestamp timeCreated) {
+        this.timeCreated = timeCreated;
+    }
+    public Timestamp getTimeUpdated() {
+        return timeUpdated;
+    }
+    public void setTimeUpdated(Timestamp timeUpdated) {
+        this.timeUpdated = timeUpdated;
+    }
+    public String toString() {
+        return "User ID: " + userId + "\n" +
+               "First Name: " + firstName + "\n" +
+               "Last Name: " + lastName + "\n" +
+               "Email: " + email + "\n" +
+               "Password: " + password + "\n" +
+                "User Type: " + userType + "\n" +
+               "Profile Picture: " + profilePicture + "\n" +
+               "Time Created: " + timeCreated + "\n" +
+               "Time Updated: " + timeUpdated;
+    }
+
 }

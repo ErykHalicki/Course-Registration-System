@@ -1,71 +1,46 @@
-package recordrangers.models;
-import java.util.List;
-
-public class Student extends User{
-	enum Standing {
-		Good,
-		Warning,
-		Probation,
-		Suspension
-	}
-	
-	Standing academicStanding;
-	
-	private int yearLevel;
-	List<Course> enrolledCourses; 
+import java.sql.*;
+public class Student extends User {
     private int studentId;
-    private String fullName;
-    private String email;
-    private String phone;
-    private String address;
+    private Date enrollment_date;
+    private Status status;
 
-    // Getters and Setters
+    public Student(){
+        super();
+    }
+    public Student(int userId, String firstName, String lastName, String email, String password, byte[] profilePicture, Timestamp timeCreated, Timestamp timeUpdated, Date enrollment_date, Status status){
+        super(userId, firstName,lastName, email, password, UserType.STUDENT, profilePicture, timeCreated, timeUpdated);
+        this.studentId = userId;
+        this.enrollment_date = enrollment_date;
+        this.status = status;
+    }
+    public enum Status{
+        ACTIVE, INACTIVE, GRADUATED
+    }
     public int getStudentId() {
         return studentId;
     }
-
     public void setStudentId(int studentId) {
         this.studentId = studentId;
     }
-
-    public String getFullName() {
-        return fullName;
+    public Date getEnrollment_date() {
+        return enrollment_date;
     }
-
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
+    public void setEnrollment_date(Date enrollment_date) {
+        this.enrollment_date = enrollment_date;
     }
-
-    public String getEmail() {
-        return email;
+    public Status getStatus() {
+        return status;
     }
-
-    public void setEmail(String email) {
-        this.email = email;
+    public void setStatus(Status status) {
+        this.status = status;
     }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-    
-    public int getYearLevel() {
-        return yearLevel;
-    }
-
-    public void setYearLevel(int year) {
-        this.yearLevel = year;
+    @Override
+    public String toString() {
+        return "Student{" +
+                "studentId=" + studentId +
+                ", enrollment_date=" + enrollment_date +
+                ", status=" + status +
+                '}';
     }
     
 }
