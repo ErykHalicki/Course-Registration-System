@@ -1,4 +1,4 @@
-package recordrangers.models;
+package recordrangers.services;
 import java.sql.*;
 
 

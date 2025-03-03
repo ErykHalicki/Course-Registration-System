@@ -1,3 +1,4 @@
+package recordrangers.tests;
 import org.junit.jupiter.api.*;
 import java.sql.*;
 import java.util.*;

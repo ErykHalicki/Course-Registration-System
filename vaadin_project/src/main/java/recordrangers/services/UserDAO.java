@@ -1,5 +1,6 @@
-package recordrangers.models;
+package recordrangers.services;
 import java.sql.*;
+import recordrangers.models.User;
 
 public class UserDAO extends User {
     private static Connection connection;

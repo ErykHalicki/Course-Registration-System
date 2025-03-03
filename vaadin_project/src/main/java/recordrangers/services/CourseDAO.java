@@ -1,5 +1,7 @@
+package recordrangers.services;
 import java.sql.*;
 import java.util.*;
+import recordrangers.models.Course;
 
 public class CourseDAO {
     private static Connection connection;

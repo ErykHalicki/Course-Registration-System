@@ -1,4 +1,4 @@
-package recordrangers.models;
+package recordranangers.services;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
