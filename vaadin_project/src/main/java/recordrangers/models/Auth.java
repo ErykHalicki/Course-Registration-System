@@ -42,4 +42,5 @@ public class Auth {
         user.setProfilePicture(profilePicture);
         return user;
     }
+    public boolean isAdmin() {return false;}
 }

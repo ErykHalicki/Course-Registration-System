@@ -39,6 +39,7 @@ public class LoginView extends Composite<LoginOverlay> {
                     notification.show("Sign in failed. Invalid username or password!");
                 } else {
                     // route to either student home page or admin home page
+                	/*
                     if (auth.isStudent(user.getUserId())) {
                         // route to student home page
                     } else if (auth.isAdmin(user.getUserId())) {
@@ -47,6 +48,7 @@ public class LoginView extends Composite<LoginOverlay> {
                         Notification notification = new Notification();
                         notification.show("Sign in failed! ");
                     }
+                    */
 
                 }
                 } catch (SQLException ex) {
