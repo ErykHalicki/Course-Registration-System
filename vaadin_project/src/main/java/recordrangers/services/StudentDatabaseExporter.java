@@ -1,10 +1,16 @@
-package recordranangers.services;
+package recordrangers.services;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+
+import recordrangers.models.Student;
+
 
 public class StudentDatabaseExporter {
     private static Connection connection;
@@ -12,6 +18,7 @@ public class StudentDatabaseExporter {
     public StudentDatabaseExporter() throws SQLException{
        StudentDatabaseExporter.connection = DatabaseConnection.getConnection();
     }
+    @SuppressWarnings("CallToPrintStackTrace")
     public static List<Student> fetchStudentsFromDB() {
         List<Student> students = new ArrayList<>();
         try (Statement stmt = connection.createStatement();
@@ -37,6 +44,7 @@ public class StudentDatabaseExporter {
         return students;
     }
 
+    @SuppressWarnings("CallToPrintStackTrace")
     public static void writeStudentsToFile(List<Student> students, String filename) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
             for (Student student : students) {

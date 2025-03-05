@@ -1,5 +1,8 @@
 package recordrangers.services;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class StudentDAO{
     private static Connection connection;
@@ -11,6 +14,7 @@ public class StudentDAO{
             StudentDAO.connection = connection;
         }
     
+    @SuppressWarnings("CallToPrintStackTrace")
         public static String enrollStudent(int studentId, int courseId) {
             String queryCheckEnrollment = "SELECT * FROM enrollments WHERE student_id = ? AND course_id = ?";
             String queryCourseCapacity = "SELECT COUNT(*) AS enrolled, max_capacity FROM enrollments " +

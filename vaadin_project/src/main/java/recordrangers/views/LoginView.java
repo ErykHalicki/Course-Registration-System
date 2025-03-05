@@ -7,8 +7,8 @@ import com.vaadin.flow.component.login.LoginOverlay;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.router.Route;
 
-import recordrangers.models.User;
 import recordrangers.models.Auth;
+import recordrangers.models.User;
 
 @Route
 public class LoginView extends Composite<LoginOverlay> {
@@ -35,8 +35,7 @@ public class LoginView extends Composite<LoginOverlay> {
                 user = auth.signIn(username, password);
                 // check if signIn returns null, if so send notification
                 if (user == null) {
-                    Notification notification = new Notification();
-                    notification.show("Sign in failed. Invalid username or password!");
+                    Notification.show("Sign in failed. Invalid username or password!");
                 } else {
                     // route to either student home page or admin home page
                 	/*

@@ -2,6 +2,7 @@ package recordrangers.models;
 
 public class Course {
     public int courseId;
+    public String courseName;
     public String courseCode;
     public int numCredits;
     public String description;
@@ -30,6 +31,9 @@ public class Course {
     public int getCourseId() {
         return courseId;
     }
+    public String getCourseName() {
+        return courseName;
+    }
     public String getCourseCode() {
         return courseCode;
     }
@@ -53,6 +57,9 @@ public class Course {
     }
     public void setCourseId(int courseId) {
         this.courseId = courseId;
+    }
+    public void setCourseName(String courseName) {
+        this.courseName = courseName;
     }
     public void setCourseCode(String courseCode) {
         this.courseCode = courseCode;

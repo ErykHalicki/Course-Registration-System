@@ -1,9 +1,15 @@
 package recordrangers.services;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
 
 public class AdminCourseUses {
-    private final Connection con = ConnectionManager.getConnection();
+    private final Connection connection;
+
+    public AdminCourseUses() throws SQLException {
+        this.connection = DatabaseConnection.getConnection();
+    }
 
     public void addCourse(String name, String code, int credits, String desc, int capacity, String startDate, 
     String endDate, String term, String days, String startTime, String endTime, String location) 
@@ -12,7 +18,7 @@ public class AdminCourseUses {
         "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
 
-        try (PreparedStatement pstmt = con.prepareStatement(sql)) {
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
             pstmt.setString(1, name);
             pstmt.setString(2, code);
             pstmt.setInt(3, credits);
@@ -50,7 +56,7 @@ public class AdminCourseUses {
         "location = ? " +
         "WHERE code = ?";
 
-        try (PreparedStatement pstmt = con.prepareStatement(sql)) {
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
         pstmt.setString(1, name);
         pstmt.setInt(2, credits);
         pstmt.setString(3, desc);
@@ -74,7 +80,7 @@ public class AdminCourseUses {
         String sql = "DELETE FROM Courses WHERE code = ?";
         
 
-        try (PreparedStatement pstmt = con.prepareStatement(sql)) {
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
             pstmt.setString(1, code);
 
             pstmt.executeUpdate();
@@ -82,5 +88,9 @@ public class AdminCourseUses {
         } catch (SQLException e) {
             System.err.println(e.getMessage());
         }
+    }
+
+    public Connection getConnection() {
+        return connection;
     }
 }
