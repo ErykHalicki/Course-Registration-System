@@ -1,32 +1,90 @@
 package recordrangers.views;
+
+import com.vaadin.flow.component.applayout.AppLayout;
+import com.vaadin.flow.component.applayout.DrawerToggle;
+import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.Span;
-import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.orderedlayout.FlexComponent;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.tabs.Tab;
+import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouterLink;
 
-@Route
-public class AdminHomeView extends VerticalLayout{
+@Route("admin-home")
+public class AdminHomeView extends AppLayout{
+    
+    public AdminHomeView() {
+        createHeader();
+        createDrawer();
 
-    public AdminHomeView(){
-        AdminHeaderComponent header = new AdminHeaderComponent("Admin User");
-        add(header);
+        setContent(new Span("Welcome to the Admin Home Page"));
+    }
 
-        // Welcome span
-        add(new Span("Welcome to the admin home page!"));
+    private void createHeader() {
+        // App Name on the left side of the header
+        H1 appName = new H1("CampusNest");
 
-        // Menu layout
-        VerticalLayout menuLayout = new VerticalLayout();
-        menuLayout.setSpacing(true);
-        menuLayout.setPadding(true);
+        // User info on the right
+        Span userInfo = new Span("AdminUser (Admin)");
 
-        // Add menu options (router links)
-        RouterLink searchStudentsLink = new RouterLink("Search for students", LoginView.class);
-        RouterLink searchCoursesLink = new RouterLink("Search for courses", LoginView.class);
-        RouterLink addCourseLink = new RouterLink("Create a course", LoginView.class);
-        RouterLink removeCourseLink = new RouterLink("Remove a course", LoginView.class);
+        // Create log out button
+        Button logOutButton = new Button("Log Out", event -> {
+            getUI().ifPresent(ui -> ui.navigate("login")); // Navigate to the login page when we log out
+        });
 
-        menuLayout.add(searchStudentsLink, searchCoursesLink, addCourseLink, removeCourseLink);
+        // Remove default background, border, and outline
+        logOutButton.getStyle().set("background", "none");
+        logOutButton.getStyle().set("border", "none");
+        logOutButton.getStyle().set("outline", "none"); // Remove focus outline
+        logOutButton.getStyle().set("box-shadow", "none"); // Remove shadow
 
-        add(menuLayout);
+        // Set the button's text color to match the link color
+        logOutButton.getStyle().set("color", "var(--lumo-primary-text-color)"); // Use Vaadin's primary text color for consistency
+
+        // Add margin to the button
+        logOutButton.getStyle().set("margin-left", "10px");
+
+        // Add hover effect to match link hover color
+        logOutButton.getStyle().set("cursor", "pointer"); // Change cursor to pointer
+        logOutButton.getStyle().set("text-decoration", "underline"); // Underline on hover
+
+        // Add hover effects 
+        logOutButton.getElement().executeJs(
+            "this.style.transition = 'color 0.3s';" +
+            "this.onmouseover = function() { this.style.color = 'var(--lumo-primary-color-50pct)'; };" + 
+            "this.onmouseout = function() { this.style.color = 'var(--lumo-primary-text-color)'; };"
+        );
+
+        // Create a container for user info and logout button
+        Div userContainer = new Div(userInfo, logOutButton);
+        userContainer.getStyle().set("margin-left", "auto");
+
+        // Create a HorizontalLayout for the header
+        HorizontalLayout header = new HorizontalLayout(new DrawerToggle(), appName, userContainer);
+        header.setDefaultVerticalComponentAlignment(FlexComponent.Alignment.CENTER);
+        header.setWidth("100%");
+        header.expand(appName); // Expand the app name to push user info to the right
+
+        // Add the header to the navbar
+        addToNavbar(header);
+    }
+
+    public void createDrawer() {
+        // Create tabs for the drawer
+        Tabs tabs = new Tabs(
+            new Tab(VaadinIcon.CLIPBOARD_USER.create(), new RouterLink("Profile", AdminHomeView.class)),
+            new Tab(VaadinIcon.USER.create(), new RouterLink("Search for Students", AdminHomeView.class)),
+            new Tab(VaadinIcon.ACADEMY_CAP.create(), new RouterLink("Search for Courses", AdminHomeView.class)),
+            new Tab(VaadinIcon.PLUS_CIRCLE_O.create(), new RouterLink("Add a Course", AdminHomeView.class)),
+            new Tab(VaadinIcon.MINUS_CIRCLE.create(), new RouterLink("Delete a Course", AdminHomeView.class))
+        );
+        tabs.setOrientation(Tabs.Orientation.VERTICAL);
+
+        // Add the tabs to the drawer
+        addToDrawer(tabs);
     }
 }
