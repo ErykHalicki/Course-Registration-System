@@ -21,6 +21,7 @@ import java.sql.SQLException;
 import recordrangers.models.User;
 import recordrangers.services.Auth;
 
+
 @Route("create-account")
 public class AccountCreationView extends Composite<VerticalLayout> {
 
@@ -74,7 +75,7 @@ public class AccountCreationView extends Composite<VerticalLayout> {
                 return;
             }
 
-            Auth auth = new Auth();
+            Auth auth = getAuthService();  // Use method instead of direct new Auth()
             try {
                 int userId = auth.createAccount(username, email, password);
                 if (userId != -1) {
@@ -87,5 +88,8 @@ public class AccountCreationView extends Composite<VerticalLayout> {
                 Notification.show("An error occurred: " + e.getMessage(), 5000, Notification.Position.MIDDLE);
             }
         });
+    }
+    protected Auth getAuthService() {
+        return new Auth();
     }
 }
