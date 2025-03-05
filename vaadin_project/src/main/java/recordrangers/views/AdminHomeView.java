@@ -4,7 +4,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouterLink;
 
-@Route
+@Route("admin-home")
 public class AdminHomeView extends VerticalLayout{
 
     public AdminHomeView(){

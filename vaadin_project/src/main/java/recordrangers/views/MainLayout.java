@@ -10,7 +10,7 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouterLink;
 
-@Route("")
+@Route("student-home")
 public class MainLayout extends AppLayout {
 
     public MainLayout() {
