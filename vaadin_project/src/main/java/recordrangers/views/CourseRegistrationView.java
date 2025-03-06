@@ -3,6 +3,7 @@ package recordrangers.views;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
@@ -54,7 +55,9 @@ public class CourseRegistrationView extends VerticalLayout {
         resetButton = new Button("Reset");
 
         // Arrange the search components in a horizontal layout.
-        HorizontalLayout searchLayout = new HorizontalLayout(criteriaComboBox, levelComboBox, subjectField, creditsField, searchButton, resetButton);
+        HorizontalLayout searchLayout = new HorizontalLayout(
+            criteriaComboBox, levelComboBox, subjectField, creditsField, searchButton, resetButton
+        );
         add(searchLayout);
 
         // Show the corresponding input field based on the selected criterion.
@@ -73,14 +76,14 @@ public class CourseRegistrationView extends VerticalLayout {
             }
         });
 
-        // Set up the grid.
+        // Set up the grid (use single selection mode).
         courseGrid = new Grid<>(Course.class);
         courseGrid.removeAllColumns();
-        // Assuming getCourseName() returns the course code (e.g., "MATH101")
+        courseGrid.setSelectionMode(Grid.SelectionMode.SINGLE); // Single selection
+        // Columns
         courseGrid.addColumn(Course::getCourseName).setHeader("Course Code");
         courseGrid.addColumn(Course::getMaxCapacity).setHeader("Max Capacity");
         courseGrid.addColumn(Course::getEnrollment).setHeader("Enrollment");
-        // Display credits if available.
         courseGrid.addColumn(Course::getNumCredits).setHeader("Credits");
 
         // Initialize the courses list with example data.
@@ -92,6 +95,34 @@ public class CourseRegistrationView extends VerticalLayout {
         courseGrid.setItems(courses);
         add(courseGrid);
 
+        // Add a Register button that uses the selected course from the grid.
+        Button registerButton = new Button("Register");
+        registerButton.addClickListener(e -> {
+            // Get the currently selected course
+            Course selectedCourse = courseGrid.asSingleSelect().getValue();
+            if (selectedCourse == null) {
+                Notification.show("Please select a course first.");
+                return;
+            }
+
+            // Check if there's room in the course
+            if (selectedCourse.getEnrollment() < selectedCourse.getMaxCapacity()) {
+                selectedCourse.setEnrollment(selectedCourse.getEnrollment() + 1);
+                // Optionally, update the list of enrolled students in the Course object as well
+                // selectedCourse.getEnrolledStudents().add(new Student(...));
+
+                // Refresh the item in the grid to display updated enrollment
+                courseGrid.getDataProvider().refreshItem(selectedCourse);
+
+                Notification.show("Successfully registered for " + selectedCourse.getCourseName());
+            } else {
+                Notification.show("Course is full. Unable to register.");
+            }
+        });
+
+        // Add the Register button to the layout
+        add(registerButton);
+
         // Wire up the Search button.
         searchButton.addClickListener(e -> {
             String selectedCriteria = criteriaComboBox.getValue();
@@ -99,7 +130,7 @@ public class CourseRegistrationView extends VerticalLayout {
             String subject = "";
             String credits = "";
             if ("Course Level".equals(selectedCriteria)) {
-                level = levelComboBox.getValue() != null ? levelComboBox.getValue() : "";
+                level = (levelComboBox.getValue() != null) ? levelComboBox.getValue() : "";
             } else if ("Course Subject".equals(selectedCriteria)) {
                 subject = subjectField.getValue();
             } else if ("Number of Credits".equals(selectedCriteria)) {
@@ -136,12 +167,10 @@ public class CourseRegistrationView extends VerticalLayout {
         // Filter by Course Level if provided.
         if (level != null && !level.isEmpty()) {
             stream = stream.filter(course -> {
-                // Extract numeric part from the course code (e.g., "MATH101" -> "101").
                 String digits = course.getCourseName().replaceAll("\\D", "");
                 if (digits.isEmpty()) {
                     return false;
                 }
-                // Compare the first digit (e.g., '1' for 100-level courses).
                 return digits.charAt(0) == level.charAt(0);
             });
         }
@@ -158,7 +187,7 @@ public class CourseRegistrationView extends VerticalLayout {
                 int c = Integer.parseInt(credits);
                 stream = stream.filter(course -> course.getNumCredits() == c);
             } catch (NumberFormatException ex) {
-                // You might log this error or notify the user; here we simply ignore invalid input.
+                // You could log or notify the user about invalid input
             }
         }
 
