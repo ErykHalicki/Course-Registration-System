@@ -1,6 +1,10 @@
 package recordrangers.services;
-import java.sql.*;
-import java.util.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+
 import recordrangers.models.Course;
 
 public class CourseDAO {
@@ -12,27 +16,28 @@ public class CourseDAO {
     public CourseDAO(Connection connection){
         CourseDAO.connection = connection;
     }
-    public ArrayList<Course> searchByCourseName(String name) throws SQLException{
+    public ArrayList<Course> searchByCourseCode(String code) throws SQLException{
         ArrayList<Course> courses = new ArrayList<>();
         String sql = 
-        "SELECT code, name " + 
-        "FROM Courses " +
-        "WHERE code = ? OR name = ?";
+        "SELECT * FROM Course WHERE course_code = ?";
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
-        pstmt.setString(1, name);
-        pstmt.setString(1, name);
+        pstmt.setString(1, code);
             try (ResultSet rst = pstmt.executeQuery()){
                 while(rst.next()){
-                    String currentCode = rst.getString("code");
-                    Course currentCourse = new Course(currentCode);
+                    int currentId = rst.getInt("course_id");
+                    String currentCode = rst.getString("course_code");
+                    String currentName = rst.getString("course_name");
+                    int currentMax = rst.getInt("capacity");
+                    String schedule = rst.getString("term_label")+" : "+rst.getString("start_date")+" - "+rst.getString("end_date");
+                    Course currentCourse = new Course(currentId, currentCode, currentName, currentMax, schedule);
                     courses.add(currentCourse);
                 }
             }
         }
-
         return courses;
     }
 
+    @SuppressWarnings("CallToPrintStackTrace")
     public static Course getCourseDetails(int courseId) {
         String query = "SELECT * FROM courses WHERE course_id = ?";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
@@ -53,6 +58,7 @@ public class CourseDAO {
         return null;
     }
 
+    @SuppressWarnings("CallToPrintStackTrace")
     public static boolean updateCourseCapacity(int courseId, int newCapacity) {
         String query = "UPDATE courses SET max_capacity = ? WHERE course_id = ?";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
@@ -97,4 +103,14 @@ public class CourseDAO {
         }
         return false;
     }
+    @SuppressWarnings("CallToPrintStackTrace")
+    public static void main(String[] args){
+        try {
+            CourseDAO courseDAO = new CourseDAO();
+            ArrayList<Course> courses = courseDAO.searchByCourseCode("CS101");
+            System.out.println(courses);
+        } catch (SQLException e) {
+            System.out.println(e);
+    }
+}
 }

@@ -5,6 +5,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+
+import recordrangers.models.User.UserType;
 
 public class Auth {
     private Connection con; // = ConnectionManager.getConnection();
@@ -35,11 +38,13 @@ public class Auth {
         String lastName = rst.getString("last_name");
         String email = rst.getString("email");
         String password = rst.getString("password");
-        String createdAt = rst.getString("created_at");
-        String updatedLast = rst.getString("updated_last");
+        UserType userType = User.getUserTypeFromResultSet(rst);
+        byte[] profilePicture = rst.getBytes("profile_picture");
+        Timestamp createdAt = rst.getTimestamp("created_at");
+        Timestamp updatedLast = rst.getTimestamp("updated_last");
 
         // create the user
-        User user = new User(); //new User(userId, firstName, lastName, email, password, createdAt, updatedLast);
+        User user = new User(userId, firstName, lastName, email, password, userType, profilePicture, createdAt, updatedLast); //new User(userId, firstName, lastName, email, password, createdAt, updatedLast);
         
         return user;
     }
