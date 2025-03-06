@@ -1,14 +1,5 @@
 package recordrangers.views;
 
-import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.component.html.H2;
-import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.textfield.TextField;
-import com.vaadin.flow.router.PageTitle;
-import com.vaadin.flow.router.Route;
-import recordrangers.views.MainLayout;
-
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.DriverManager;
@@ -18,6 +9,14 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.html.H2;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.router.PageTitle;
+import com.vaadin.flow.router.Route;
 
 @PageTitle("Admin Student Search")
 @Route(value = "admin-search", layout = MainLayout.class)
@@ -83,6 +82,7 @@ public class AdminStudentSearchView extends VerticalLayout {
     /**
      * Retrieves a list of students by joining the User and Student tables.
      */
+    @SuppressWarnings("CallToPrintStackTrace")
     private List<StudentDetails> getStudentList() {
         List<StudentDetails> list = new ArrayList<>();
         String sql = "SELECT u.user_id, CONCAT(u.first_name, ' ', u.last_name) AS fullName, u.email, " +

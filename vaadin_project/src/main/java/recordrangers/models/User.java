@@ -1,6 +1,8 @@
 package recordrangers.models;
 
-import java.sql.*;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Timestamp;
 
 public class User {
     private int userId;
@@ -92,6 +94,7 @@ public class User {
     public void setTimeUpdated(Timestamp timeUpdated) {
         this.timeUpdated = timeUpdated;
     }
+    @Override
     public String toString() {
         return "User ID: " + userId + "\n" +
                "First Name: " + firstName + "\n" +
@@ -99,7 +102,6 @@ public class User {
                "Email: " + email + "\n" +
                "Password: " + password + "\n" +
                 "User Type: " + userType + "\n" +
-               "Profile Picture: " + profilePicture + "\n" +
                "Time Created: " + timeCreated + "\n" +
                "Time Updated: " + timeUpdated;
     }
