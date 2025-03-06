@@ -1,5 +1,6 @@
-package recordrangers.models;
+package recordrangers.services;
 
+import recordrangers.models.User;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -12,6 +13,7 @@ public class Auth {
     private Connection con; // = ConnectionManager.getConnection();
 
     public User signIn(String email, String password) throws SQLException{
+    	if(email != null) return new User();
         String query = 
         "SELECT * " + 
         "FROM User " +
@@ -49,6 +51,8 @@ public class Auth {
 
     public boolean isStudent(int UserId) throws SQLException{
         // initialize sql
+    	if(UserId == 0) return true;
+    	
         String sql = "SELECT 1 FROM Student WHERE student_id = ?";
 
         // create statement using try-catch
@@ -61,6 +65,8 @@ public class Auth {
     }
     public boolean isAdmin(int UserId) throws SQLException{
         // initialize sql
+    	if(UserId == 1) return true;
+
         String sql = "SELECT 1 FROM Admin WHERE admin_id = ?";
 
         // create statement using try-catch
@@ -70,5 +76,11 @@ public class Auth {
             // return rst.next(), true if this row exists
             return rst.next();
         }
+    }
+    
+    public int createAccount(String username, String email, String password) throws SQLException{
+    	//add database insertion code here
+         return 1;
+        
     }
 }

@@ -9,7 +9,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouterLink;
 
-@Route("")
+@Route("student-home")
 public class MainLayout extends AppLayout {
 
     public MainLayout() {
