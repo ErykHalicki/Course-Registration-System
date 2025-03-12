@@ -11,10 +11,10 @@ import recordrangers.models.User.UserType;
 
 public class Auth{
 	
-    private Connection con;
+    private static Connection con;
     
     
-    public User signIn(String email, String password) throws SQLException{
+    public static User signIn(String email, String password) throws SQLException{
     	con = DatabaseConnection.getConnection();
         String query = 
         "SELECT * " + 
@@ -33,7 +33,7 @@ public class Auth{
         }
     }
 
-    public User ResultSetToUser(ResultSet rst) throws SQLException{
+    public static User ResultSetToUser(ResultSet rst) throws SQLException{
         // get attributes
     	rst.next();
         int userId = rst.getInt("user_id");
@@ -54,10 +54,10 @@ public class Auth{
         return user;
     }
 
-    public boolean isStudent(int UserId) throws SQLException{
+    public static boolean isStudent(int UserId) throws SQLException{
         // initialize sql
     	//if(UserId == 0) return true;
-    	
+    	con = DatabaseConnection.getConnection();
         String sql = "SELECT 1 FROM Student WHERE student_id = ?";
 
         // create statement using try-catch
@@ -71,10 +71,10 @@ public class Auth{
         	return false;
         }
     }
-    public boolean isAdmin(int UserId) throws SQLException{
+    public static boolean isAdmin(int UserId) throws SQLException{
         // initialize sql
     	//if(UserId == 1) return true;
-
+    	con = DatabaseConnection.getConnection();
         String sql = "SELECT 1 FROM Admin WHERE admin_id = ?";
 
         // create statement using try-catch

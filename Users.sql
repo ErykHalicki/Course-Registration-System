@@ -9,7 +9,7 @@ INSERT INTO User (first_name, last_name, email, password, profile_photo, user_ty
 ('Michael', 'Lewis', 'michael.lewis@example.com', 'password707', 'https://example.com/profiles/michael.jpg', 'Student'),
 ('Sophia', 'Walker', 'sophia.walker@example.com', 'password808', 'https://example.com/profiles/sophia.jpg', 'Student'),
 ('Daniel', 'Hall', 'daniel.hall@example.com', 'password909', 'https://example.com/profiles/daniel.jpg', 'Admin'),
-('Olivia', 'Young', 'olivia.young@example.com', 'password1010', 'https://example.com/profiles/olivia.jpg', 'Admin');-- Mock data for Students
+('Olivia', 'Young', 'olivia.young@example.com', 'password1010', 'https://example.com/profiles/olivia.jpg', 'Admin');
 
 INSERT INTO Student (student_id, enrollment_date, status) VALUES
 (1, '2020-09-2', 'Graduated'), -- 1

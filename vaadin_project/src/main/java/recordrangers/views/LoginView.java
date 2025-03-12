@@ -7,6 +7,7 @@ import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.login.LoginI18n;
 import com.vaadin.flow.component.login.LoginOverlay;
 import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.textfield.EmailField;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.VaadinSession;
 
@@ -67,5 +68,6 @@ public class LoginView extends Composite<LoginOverlay> {
             }
 
         });
-    }   
+    }
+ 
 }

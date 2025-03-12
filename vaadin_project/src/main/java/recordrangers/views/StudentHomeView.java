@@ -1,5 +1,7 @@
 package recordrangers.views;
 
+import java.sql.SQLException;
+
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
@@ -18,17 +20,24 @@ import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.server.VaadinSession;
 
 import recordrangers.models.User;
+import recordrangers.services.Auth;
 
 @Route("student-home")
 public class StudentHomeView extends AppLayout{
 	User loggedInUser;
     public StudentHomeView() {
     	loggedInUser = (User)VaadinSession.getCurrent().getAttribute("loggedInUser");
-    	if (loggedInUser == null || loggedInUser.getUserType() != User.UserType.STUDENT) {
-    	    // if not signed in, or wrong user type, redirect to login screen
-    		UI.getCurrent().navigate("404");
-    		return;
-    	}
+    	try {
+			if (loggedInUser == null || !Auth.isStudent(loggedInUser.getUserId())) {
+			    // Throwing a NotFoundException triggers the 404 error page
+				UI.getCurrent().navigate("404");
+				return;
+			}
+		} catch (SQLException e) {
+			UI.getCurrent().navigate("404");
+			e.printStackTrace();
+			return;
+		}
         createHeader();
         createDrawer();
         
@@ -45,7 +54,7 @@ public class StudentHomeView extends AppLayout{
 
         // Create log out button
         Button logOutButton = new Button("Log Out", event -> {
-        	
+        	VaadinSession.getCurrent().setAttribute("loggedInUser", null);
             getUI().ifPresent(ui -> ui.navigate("")); // Navigate to the login page when we log out
         });
 
