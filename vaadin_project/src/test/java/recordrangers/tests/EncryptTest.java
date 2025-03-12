@@ -1,8 +1,11 @@
+package recordrangers.tests;
 import java.security.NoSuchAlgorithmException;
 
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
+import recordrangers.services.Encrypt;
 
 public class EncryptTest {
 

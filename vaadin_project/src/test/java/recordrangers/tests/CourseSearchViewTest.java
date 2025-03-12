@@ -1,13 +1,11 @@
 package recordrangers.tests;
-/* 
+
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.value.ValueChangeMode;
-import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.*;
 import recordrangers.models.Course;
 import recordrangers.views.CourseSearchView;
@@ -58,4 +56,4 @@ public class CourseSearchViewTest {
         List<Course> allCourses = courseGrid.getListDataView().getItems().toList();
         assertTrue(allCourses.size() >= 3, "All courses should be shown when search is empty");
     }
-}*/
+}

@@ -1,12 +1,14 @@
 package recordrangers.tests;
 
+import recordrangers.views.AccountCreationView;
+
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.textfield.EmailField;
 import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
 
-import recordrangers.views.AccountCreationView;
+
 
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import org.junit.jupiter.api.Test;
