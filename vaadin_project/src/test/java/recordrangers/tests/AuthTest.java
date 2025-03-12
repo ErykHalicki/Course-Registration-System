@@ -1,5 +1,7 @@
 package recordrangers.tests;
 import java.sql.SQLException;
+import recordrangers.services.Auth;
+import recordrangers.models.User;
 
 import recordrangers.services.Auth;
 import recordrangers.models.User;
