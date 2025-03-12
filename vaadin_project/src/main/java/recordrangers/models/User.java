@@ -1,17 +1,19 @@
 package recordrangers.models;
 
+import java.io.Serializable;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 
-public class User {
+
+public class User implements Serializable{
     private int userId;
     private String firstName;
     private String lastName;
     private String email;
     private String password;
     private UserType userType;
-    private byte[] profilePicture;
+    private String profilePicture;
     private Timestamp timeCreated;
     private Timestamp timeUpdated;
 
@@ -19,7 +21,13 @@ public class User {
         super();
     }
     
-    public User(int userId, String firstName, String lastName, String email, String password, UserType userType, byte[] profilePicture, Timestamp timeCreated, Timestamp timeUpdated) {
+    public User(String email, String password, UserType userType) {
+        this.email = email;
+        this.password = password;
+        this.userType = userType;
+    }
+    
+    public User(int userId, String firstName, String lastName, String email, String password, UserType userType, String profilePicture, Timestamp timeCreated, Timestamp timeUpdated) {
         this.userId = userId;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -37,10 +45,6 @@ public class User {
     }
     public UserType getUserType() {
         return userType;
-    }
-    public static UserType getUserTypeFromResultSet(ResultSet rs) throws SQLException {
-        String typeStr = rs.getString("user_type"); // Read from column
-        return (typeStr != null) ? UserType.valueOf(typeStr) : null;
     }
     
     public void setUserType(UserType userType) {
@@ -76,10 +80,10 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
-    public byte[] getProfilePicture() {
+    public String getProfilePicture() {
         return profilePicture;
     }
-    public void setProfilePicture(byte[] profilePicture) {
+    public void setProfilePicture(String profilePicture) {
         this.profilePicture = profilePicture;
     }
     public Timestamp getTimeCreated() {

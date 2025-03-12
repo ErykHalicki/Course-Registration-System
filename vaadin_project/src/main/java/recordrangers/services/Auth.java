@@ -9,11 +9,13 @@ import java.sql.Timestamp;
 
 import recordrangers.models.User.UserType;
 
-public class Auth {
-    private Connection con; // = ConnectionManager.getConnection();
-
+public class Auth{
+	
+    private Connection con;
+    
+    
     public User signIn(String email, String password) throws SQLException{
-    	if(email != null) return new User();
+    	con = DatabaseConnection.getConnection();
         String query = 
         "SELECT * " + 
         "FROM User " +
@@ -33,13 +35,16 @@ public class Auth {
 
     public User ResultSetToUser(ResultSet rst) throws SQLException{
         // get attributes
+    	rst.next();
         int userId = rst.getInt("user_id");
         String firstName = rst.getString("first_name");
         String lastName = rst.getString("last_name");
         String email = rst.getString("email");
         String password = rst.getString("password");
-        UserType userType = User.getUserTypeFromResultSet(rst);
-        byte[] profilePicture = rst.getBytes("profile_picture");
+        UserType userType;
+        if(rst.getString("user_type").equals("Student")) userType = User.UserType.STUDENT;
+        else userType = User.UserType.ADMIN;
+        String profilePicture = rst.getString("profile_photo");
         Timestamp createdAt = rst.getTimestamp("created_at");
         Timestamp updatedLast = rst.getTimestamp("updated_last");
 
@@ -51,7 +56,7 @@ public class Auth {
 
     public boolean isStudent(int UserId) throws SQLException{
         // initialize sql
-    	if(UserId == 0) return true;
+    	//if(UserId == 0) return true;
     	
         String sql = "SELECT 1 FROM Student WHERE student_id = ?";
 
@@ -62,10 +67,13 @@ public class Auth {
             // return rst.next(), true if this row exists
             return rst.next();
         }
+        catch(SQLException ex) {
+        	return false;
+        }
     }
     public boolean isAdmin(int UserId) throws SQLException{
         // initialize sql
-    	if(UserId == 1) return true;
+    	//if(UserId == 1) return true;
 
         String sql = "SELECT 1 FROM Admin WHERE admin_id = ?";
 
@@ -75,6 +83,9 @@ public class Auth {
             ResultSet rst = pstmt.executeQuery();
             // return rst.next(), true if this row exists
             return rst.next();
+        }
+        catch(SQLException ex) {
+        	return false;
         }
     }
     

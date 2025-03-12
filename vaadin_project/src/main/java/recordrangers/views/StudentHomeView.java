@@ -1,5 +1,6 @@
 package recordrangers.views;
 
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.button.Button;
@@ -11,16 +12,26 @@ import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.Tabs;
+import com.vaadin.flow.router.NotFoundException;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouterLink;
+import com.vaadin.flow.server.VaadinSession;
+
+import recordrangers.models.User;
 
 @Route("student-home")
 public class StudentHomeView extends AppLayout{
-    
+	User loggedInUser;
     public StudentHomeView() {
+    	loggedInUser = (User)VaadinSession.getCurrent().getAttribute("loggedInUser");
+    	if (loggedInUser == null || loggedInUser.getUserType() != User.UserType.STUDENT) {
+    	    // if not signed in, or wrong user type, redirect to login screen
+    		UI.getCurrent().navigate("404");
+    		return;
+    	}
         createHeader();
         createDrawer();
-
+        
         setContent(new Span("Welcome to the Student Home Page"));
     }
 
@@ -29,11 +40,13 @@ public class StudentHomeView extends AppLayout{
         H1 appName = new H1("CampusNest");
 
         // User info on the right
-        Span userInfo = new Span("StudentUser (Student)");
+        Span userInfo = new Span("Welcome " + loggedInUser.getFirstName() + "!");
+
 
         // Create log out button
         Button logOutButton = new Button("Log Out", event -> {
-            getUI().ifPresent(ui -> ui.navigate("login")); // Navigate to the login page when we log out
+        	
+            getUI().ifPresent(ui -> ui.navigate("")); // Navigate to the login page when we log out
         });
 
         // Remove default background, border, and outline
