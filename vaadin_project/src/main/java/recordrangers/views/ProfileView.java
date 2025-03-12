@@ -11,7 +11,7 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 
 @PageTitle("Profile")
-@Route(value = "profile", layout = MainLayout.class)
+@Route(value = "profile", layout = StudentHomeView.class)
 public class ProfileView extends VerticalLayout {
 
     public ProfileView() {
