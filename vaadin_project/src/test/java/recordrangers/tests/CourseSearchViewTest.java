@@ -9,6 +9,8 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import recordrangers.models.Course;
 import recordrangers.views.CourseSearchView;
+
+import java.sql.SQLException;
 import java.util.List;
 
 public class CourseSearchViewTest {
@@ -18,7 +20,7 @@ public class CourseSearchViewTest {
     private Grid<Course> courseGrid;
 
     @BeforeEach
-    void setUp() {
+    void setUp() throws SQLException{
         courseSearchView = new CourseSearchView();
         searchField = courseSearchView.getSearchField(); // Add a getter in your CourseSearchView for searchField
         courseGrid = courseSearchView.getCourseGrid();
