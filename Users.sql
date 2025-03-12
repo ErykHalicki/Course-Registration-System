@@ -12,7 +12,7 @@ INSERT INTO User (first_name, last_name, email, password, profile_photo) VALUES
 ('Olivia', 'Young', 'olivia.young@example.com', 'password1010', 'https://example.com/profiles/olivia.jpg'); -- Admin
 
 -- Mock data for Students
-INSERT INTO Student (student_id, entrollment_data, status) VALUES
+INSERT INTO Student (student_id, enrollment_date, status) VALUES
 (1, '2020-09-2', 'Graduated'), -- 1
 (3, '2022-09-2', 'Active'), -- 3
 (4, '2019-09-2', 'Inactive'), -- 4

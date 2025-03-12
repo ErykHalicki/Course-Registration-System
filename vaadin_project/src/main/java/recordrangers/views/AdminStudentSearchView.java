@@ -19,7 +19,7 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 
 @PageTitle("Admin Student Search")
-@Route(value = "admin-search", layout = MainLayout.class)
+@Route(value = "admin-search", layout = AdminHomeView.class)
 public class AdminStudentSearchView extends VerticalLayout {
 
     

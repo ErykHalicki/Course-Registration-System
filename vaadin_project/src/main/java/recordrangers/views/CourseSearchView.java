@@ -7,20 +7,25 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import recordrangers.models.Course;
-import recordrangers.services.CourseDatabaseRequest;
+import recordrangers.services.CourseDAO;
 import com.vaadin.flow.data.value.ValueChangeMode;
+
+import java.sql.SQLException;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @PageTitle("Course Search")
-@Route(value = "course-search", layout = MainLayout.class)
+@Route(value = "course-search", layout = StudentHomeView.class)
 public class CourseSearchView extends VerticalLayout {
 
     private Grid<Course> courseGrid = new Grid<>(Course.class);
     private TextField searchField = new TextField();
+    List<Course> allCourses;
 
-    public CourseSearchView() {
+    public CourseSearchView() throws SQLException {
         // Configure search field
+    	CourseDAO databaseInterface = new CourseDAO();
+    	allCourses = databaseInterface.getAllCourses();
     	searchField.setValueChangeMode(ValueChangeMode.EAGER);
         searchField.setPlaceholder("Enter course name...");
         searchField.setClearButtonVisible(true);
@@ -46,8 +51,6 @@ public class CourseSearchView extends VerticalLayout {
     }
 
     private List<Course> searchCoursesByString(String searchQuery) {
-        List<Course> allCourses = CourseDatabaseRequest.getAllCourses();
-
         // If searchQuery is empty, return all courses
         if (searchQuery == null || searchQuery.trim().isEmpty()) {
             return allCourses;

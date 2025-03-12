@@ -8,7 +8,7 @@ import recordrangers.models.Course;
 import java.util.List;
 
 @PageTitle("Course Registration")
-@Route(value = "register", layout = MainLayout.class)
+@Route(value = "register", layout = StudentHomeView.class)
 public class CourseRegistrationView extends VerticalLayout {
 
     public CourseRegistrationView() {

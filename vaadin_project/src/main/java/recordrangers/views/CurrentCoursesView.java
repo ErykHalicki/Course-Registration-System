@@ -8,7 +8,7 @@ import recordrangers.models.Course;
 import java.util.List;
 
 @PageTitle("Current Courses")
-@Route(value = "current-courses", layout = MainLayout.class)
+@Route(value = "current-courses", layout = StudentHomeView.class)
 public class CurrentCoursesView extends VerticalLayout {
 
     public CurrentCoursesView() {
