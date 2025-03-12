@@ -19,7 +19,7 @@ public class UserDAO extends User {
             stmt.setInt(1, userId);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                return new User( rs.getInt("user_id")   , rs.getString("first_name") , rs.getString("last_name") , rs.getString("email") , rs.getString("password"), User.UserType.valueOf(rs.getString("user_Type")), rs.getBytes("profile_picture") , rs.getTimestamp("time_created") , rs.getTimestamp("time_updated") );}
+                return new User( rs.getInt("user_id")   , rs.getString("first_name") , rs.getString("last_name") , rs.getString("email") , rs.getString("password"), User.UserType.valueOf(rs.getString("user_Type")), rs.getString("profile_picture") , rs.getTimestamp("time_created") , rs.getTimestamp("time_updated") );}
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -34,7 +34,7 @@ public class UserDAO extends User {
             stmt.setString(2, user.getLastName());
             stmt.setString(3, user.getEmail());
             stmt.setString(4, user.getPassword()); // Hash before storing in a real app
-            stmt.setBytes(5, user.getProfilePicture());
+            stmt.setString(5, user.getProfilePicture());
 
             int affectedRows = stmt.executeUpdate();
             if (affectedRows > 0) {
@@ -61,7 +61,7 @@ public class UserDAO extends User {
             stmt.setString(2, user.getLastName());
             stmt.setString(3, user.getEmail());
             stmt.setString(4, user.getPassword()); // Hash before storing in a real app
-            stmt.setBytes(5, user.getProfilePicture());
+            stmt.setString(5, user.getProfilePicture());
             stmt.setInt(6, user.getUserId());
 
             return stmt.executeUpdate() > 0;

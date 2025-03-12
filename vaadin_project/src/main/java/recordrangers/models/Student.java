@@ -11,7 +11,7 @@ import java.sql.Timestamp;
      public Student(){
          super();
      }
-     public Student(int userId, String firstName, String lastName, String email, String password, byte[] profilePicture, Timestamp timeCreated, Timestamp timeUpdated, Date enrollment_date, Status status){
+     public Student(int userId, String firstName, String lastName, String email, String password, String profilePicture, Timestamp timeCreated, Timestamp timeUpdated, Date enrollment_date, Status status){
          super(userId, firstName,lastName, email, password, UserType.STUDENT, profilePicture, timeCreated, timeUpdated);
          this.studentId = userId;
          this.enrollment_date = enrollment_date;

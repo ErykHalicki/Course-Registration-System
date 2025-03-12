@@ -1,8 +1,9 @@
 package recordrangers.views;
 
 import java.sql.SQLException;
-import java.util.List;
+import com.vaadin.flow.component.UI;
 
+import java.util.List;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.button.Button;
@@ -18,20 +19,44 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.Tabs;
+
+import com.vaadin.flow.router.NotFoundException;
+
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.component.timepicker.TimePicker;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouterLink;
+import com.vaadin.flow.server.VaadinSession;
+import recordrangers.models.User;
+import recordrangers.services.Auth;
 
 import recordrangers.services.AdminCourseUses;
 
 @Route("admin-home")
 public class AdminHomeView extends AppLayout{
 
+	User loggedInUser;
+
+
     private AdminCourseUses adminCourseUses = new AdminCourseUses();
     
+
     public AdminHomeView() {
+    	
+    	loggedInUser = (User)VaadinSession.getCurrent().getAttribute("loggedInUser");
+    	
+    	try {
+			if (loggedInUser == null || !Auth.isAdmin(loggedInUser.getUserId())) {
+			    // Throwing a NotFoundException triggers the 404 error page
+				UI.getCurrent().navigate("404");
+				return;
+			}
+		} catch (SQLException e) {
+			UI.getCurrent().navigate("404");
+			e.printStackTrace();
+			return;
+		}
         createHeader();
         createDrawer();
 
@@ -47,11 +72,14 @@ public class AdminHomeView extends AppLayout{
         H1 appName = new H1("CampusNest");
 
         // User info on the right
-        Span userInfo = new Span("AdminUser (Admin)");
-
+        Span userInfo = new Span("Welcome !");
+        if(loggedInUser != null) {
+        	userInfo = new Span("Welcome " + loggedInUser.getFirstName() + "!");
+        }
         // Create log out button
         Button logOutButton = new Button("Log Out", event -> {
-            getUI().ifPresent(ui -> ui.navigate("login")); // Navigate to the login page when we log out
+        	VaadinSession.getCurrent().setAttribute("loggedInUser", null);
+            getUI().ifPresent(ui -> ui.navigate("")); // Navigate to the login page when we log out
         });
 
         // Remove default background, border, and outline

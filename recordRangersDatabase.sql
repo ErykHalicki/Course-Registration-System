@@ -12,6 +12,7 @@ CREATE TABLE User (
     profile_photo TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_last TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    user_type ENUM('Student', 'Admin') NOT NULL
 );
 
 -- Create Student Table
