@@ -1,6 +1,7 @@
 package recordrangers.services;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.Statement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -37,6 +38,26 @@ public class CourseDAO {
         return courses;
     }
 
+    public ArrayList<Course> getAllCourses() throws SQLException{
+        ArrayList<Course> courses = new ArrayList<>();
+        String sql = 
+        "SELECT * FROM Course";
+        Statement stmt = connection.createStatement(); ;
+        try (ResultSet rst = stmt.executeQuery(sql)){
+                while(rst.next()){
+                    int currentId = rst.getInt("course_id");
+                    String currentCode = rst.getString("course_code");
+                    String currentName = rst.getString("course_name");
+                    int currentMax = rst.getInt("capacity");
+                    String schedule = rst.getString("term_label")+" : "+rst.getString("start_date")+" - "+rst.getString("end_date");
+                    Course currentCourse = new Course(currentId, currentCode, currentName, currentMax, schedule);
+                    courses.add(currentCourse);
+            }
+        }
+        return courses;
+    }
+
+    
     @SuppressWarnings("CallToPrintStackTrace")
     public static Course getCourseDetails(int courseId) {
         String query = "SELECT * FROM courses WHERE course_id = ?";
