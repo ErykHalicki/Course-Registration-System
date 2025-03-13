@@ -1,68 +1,56 @@
 package recordrangers.views;
 
+import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-
-import com.vaadin.flow.component.textfield.TextField;
-import com.vaadin.flow.component.html.H2;
-import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import recordrangers.models.Course;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @PageTitle("Current Courses")
-@Route(value = "current-courses", layout = StudentHomeView.class)
+@Route(value = "current-courses", layout = MainLayout.class)
 public class CurrentCoursesView extends VerticalLayout {
 
+    private final Grid<Course> courseGrid;
+    private final List<Course> enrolledCourses;
+
     public CurrentCoursesView() {
-        // Set some spacing/padding so the content doesn't hug the edges
-        setSpacing(true);
-        setPadding(true);
+        // 1) Create some dummy data for demonstration
+        enrolledCourses = new ArrayList<>();
+        enrolledCourses.add(new Course(1, "Intro to Computer Science", "CSCI 101", 3, 
+                "2025 Winter 1", "2025-09-01", "2025-12-05"));
+        enrolledCourses.add(new Course(2, "Calculus 1", "MATH 101", 4, 
+                "2025 Winter 1", "2025-09-01", "2025-12-05"));
+        enrolledCourses.add(new Course(3, "English Composition", "ENG 101", 3, 
+                "2025 Winter 1", "2025-09-01", "2025-12-05"));
 
-        addClassName("current-courses-view");
+        // 2) Initialize the grid and configure columns
+        courseGrid = new Grid<>(Course.class, false);
+        courseGrid.addColumn(Course::getCourseName).setHeader("Course Name");
+        courseGrid.addColumn(Course::getCourseCode).setHeader("Course Code");
+        courseGrid.addColumn(Course::getNumCredits).setHeader("Credits");
+        courseGrid.addColumn(Course::getTermLabel).setHeader("Term");
+        courseGrid.addColumn(Course::getStartDate).setHeader("Start Date");
+        courseGrid.addColumn(Course::getEndDate).setHeader("End Date");
 
-        // Add a heading at the top
-        H2 heading = new H2("My Current Courses");
-        add(heading);
+        // 3) Add a column with a Drop button to remove courses from the grid
+        courseGrid.addComponentColumn(course -> {
+            Button dropButton = new Button("Drop", event -> {
+                // Remove the selected course from the in-memory list
+                enrolledCourses.remove(course);
+                // Refresh the grid so it no longer displays the dropped course
+                courseGrid.getDataProvider().refreshAll();
+            });
+            return dropButton;
+        }).setHeader("Actions");
 
-        // Create the Grid without auto-generated columns
-        Grid<Course> courseGrid = new Grid<>(Course.class, false);
-        // Define columns manually
-        courseGrid.addColumn(Course::getCourseName)
-                  .setHeader("Course Name")
-                  .setAutoWidth(true);
-
-        // display more details once database setup:
-        courseGrid.addColumn(Course::getMaxCapacity)
-                  .setHeader("Max Capacity")
-                  .setAutoWidth(true);
-        courseGrid.addColumn(Course::getEnrollment)
-                  .setHeader("Enrolled")
-                  .setAutoWidth(true);
-
-        // Add a little style to the grid (striped rows, column borders, etc.)
-        courseGrid.addThemeVariants(GridVariant.LUMO_ROW_STRIPES, 
-                                    GridVariant.LUMO_COLUMN_BORDERS);
-
-        // Example data
-        List<Course> enrolledCourses = List.of(
-                new Course("MATH101", 30, 25),
-                new Course("PHYS201", 40, 38)
-        );
-
+        // 4) Populate the grid with the dummy list
         courseGrid.setItems(enrolledCourses);
 
-        // Make the grid take full available width
-        courseGrid.setWidthFull();
-
-        // Add the grid to the layout
+        // 5) Add the grid to the layout
         add(courseGrid);
-
-        // Optionally set the entire view to use the full size of the browser
-        setSizeFull();
-        // And make the grid grow to fill remaining space
-        courseGrid.setSizeFull();
     }
 }
