@@ -1,18 +1,19 @@
 package recordrangers.views;
 
+import java.sql.SQLException;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+
 import recordrangers.models.Course;
 import recordrangers.services.CourseDAO;
-import com.vaadin.flow.data.value.ValueChangeMode;
-
-import java.sql.SQLException;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @PageTitle("Course Search")
 @Route(value = "course-search", layout = StudentHomeView.class)
@@ -27,7 +28,7 @@ public class CourseSearchView extends VerticalLayout {
     	CourseDAO databaseInterface = new CourseDAO();
     	allCourses = databaseInterface.getAllCourses();
     	searchField.setValueChangeMode(ValueChangeMode.EAGER);
-        searchField.setPlaceholder("Enter course name...");
+        searchField.setPlaceholder("Enter course code...");
         searchField.setClearButtonVisible(true);
 
         // Add real-time filtering (event triggers on text input change)
@@ -38,7 +39,7 @@ public class CourseSearchView extends VerticalLayout {
         searchLayout.setSpacing(true);
 
         // Configure grid
-        courseGrid.setColumns("courseCode", "maxCapacity", "enrollment");
+        courseGrid.setColumns("courseCode","courseName", "maxCapacity", "enrollment");
         courseGrid.setItems(searchCoursesByString("")); // Initial dummy data
 
         // Add components to the layout

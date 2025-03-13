@@ -5,8 +5,8 @@ import java.sql.SQLException;
 
 public class DatabaseConnection {
     private static final String URL = "jdbc:mysql://localhost:3306/UniversityDB";
-    private static final String USER = "root";
-    private static final String PASSWORD = "";
+    private static final String USER = "amani";
+    private static final String PASSWORD = "Nomanoma_10";
 
     // Private constructor to prevent instantiation
     private DatabaseConnection() {}

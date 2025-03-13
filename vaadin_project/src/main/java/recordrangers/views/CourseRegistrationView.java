@@ -1,27 +1,36 @@
 package recordrangers.views;
 
+import java.sql.SQLException;
+import java.util.ArrayList;
+
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+
 import recordrangers.models.Course;
-import java.util.List;
+import recordrangers.services.CourseDAO;
 
 @PageTitle("Course Registration")
 @Route(value = "register", layout = StudentHomeView.class)
 public class CourseRegistrationView extends VerticalLayout {
 
-    public CourseRegistrationView() {
+    @SuppressWarnings("CallToPrintStackTrace")
+    public CourseRegistrationView() throws SQLException {
         Grid<Course> courseGrid = new Grid<>(Course.class);
-        courseGrid.setColumns("courseCode", "maxCapacity", "enrollment");
+        courseGrid.setColumns("courseCode", "courseName", "maxCapacity", "schedule");
 
-        List<Course> courses = List.of(
-                new Course("MATH101", 30, 25),
-                new Course("PHYS201", 40, 38),
-                new Course("COSC305", 50, 45)
-        );
+        ArrayList<Course> courses;
+        try {
+            CourseDAO databaseInterface = new CourseDAO();
+            courses = databaseInterface.getAllCourses();
+            courseGrid.setItems(courses);
+            add(courseGrid);
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
 
-        courseGrid.setItems(courses);
-        add(courseGrid);
+        
     }
 }
