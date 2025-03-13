@@ -6,7 +6,7 @@ import java.sql.Timestamp;
      public Admin(){
          super();
      }
-     public Admin(int userId, String firstName, String lastName, String email, String password, UserType userType, byte[] profilePicture, Timestamp timeCreated, Timestamp timeUpdated, String role){
+     public Admin(int userId, String firstName, String lastName, String email, String password, UserType userType, String profilePicture, Timestamp timeCreated, Timestamp timeUpdated, String role){
          super(userId, firstName, lastName, email, password, User.UserType.ADMIN, profilePicture, timeCreated, timeUpdated);
          this.role = role;
      }

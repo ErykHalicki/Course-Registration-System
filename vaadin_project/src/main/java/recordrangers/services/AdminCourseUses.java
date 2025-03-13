@@ -14,7 +14,7 @@ public class AdminCourseUses {
     public void addCourse(String name, String code, int credits, String desc, int capacity, String startDate, 
     String endDate, String term, String days, String startTime, String endTime, String location) 
     throws SQLException {
-        String sql = "INSERT INTO Courses (name, code, credits, description, capacity, startDate, endDate, term, startTime, endTime, location) " +
+        String sql = "INSERT INTO Course (name, code, credits, description, capacity, startDate, endDate, term, startTime, endTime, location) " +
         "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
 
@@ -42,7 +42,7 @@ public class AdminCourseUses {
     public void editCourse(String name, String code, int credits, String desc, int capacity, String startDate, 
     String endDate, String term, String days, String startTime, String endTime, String location) throws SQLException{
         
-        String sql = "UPDATE courses SET " +
+        String sql = "UPDATE Course SET " +
         "name = ?, " +
         "credits = ?, " +
         "description = ?, " +
@@ -77,7 +77,7 @@ public class AdminCourseUses {
     }
 
     public void deleteCourse(String code) throws SQLException{
-        String sql = "DELETE FROM Courses WHERE code = ?";
+        String sql = "DELETE FROM Course WHERE code = ?";
         
 
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {

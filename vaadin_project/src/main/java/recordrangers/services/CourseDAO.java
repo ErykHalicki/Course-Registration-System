@@ -1,4 +1,5 @@
 package recordrangers.services;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -121,6 +122,17 @@ public class CourseDAO {
         }
         return false;
     }
+
+    public static int courseCapacity(int courseId) throws SQLException {
+        // Select the count of studentIds from the enrolled relation with matching courseId
+        // Prepared statement not needed as user does not enter courseId
+        String sql = "SELECT COUNT(student_id) as enrolled FROM Enrollments WHERE course_id = " + courseId; 
+        try (Statement stmt = connection.createStatement()) {
+            ResultSet rst = stmt.executeQuery(sql);
+            return rst.getInt("enrolled");
+        }
+    }
+
     @SuppressWarnings("CallToPrintStackTrace")
     public static void main(String[] args){
         try {

@@ -31,7 +31,7 @@ public class StudentDatabaseExporter {
                         rs.getString("last_name"),
                         rs.getString("email"),
                         rs.getString("password"),
-                        rs.getBytes("profile_picture"),
+                        rs.getString("profile_picture"),
                         rs.getTimestamp("time_created"),
                         rs.getTimestamp("time_updated"),
                         rs.getDate("enrollment_date"),
