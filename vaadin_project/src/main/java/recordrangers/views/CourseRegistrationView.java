@@ -1,6 +1,11 @@
 package recordrangers.views;
 
+import java.sql.SQLException;
+import java.util.ArrayList;
+
+
 import com.vaadin.flow.component.button.Button;
+
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.notification.Notification;
@@ -9,16 +14,39 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+
 import recordrangers.models.Course;
+
+import recordrangers.services.CourseDAO;
+
 
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+
 @PageTitle("Course Registration")
 @Route(value = "register", layout = StudentHomeView.class)
 public class CourseRegistrationView extends VerticalLayout {
+
+    @SuppressWarnings("CallToPrintStackTrace")
+    public CourseRegistrationView() throws SQLException {
+        Grid<Course> courseGrid = new Grid<>(Course.class);
+        courseGrid.setColumns("courseCode", "courseName", "maxCapacity", "schedule");
+
+        ArrayList<Course> courses;
+        try {
+            CourseDAO databaseInterface = new CourseDAO();
+            courses = databaseInterface.getAllCourses();
+            courseGrid.setItems(courses);
+            add(courseGrid);
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        
 
     private final Grid<Course> courseGrid = new Grid<>(Course.class);
     private final TextField searchField = new TextField("Search Courses");
@@ -67,6 +95,7 @@ public class CourseRegistrationView extends VerticalLayout {
     private void updateCourseGrid(String filterText) {
         List<Course> courses = fetchCoursesFromDB(filterText);
         courseGrid.setItems(courses);
+
     }
 
     /**

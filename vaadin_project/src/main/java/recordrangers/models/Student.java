@@ -1,5 +1,7 @@
 package recordrangers.models;
 import java.sql.Date;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Timestamp;
 
 
@@ -38,6 +40,10 @@ import java.sql.Timestamp;
      public void setStatus(Status status) {
          this.status = status;
      }
+     public static Status getStatusFromResultSet(ResultSet rs) throws SQLException {
+        String typeStr = rs.getString("Status"); // Read from column
+        return (typeStr != null) ? Status.valueOf(typeStr) : null;
+    }
      @Override
      public String toString() {
          return "Student{" +

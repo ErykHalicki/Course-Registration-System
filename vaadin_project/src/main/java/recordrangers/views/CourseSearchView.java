@@ -1,5 +1,9 @@
 package recordrangers.views;
 
+import java.sql.SQLException;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -8,23 +12,35 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+
 import recordrangers.models.Course;
+
+import recordrangers.services.CourseDAO;
+
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+
 
 @PageTitle("Course Search")
 @Route(value = "course-search", layout = MainLayout.class)
 public class CourseSearchView extends VerticalLayout {
 
     private Grid<Course> courseGrid = new Grid<>(Course.class);
-    private TextField searchField = new TextField("Search Courses");
 
-    // Hard-coded JDBC credentials
-    private static final String DB_URL = "jdbc:mysql://localhost:3306/UniversityDB";
-    private static final String DB_USER = "root";
-    private static final String DB_PASS = "Backstroke1*";
+    private TextField searchField = new TextField();
+    List<Course> allCourses;
+
+    public CourseSearchView() throws SQLException {
+        // Configure search field
+    	CourseDAO databaseInterface = new CourseDAO();
+    	allCourses = databaseInterface.getAllCourses();
+    	searchField.setValueChangeMode(ValueChangeMode.EAGER);
+        searchField.setPlaceholder("Enter course code...");
+        searchField.setClearButtonVisible(true);
+
+    private TextField searchField = new TextField("Search Courses");
 
     public CourseSearchView() {
         // Configure the search field
@@ -40,6 +56,11 @@ public class CourseSearchView extends VerticalLayout {
         
         courseGrid.setColumns("courseId", "courseName", "courseCode", "numCredits", "termLabel", "maxCapacity", "startDate", "endDate");
         courseGrid.setSizeFull();
+
+
+        // Configure grid
+        courseGrid.setColumns("courseCode","courseName", "maxCapacity", "enrollment");
+        courseGrid.setItems(searchCoursesByString("")); // Initial dummy data
 
         // Initial fetch of courses without filter
         updateCourseGrid("");

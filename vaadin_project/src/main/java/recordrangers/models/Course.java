@@ -59,6 +59,7 @@ public class Course {
     
     public Course(int courseId, String courseCode, String courseName, int maxCapacity, String schedule) {
         this.courseId = courseId;
+        this.courseName = courseName;
         this.courseCode = courseCode;
         this.courseName = courseName;
         this.maxCapacity = maxCapacity;

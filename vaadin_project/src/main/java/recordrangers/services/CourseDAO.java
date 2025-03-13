@@ -15,9 +15,6 @@ public class CourseDAO {
     public CourseDAO() throws SQLException{
         CourseDAO.connection = DatabaseConnection.getConnection();
     }
-    public CourseDAO(Connection connection){
-        CourseDAO.connection = connection;
-    }
     public ArrayList<Course> searchByCourseCode(String code) throws SQLException{
         ArrayList<Course> courses = new ArrayList<>();
         String sql = 
@@ -39,7 +36,7 @@ public class CourseDAO {
         return courses;
     }
 
-    public ArrayList<Course> getAllCourses() throws SQLException{
+    public static ArrayList<Course> getAllCourses() throws SQLException{
         ArrayList<Course> courses = new ArrayList<>();
         String sql = 
         "SELECT * FROM Course";
@@ -140,7 +137,7 @@ public class CourseDAO {
     public static void main(String[] args){
         try {
             CourseDAO courseDAO = new CourseDAO();
-            ArrayList<Course> courses = courseDAO.searchByCourseCode("CS101");
+            ArrayList<Course> courses = courseDAO.getAllCourses();
             System.out.println(courses);
         } catch (SQLException e) {
             System.out.println(e);

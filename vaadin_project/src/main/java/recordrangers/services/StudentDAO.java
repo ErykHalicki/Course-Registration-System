@@ -1,8 +1,14 @@
 package recordrangers.services;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.util.ArrayList;
+
+import recordrangers.models.Student;
+import recordrangers.models.Student.Status;
 
 public class StudentDAO{
     private static Connection connection;
@@ -62,4 +68,36 @@ public class StudentDAO{
         }
         return "Enrollment process failed.";
     }
+    public ArrayList<Student> getAllStudents() throws SQLException {
+        ArrayList<Student> students = new ArrayList<>();
+        String query = "SELECT * FROM User JOIN Student ON student_id = user_id;";
+        try (PreparedStatement stmt = connection.prepareStatement(query);
+             ResultSet rs = stmt.executeQuery()) {
+            while (rs.next()) {
+                int userId = rs.getInt("user_id");
+                int studentId = rs.getInt("student_id");
+                String firstName = rs.getString("first_name");
+                String lastName = rs.getString("last_name");
+                String email = rs.getString("email");
+                String password = rs.getString("password");
+                byte[] profilePicture = rs.getBytes("profile_picture");
+                Timestamp timeCreated = rs.getTimestamp("time_created");
+                Timestamp timeUpdated = rs.getTimestamp("time_updated");
+                Date enrollment_date = rs.getDate("enrollment_date");
+                Status status = Student.getStatusFromResultSet(rs);
+                students.add(new Student(userId, firstName, lastName, email, password, profilePicture, timeCreated, timeUpdated, enrollment_date, status));
+            }
+        }
+        return students;
+    }
+public static void main(String[] args) {
+    try {
+        StudentDAO dao = new StudentDAO();
+        ArrayList<Student> students = dao.getAllStudents();
+            System.out.println(students);
+
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+}
 }
