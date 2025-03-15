@@ -19,3 +19,4 @@ INSERT INTO Course (course_name, course_code, num_credits, description, capacity
 ('Intro to Databases', 'COSC 304', 3, 'Intro to MySQL and relational databases.', 120, '2025-01-06', '2025-04-10', '2025 Winter T2', 'Monday-Tuesday', '09:30:00', '11:00:00', 'ASC 140'),
 ('Analysis of Algorithms', 'COSC 320', 3, 'Analysis of algorithms, Big-O complexity and optimization.', 120, '2025-01-06', '2025-04-10', '2025 Winter T2', 'Monday-Wednesday', '10:00:00', '11:30:00', 'SCI 330'),
 ('Web Programming', 'COSC 360', 3, 'Intro HTML, CSS and JavaScript, as well as back end integration.', 120, '2025-01-06', '2025-04-10', '2025 Winter T2', 'Wednesday-Friday', '08:00:00', '09:30:00', 'EME 0500');
+

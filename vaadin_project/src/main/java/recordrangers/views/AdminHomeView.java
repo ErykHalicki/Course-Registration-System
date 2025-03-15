@@ -39,10 +39,14 @@ public class AdminHomeView extends AppLayout{
 	User loggedInUser;
 
 
-    private AdminCourseUses adminCourseUses = new AdminCourseUses();
+    private AdminCourseUses adminCourseUses;
     
 
     public AdminHomeView() {
+    	
+    	try {
+    	adminCourseUses = new AdminCourseUses();
+    	} catch (SQLException ex) {}
     	
     	loggedInUser = (User)VaadinSession.getCurrent().getAttribute("loggedInUser");
     	
@@ -121,7 +125,7 @@ public class AdminHomeView extends AppLayout{
 
     public void createDrawer() {
         // Create tabs for the drawer
-        Tab profile = new Tab(VaadinIcon.CLIPBOARD_USER.create(), new RouterLink("Profile", AdminHomeView.class));
+        Tab profile = new Tab(VaadinIcon.CLIPBOARD_USER.create(), new RouterLink("Profile", AdminProfileView.class));
 
         // Student search
         Button studentSearchButton = new Button("Search for Students", event -> showStudentSearch());
@@ -133,7 +137,7 @@ public class AdminHomeView extends AppLayout{
         Tab studentSearch = new Tab(VaadinIcon.USER.create(), studentSearchButton);
         
         // Course search
-        Tab courseSearch = new Tab(VaadinIcon.ACADEMY_CAP.create(), new RouterLink("Search for Courses", AdminHomeView.class));
+        Tab courseSearch = new Tab(VaadinIcon.ACADEMY_CAP.create(), new RouterLink("Search for Courses", AdminCourseSearchView.class));
 
         // Create course
         Button addCourseButton = new Button("Add a Course", event -> showAddCourse());

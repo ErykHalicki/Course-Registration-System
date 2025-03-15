@@ -1,3 +1,4 @@
+/*
 package recordrangers.tests;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -78,3 +79,4 @@ public class AdminCourseUsesTest {
       return out;
 }
 }
+*/

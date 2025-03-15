@@ -14,7 +14,7 @@ public class StudentDAO{
     private static Connection connection;
         
         public StudentDAO() throws SQLException{
-            StudentDAO.connection = DatabaseConnection.getConnection();
+            StudentDAO.connection =  DatabaseConnection.getInstance().getConnection();
         }
         public StudentDAO(Connection connection){
             StudentDAO.connection = connection;
@@ -80,7 +80,7 @@ public class StudentDAO{
                 String lastName = rs.getString("last_name");
                 String email = rs.getString("email");
                 String password = rs.getString("password");
-                byte[] profilePicture = rs.getBytes("profile_picture");
+                String profilePicture = rs.getString("profile_picture");
                 Timestamp timeCreated = rs.getTimestamp("time_created");
                 Timestamp timeUpdated = rs.getTimestamp("time_updated");
                 Date enrollment_date = rs.getDate("enrollment_date");

@@ -6,7 +6,7 @@ public class UserDAO extends User {
     private static Connection connection;
 
     public UserDAO() throws SQLException{
-            UserDAO.connection = DatabaseConnection.getConnection();
+            UserDAO.connection =  DatabaseConnection.getInstance().getConnection();
         }
     
     public UserDAO(Connection connection) {

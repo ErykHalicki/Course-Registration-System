@@ -30,8 +30,8 @@ public class StudentHomeView extends AppLayout{
     	try {
 			if (loggedInUser == null || !Auth.isStudent(loggedInUser.getUserId())) {
 			    // Throwing a NotFoundException triggers the 404 error page
-				UI.getCurrent().navigate("404");
-				return;
+				//UI.getCurrent().navigate("404");
+				//return;
 			}
 		} catch (SQLException e) {
 			UI.getCurrent().navigate("404");

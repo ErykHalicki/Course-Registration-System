@@ -13,7 +13,7 @@ public class CourseDAO {
     private static Connection connection;
 
     public CourseDAO() throws SQLException{
-        CourseDAO.connection = DatabaseConnection.getConnection();
+        CourseDAO.connection =  DatabaseConnection.getInstance().getConnection();
     }
     public ArrayList<Course> searchByCourseCode(String code) throws SQLException{
         ArrayList<Course> courses = new ArrayList<>();

@@ -16,7 +16,7 @@ public class StudentDatabaseExporter {
     private static Connection connection;
 
     public StudentDatabaseExporter() throws SQLException{
-       StudentDatabaseExporter.connection = DatabaseConnection.getConnection();
+       StudentDatabaseExporter.connection =  DatabaseConnection.getInstance().getConnection();
     }
     @SuppressWarnings("CallToPrintStackTrace")
     public static List<Student> fetchStudentsFromDB() {
