@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @PageTitle("Current Courses")
-@Route(value = "current-courses", layout = MainLayout.class)
+@Route(value = "current-courses", layout = StudentHomeView.class)
 public class CurrentCoursesView extends VerticalLayout {
 
     private final Grid<Course> courseGrid;
@@ -20,13 +20,6 @@ public class CurrentCoursesView extends VerticalLayout {
     public CurrentCoursesView() {
         // 1) Create some dummy data for demonstration
         enrolledCourses = new ArrayList<>();
-        enrolledCourses.add(new Course(1, "Intro to Computer Science", "CSCI 101", 3, 
-                "2025 Winter 1", "2025-09-01", "2025-12-05"));
-        enrolledCourses.add(new Course(2, "Calculus 1", "MATH 101", 4, 
-                "2025 Winter 1", "2025-09-01", "2025-12-05"));
-        enrolledCourses.add(new Course(3, "English Composition", "ENG 101", 3, 
-                "2025 Winter 1", "2025-09-01", "2025-12-05"));
-
         // 2) Initialize the grid and configure columns
         courseGrid = new Grid<>(Course.class, false);
         courseGrid.addColumn(Course::getCourseName).setHeader("Course Name");

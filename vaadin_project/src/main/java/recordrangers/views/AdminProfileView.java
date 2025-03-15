@@ -14,10 +14,10 @@ import com.vaadin.flow.server.VaadinSession;
 import recordrangers.models.User;
 
 @PageTitle("Profile")
-@Route(value = "profile", layout = StudentHomeView.class)
-public class ProfileView extends VerticalLayout {
+@Route(value = "admin-profile", layout = AdminHomeView.class)
+public class AdminProfileView extends VerticalLayout {
 
-    public ProfileView() {
+    public AdminProfileView() {
     	User loggedInUser = (User)VaadinSession.getCurrent().getAttribute("loggedInUser");
     	
         // Profile Photo (Avatar)

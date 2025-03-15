@@ -7,7 +7,7 @@ CREATE TABLE User (
     user_id INT AUTO_INCREMENT PRIMARY KEY,
     first_name VARCHAR(50),
     last_name VARCHAR(50),
-    email VARCHAR(100) UNIQUE NOT NULL,
+    email VARCHAR(100) NOT NULL,
     password VARCHAR(255) NOT NULL,
     profile_photo TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -34,7 +34,7 @@ CREATE TABLE Admin (
 CREATE TABLE Course (
     course_id INT AUTO_INCREMENT PRIMARY KEY,
     course_name VARCHAR(100) NOT NULL,
-    course_code VARCHAR(20) UNIQUE NOT NULL,
+    course_code VARCHAR(20) NOT NULL,
     num_credits INT,
     description TEXT,
     capacity INT NOT NULL,

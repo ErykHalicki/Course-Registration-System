@@ -15,7 +15,7 @@ public class Auth{
     
     
     public static User signIn(String email, String password) throws SQLException{
-    	con = DatabaseConnection.getConnection();
+    	con =  DatabaseConnection.getInstance().getConnection();
         String query = 
         "SELECT * " + 
         "FROM User " +
@@ -57,7 +57,7 @@ public class Auth{
     public static boolean isStudent(int UserId) throws SQLException{
         // initialize sql
     	//if(UserId == 0) return true;
-    	con = DatabaseConnection.getConnection();
+    	con = DatabaseConnection.getInstance().getConnection();
         String sql = "SELECT 1 FROM Student WHERE student_id = ?";
 
         // create statement using try-catch
@@ -74,7 +74,7 @@ public class Auth{
     public static boolean isAdmin(int UserId) throws SQLException{
         // initialize sql
     	//if(UserId == 1) return true;
-    	con = DatabaseConnection.getConnection();
+    	con = DatabaseConnection.getInstance().getConnection();
         String sql = "SELECT 1 FROM Admin WHERE admin_id = ?";
 
         // create statement using try-catch

@@ -8,7 +8,7 @@ public class AdminCourseUses {
     private final Connection connection;
 
     public AdminCourseUses() throws SQLException {
-        this.connection = DatabaseConnection.getConnection();
+        this.connection = DatabaseConnection.getInstance().getConnection();
     }
 
     public void addCourse(String name, String code, int credits, String desc, int capacity, String startDate, 

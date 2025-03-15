@@ -15,14 +15,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @PageTitle("Course Search")
-@Route(value = "course-search", layout = StudentHomeView.class)
-public class CourseSearchView extends VerticalLayout {
+@Route(value = "admin-course-search", layout = AdminHomeView.class)
+public class AdminCourseSearchView extends VerticalLayout {
 
     protected Grid<Course> courseGrid = new Grid<>(Course.class);
     protected TextField searchField = new TextField();
     List<Course> allCourses;
 
-    public CourseSearchView() throws SQLException {
+    public AdminCourseSearchView() throws SQLException {
         // Configure search field
     	CourseDAO databaseInterface = new CourseDAO();
     	allCourses = databaseInterface.getAllCourses();

@@ -1,16 +1,23 @@
-# Use an official OpenJDK 17 image (Vaadin requires Java 17+)
-FROM eclipse-temurin:17-jdk
+
+FROM eclipse-temurin:19-jdk
 
 # Set the working directory inside the container
 WORKDIR /app
 
-# Copy the project files into the container
-COPY . /app
+# Copy Maven wrapper and POM file first (for efficient caching)
+COPY mvnw pom.xml ./
 
-# Install dependencies and build the project
-RUN ./mvnw package 
+COPY .mvn .mvn
 
+COPY src src
+
+# Install dependencies (without building the whole project)
+RUN ./mvnw install
+
+# Copy the entire project
+
+# Build the project
 # Expose the port Vaadin runs on (default is 8080)
 EXPOSE 8080
 
-CMD ["java", "-jar", "target/spring-skeleton-1.0-SNAPSHOT.jar"]
+CMD ["./mvnw", "spring-boot:run"]

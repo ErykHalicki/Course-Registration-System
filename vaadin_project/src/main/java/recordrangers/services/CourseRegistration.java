@@ -1,3 +1,4 @@
+package recordrangers.services;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -12,7 +13,7 @@ public class CourseRegistration {
     private Connection con;
 
     public CourseRegistration() throws SQLException {
-        this.con = DatabaseConnection.getConnection();
+        this.con =  DatabaseConnection.getInstance().getConnection();
     }
 
     public void registerStudent(int studentId, int courseId) throws SQLException {
