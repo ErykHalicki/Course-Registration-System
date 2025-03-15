@@ -5,6 +5,25 @@ COSC 310 project
 ## Overview
 This project is a Course Enrollment and Management System designed to cater to two primary user roles: **students** and **admins**. The system supports secure account creation and login, profile management, course viewing, enrollment, and administration functionalities, with additional features planned for future development.
 
+## Steps to Build and Run the Project
+```sh
+git clone https://github.com/ErykHalicki/RecordRangers.git
+cd RecordRangers/vaadin_project
+docker compose up --build -d
+```
+
+You can now access the project at localhost:8080!
+please email our group if it isnt working, i tested the compilation on my laptop but im not 100% sure if itll work on someone elses computer
+
+### demo login info
+student:
+john.doe@example.com
+password123
+
+admin:
+olivia.young@example.com
+password1010
+
 ## Current Features
 
 ### General Features (Completed)
@@ -48,21 +67,4 @@ This project is a Course Enrollment and Management System designed to cater to t
 - **Waitlist Management:** Admins will be able to add students to course waitlists when enrollment is full.
 
 
-## Steps to Build and Run the Project
-```sh
-git clone https://github.com/ErykHalicki/RecordRangers.git
-cd RecordRangers/vaadin_project
-docker compose up --build -d
-```
 
-You can now access the project at localhost:8080!
-please email our group if it isnt working, i tested the compilation on my laptop but im not 100% sure if itll work on someone elses computer
-
-### demo login info
-student:
-john.doe@example.com
-password123
-
-admin:
-olivia.young@example.com
-password1010
