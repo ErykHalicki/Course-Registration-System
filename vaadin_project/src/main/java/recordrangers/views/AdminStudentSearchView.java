@@ -9,6 +9,7 @@ import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 
@@ -29,9 +30,8 @@ public class AdminStudentSearchView extends VerticalLayout {
         H2 title = new H2("Admin Student Search");
 
         // Configure grid columns
-        Grid<Student> studentGrid = new Grid<>(Student.class);
         studentGrid.setColumns("studentId", "firstName", "lastName", "email", "enrollment_date", "status");
-       
+    
         ArrayList<Student> students;
         try {
             students = databaseInterface.getAllStudents();
@@ -41,16 +41,18 @@ public class AdminStudentSearchView extends VerticalLayout {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        // Search button listener to update the grid based on search term
-        searchButton.addClickListener(e -> updateGrid());
+
+         // Initial load of student data
+         updateGrid();
+
+        // Enable real-time search as the user types
+        searchField.setValueChangeMode(ValueChangeMode.EAGER);
+        searchField.addValueChangeListener(event -> updateGrid());
 
         // Arrange components vertically
         add(title, searchField, searchButton, studentGrid);
         setPadding(true);
         setSpacing(true);
-
-        // Initial load of student data
-        updateGrid();
     }
     /**
      * Updates the grid by fetching the student list and filtering it based on the search term.
@@ -60,9 +62,20 @@ public class AdminStudentSearchView extends VerticalLayout {
             ArrayList<Student> students = databaseInterface.getAllStudents();
             String searchTerm = searchField.getValue().toLowerCase().trim();
             if (!searchTerm.isEmpty()) {
-                students = (ArrayList<Student>) students.stream()
-                        .filter(s -> s.getFirstName().toLowerCase().contains(searchTerm))
+                // First, get names that start with the search term
+                ArrayList<Student> startsWith = (ArrayList<Student>) students.stream()
+                        .filter(s -> s.getFirstName().toLowerCase().startsWith(searchTerm))
                         .collect(Collectors.toList());
+    
+                // Then, get names that contain the search term but do not start with it
+                ArrayList<Student> contains = (ArrayList<Student>) students.stream()
+                        .filter(s -> s.getFirstName().toLowerCase().contains(searchTerm) && 
+                                     !s.getFirstName().toLowerCase().startsWith(searchTerm))
+                        .collect(Collectors.toList());
+    
+                // Combine results, with "startsWith" appearing first
+                startsWith.addAll(contains);
+                students = startsWith;
             }
             studentGrid.setItems(students);
         } catch (SQLException e) {
@@ -71,3 +84,4 @@ public class AdminStudentSearchView extends VerticalLayout {
     }
 
 }
+
