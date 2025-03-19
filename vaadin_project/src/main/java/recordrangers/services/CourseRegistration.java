@@ -5,8 +5,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import recordrangers.models.Course;
-import recordrangers.services.CourseDAO;
-import recordrangers.services.DatabaseConnection;
 
 public class CourseRegistration {
     
@@ -41,6 +39,17 @@ public class CourseRegistration {
             pstmt.executeUpdate();
         } catch (SQLException e) {
             System.out.println("Error registering a student: " + e.getMessage());
+        }
+    }
+
+    public void registerStudentIntoLab(int studentId, int sectionId) throws SQLException {
+        String sql = "INSERT INTO LabEnrollment (student_id, section_id) VALUES (?, ?)";
+        try (PreparedStatement pstmt = con.prepareStatement(sql)) {
+            pstmt.setInt(1, studentId);
+            pstmt.setInt(2, sectionId);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println("Error registering a student into the lab! " + e.getMessage());
         }
     }
 
