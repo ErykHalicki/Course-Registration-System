@@ -39,6 +39,7 @@ public class WaitlistHandlerTest {
         }
     }
 
+    @Test
     public void addToLabWaitlist() throws SQLException { 
         // Lab waitlist
         int studentId = 1;
