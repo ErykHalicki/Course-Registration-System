@@ -8,8 +8,11 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import recordrangers.services.DatabaseConnection;
+
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
+
+import recordrangers.services.WaitlistHandler;
 
 public class WaitlistHandlerTest {
     private WaitlistHandler waitlistHandler;
