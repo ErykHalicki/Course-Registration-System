@@ -4,14 +4,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import recordrangers.services.DatabaseConnection;
-
-import org.junit.jupiter.api.*;
-import static org.junit.jupiter.api.Assertions.*;
-
 import recordrangers.services.WaitlistHandler;
 
 public class WaitlistHandlerTest {
