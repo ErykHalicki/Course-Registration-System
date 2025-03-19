@@ -14,7 +14,7 @@ public class CourseRegistration {
         this.con =  DatabaseConnection.getInstance().getConnection();
     }
 
-    public void registerStudent(int studentId, int courseId) throws SQLException {
+    public static void registerStudent(int studentId, int courseId) throws SQLException {
         // check that student is not already registered
         // check that course capacity is not full
         Course course = CourseDAO.getCourseDetails(courseId);
