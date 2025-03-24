@@ -100,7 +100,7 @@ public class CourseDAO {
 
             if (rs.next()) {
                 int enrollment = rs.getInt("enrollment");
-                int maxCapacity = rs.getInt("maxCapacity");
+                int maxCapacity = rs.getInt("capacity");
 
                 if (enrollment >= maxCapacity) {
                     // Course is full, insert student into waitlist
