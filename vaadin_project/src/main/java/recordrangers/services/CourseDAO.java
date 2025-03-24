@@ -58,7 +58,7 @@ public class CourseDAO {
     
     @SuppressWarnings("CallToPrintStackTrace")
     public static Course getCourseDetails(int courseId) {
-        String query = "SELECT * FROM courses WHERE course_id = ?";
+        String query = "SELECT * FROM Course WHERE course_id = ?";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setInt(1, courseId);
             ResultSet rs = stmt.executeQuery();
@@ -67,8 +67,8 @@ public class CourseDAO {
                     rs.getInt("course_id"),
                     rs.getString("course_code"),
                     rs.getString("course_name"),
-                    rs.getInt("max_capacity"),
-                    rs.getString("schedule")
+                    rs.getInt("capacity"),
+                    rs.getString("term_label")
                 );
             }
         } catch (SQLException e) {
@@ -79,7 +79,7 @@ public class CourseDAO {
 
     @SuppressWarnings("CallToPrintStackTrace")
     public static boolean updateCourseCapacity(int courseId, int newCapacity) {
-        String query = "UPDATE courses SET max_capacity = ? WHERE course_id = ?";
+        String query = "UPDATE Course SET capacity = ? WHERE course_id = ?";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setInt(1, newCapacity);
             stmt.setInt(2, courseId);
@@ -93,7 +93,7 @@ public class CourseDAO {
     // Method to add a student to the waitlist if the course is full
     public boolean addStudentToWaitlist(int studentId, int courseId) {
         // Check if the course is full
-        String checkCapacityQuery = "SELECT enrollment, maxCapacity FROM courses WHERE course_id = ?";
+        String checkCapacityQuery = "SELECT enrollment, capacity FROM Course WHERE course_id = ?";
         try (PreparedStatement checkStmt = connection.prepareStatement(checkCapacityQuery)) {
             checkStmt.setInt(1, courseId);
             ResultSet rs = checkStmt.executeQuery();
@@ -129,7 +129,10 @@ public class CourseDAO {
         String sql = "SELECT COUNT(student_id) as enrolled FROM Enrollments WHERE course_id = " + courseId; 
         try (Statement stmt = connection.createStatement()) {
             ResultSet rst = stmt.executeQuery(sql);
-            return rst.getInt("enrolled");
+            if (rst.next()) {
+            	return rst.getInt("enrolled");
+            }
+            return 0;
         }
     }
 
