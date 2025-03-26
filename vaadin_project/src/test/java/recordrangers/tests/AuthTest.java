@@ -3,16 +3,15 @@ import java.sql.SQLException;
 import recordrangers.services.Auth;
 import recordrangers.models.User;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 public class AuthTest {
-    private Auth auth;
-    
-    @Before
-    public void init() {
-        auth = new Auth();
+        
+    @BeforeAll
+    public static void init() {
+
     }
 
     @Test
@@ -22,9 +21,9 @@ public class AuthTest {
         String email = "john.doe@example.com";
         String password = "password123";
         
-        User result = auth.signIn(email, password);
-        Assert.assertEquals(firstName, result.getFirstName());
-        Assert.assertEquals(lastName, result.getLastName());
+        User result = Auth.signIn(email, password);
+        assertEquals(firstName, result.getFirstName());
+        assertEquals(lastName, result.getLastName());
     }
 
     @Test
@@ -34,39 +33,39 @@ public class AuthTest {
         String email = "john.doe@example.com";
         String password = "wrongPassword";
     
-        User result = auth.signIn(email, password);
-        Assert.assertNull(result);
+        User result = Auth.signIn(email, password);
+        assertNull(result);
     }
 
     @Test
     public void testIsStudent() throws SQLException {
         String email = "john.doe@example.com";
         String password = "password123";
-        User user = auth.signIn(email, password);
-        Assert.assertTrue(auth.isStudent(user.getUserId()));
+        User user = Auth.signIn(email, password);
+        assertTrue(Auth.isStudent(user.getUserId()));
     }
 
     @Test
     public void testIsStudentNot() throws SQLException {
         String email = "jane.smith@example.com";
         String password = "password456";
-        User user = auth.signIn(email, password);
-        Assert.assertFalse(auth.isStudent(user.getUserId()));
+        User user = Auth.signIn(email, password);
+        assertFalse(Auth.isStudent(user.getUserId()));
     }
 
     @Test
     public void testIsAdmin() throws SQLException {
         String email = "jane.smith@example.com";
         String password = "password456";
-        User user = auth.signIn(email, password);
-        Assert.assertTrue(auth.isAdmin(user.getUserId()));
+        User user = Auth.signIn(email, password);
+        assertTrue(Auth.isAdmin(user.getUserId()));
     }
 
     @Test
     public void testIsAdminNot() throws SQLException {
         String email = "john.doe@example.com";
         String password = "password123";
-        User user = auth.signIn(email, password);
-        Assert.assertFalse(auth.isAdmin(user.getUserId()));
+        User user = Auth.signIn(email, password);
+        assertFalse(Auth.isAdmin(user.getUserId()));
     }
 }

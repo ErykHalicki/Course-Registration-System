@@ -4,6 +4,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class DatabaseConnection {
+
     private static final String URL = "jdbc:mysql://database:3306/UniversityDB";
 	//private static final String URL = "jdbc:mysql://localhost:3306/UniversityDB";
     private static final String USER = "root";
@@ -14,8 +15,8 @@ public class DatabaseConnection {
     private Connection connection;
 
     private DatabaseConnection() {
-        try {
-            this.connection = DriverManager.getConnection(URL, USER, PASSWORD);
+    	try {
+            this.connection = DriverManager.getConnection(url, user, password);
         } catch (SQLException e) {
             e.printStackTrace();
         }
