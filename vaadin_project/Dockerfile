@@ -12,7 +12,7 @@ COPY .mvn .mvn
 COPY src src
 
 # Install dependencies (without building the whole project)
-
+RUN ./mvnw install -DskipTests
 # Copy the entire project
 
 # Build the project
