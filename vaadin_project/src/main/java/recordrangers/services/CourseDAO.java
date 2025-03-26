@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 import recordrangers.models.Course;
@@ -46,9 +47,13 @@ public class CourseDAO {
                     int currentId = rst.getInt("course_id");
                     String currentCode = rst.getString("course_code");
                     String currentName = rst.getString("course_name");
-                    int currentMax = rst.getInt("capacity");
+                    int capacity = rst.getInt("capacity");
+                    int credits = rst.getInt("num_credits");
+                    String term = rst.getString("term_label");
+                    LocalDate startDate = LocalDate.parse(rst.getString("start_date"));
+                    LocalDate endDate = LocalDate.parse(rst.getString("end_date"));
                     String schedule = rst.getString("term_label")+" : "+rst.getString("start_date")+" - "+rst.getString("end_date");
-                    Course currentCourse = new Course(currentId, currentCode, currentName, currentMax, schedule);
+                    Course currentCourse = new Course(currentId, currentCode, currentName, credits, capacity, term, startDate, endDate, schedule);
                     courses.add(currentCourse);
             }
         }
