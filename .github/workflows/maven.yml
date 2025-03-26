@@ -28,6 +28,10 @@ jobs:
           - ./vaadin_project/db/init.sql:/docker-entrypoint-initdb.d/init.sql
 
     steps:
+    - name: Increase file system permissions
+      run:
+        sudo chown -R runner:docker "$GITHUB_WORKSPACE"
+        sudo chmod -R 755 "$GITHUB_WORKSPACE"
     - uses: actions/checkout@v4
       with:
         # Add this to ensure clean checkout and handle permission issues
