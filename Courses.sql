@@ -20,3 +20,11 @@ INSERT INTO Course (course_name, course_code, num_credits, description, capacity
 ('Analysis of Algorithms', 'COSC 320', 3, 'Analysis of algorithms, Big-O complexity and optimization.', 120, '2025-01-06', '2025-04-10', '2025 Winter T2', 'Monday-Wednesday', '10:00:00', '11:30:00', 'SCI 330'),
 ('Web Programming', 'COSC 360', 3, 'Intro HTML, CSS and JavaScript, as well as back end integration.', 120, '2025-01-06', '2025-04-10', '2025 Winter T2', 'Wednesday-Friday', '08:00:00', '09:30:00', 'EME 0500');
 
+-- Labs
+INSERT INTO Labs(course_id, lab_name) VALUES (1, 'COSC 101 Lab LO1');
+
+INSERT INTO LabSection(lab_id, capacity, days, start_time, end_time, location) VALUES
+(1, 60, 'Monday', '08:00:00', '10:00:00', "FIP 104");
+
+
+

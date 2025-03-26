@@ -57,6 +57,15 @@ public class Course {
         this.enrollment = enrollment;
     }
     
+    public Course(String courseCode, String courseName, int credits, String term, LocalDate startDate, LocalDate endDate) {
+        this.courseName = courseName;
+        this.courseCode = courseCode;
+        this.numCredits = credits;
+        this.termLabel = term;
+        this.startDate = startDate;
+        this.endDate = endDate;
+    }
+
     public Course(int courseId, String courseCode, String courseName, int maxCapacity, String schedule) {
         this.courseId = courseId;
         this.courseName = courseName;
