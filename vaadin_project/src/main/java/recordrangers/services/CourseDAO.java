@@ -142,9 +142,62 @@ public class CourseDAO {
             return 0;
         }
     }
+  
+    public static ArrayList<Course> getEnrolledCourses(int studentId) throws SQLException {
+        ArrayList<Course> courses = new ArrayList<>();
+        String sql = "SELECT course_name, course_code, num_credits, term_label, start_date, end_date " + 
+                     "FROM Course JOIN Enrollments " + 
+                     "ON Course.course_id = Enrollments.course_id " + 
+                     "WHERE Enrollments.student_id = ?";
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+            pstmt.setInt(1, studentId);
+            ResultSet rst = pstmt.executeQuery();
+            while(rst.next()) {
+                String name = rst.getString("course_name");
+                String code = rst.getString("course_code");
+                int credits = rst.getInt("num_credits");
+                String term = rst.getString("term_label");
+                LocalDate startDate = LocalDate.parse(rst.getString("start_date"));
+                LocalDate endDate = LocalDate.parse(rst.getString("end_date"));
+                Course course = new Course(name, code, credits, term, startDate, endDate);
+                courses.add(course);
+            }
+        } catch(SQLException e) {
+            throw new SQLException("Error fetching course enrollments: " + e.getMessage());
+        }
+        // Add lab enrollments to course array as well
+        String labs = "SELECT l.lab_name, c.course_code, c.term_label, c.start_date, c.end_date " + 
+                      "FROM Labs as l JOIN Course as c ON l.course_id = c.course_id JOIN LabSection as ls ON l.lab_id = ls.lab_id " +
+                      "JOIN LabEnrollment as ON le.section_id = ls.section_id  " + 
+                      "WHERE le.student_id = ?";
+        try(PreparedStatement pstmt = connection.prepareStatement(labs)) {
+            pstmt.setInt(1, studentId);
+            ResultSet rst = pstmt.executeQuery();
+            while(rst.next()) {
+                String name = rst.getString("lab_name");
+                String code = rst.getString("course_code");
+                int credits = 0;
+                String term = rst.getString("term_label");
+                LocalDate startDate = LocalDate.parse(rst.getString("start_date"));
+                LocalDate endDate = LocalDate.parse(rst.getString("end_date"));
+                Course course = new Course(name, code, credits, term, startDate, endDate);
+                courses.add(course);
+            }
+        } catch(SQLException e) {
+            throw new SQLException("Error fecthing lab enrollments: " + e.getMessage());
+        }
+                      
+        return courses;
+    }
 
-	public static List<Course> getAllStudentCourses(int userId) throws SQLException{
-		//add actual SQL statement for getting a specific students courses
-		return getAllCourses();
-	}
+    @SuppressWarnings("CallToPrintStackTrace")
+    public static void main(String[] args){
+        try {
+            CourseDAO courseDAO = new CourseDAO();
+            ArrayList<Course> courses = courseDAO.getAllCourses();
+            System.out.println(courses);
+        } catch (SQLException e) {
+            System.out.println(e);
+    }
+}
 }
