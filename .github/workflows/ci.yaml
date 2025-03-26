@@ -11,10 +11,17 @@ jobs:
   build-and-test:
     runs-on: ubuntu-latest
     env:
-      MAVEN_OPTS: "-Xmx4096m"
-      NODE_OPTIONS: "--max_old_space_size=4096"
-      
+      MAVEN_OPTS: "-Xmx8192m"
+      NODE_OPTIONS: "--max_old_space_size=8192"
+    
     steps:
+    - name: Create Swap Space
+      run: |
+        sudo swapoff -a
+        sudo dd if=/dev/zero of=/swapfile bs=1M count=8192
+        sudo mkswap /swapfile
+        sudo swapon /swapfile
+        free -h
     - uses: actions/checkout@v4
 
     # Ensure Docker Compose V2 is available
