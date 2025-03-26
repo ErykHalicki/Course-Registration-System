@@ -41,8 +41,8 @@ import java.sql.Timestamp;
          this.status = status;
      }
      public static Status getStatusFromResultSet(ResultSet rs) throws SQLException {
-        String typeStr = rs.getString("Status"); // Read from column
-        return (typeStr != null) ? Status.valueOf(typeStr) : null;
+        String typeStr = rs.getString("status"); // Read from column
+        return (typeStr != null) ? Status.valueOf(typeStr.toUpperCase()) : null;
     }
      @Override
      public String toString() {
