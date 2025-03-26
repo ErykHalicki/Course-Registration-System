@@ -23,6 +23,12 @@ jobs:
         sudo swapon /swapfile
         sudo chmod 600 /swapfile
         free -h
+        
+    - name: Set swappiness
+      run: |
+        sudo sysctl -w vm.swappiness=90
+        sudo sysctl -p
+        
     - uses: actions/checkout@v4
 
     # Ensure Docker Compose V2 is available
