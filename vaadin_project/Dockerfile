@@ -19,4 +19,4 @@ COPY src src
 # Expose the port Vaadin runs on (default is 8080)
 EXPOSE 8080
 
-CMD ["./mvnw", "test", "spring-boot:run"]
+CMD ["./mvnw", "test"]
