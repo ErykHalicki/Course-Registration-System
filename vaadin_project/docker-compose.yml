@@ -26,6 +26,11 @@ services:
       SPRING_DATASOURCE_URL: jdbc:mysql://database:3306/UniversityDB
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: root
+      JAVA_TOOL_OPTIONS: >-
+        -XX:+UseContainerSupport 
+        -XX:MaxRAMPercentage=75.0 
+        -XX:+UseG1GC 
+        -XX:+ExitOnOutOfMemoryError
     restart: unless-stopped
     mem_reservation: 4g
 
