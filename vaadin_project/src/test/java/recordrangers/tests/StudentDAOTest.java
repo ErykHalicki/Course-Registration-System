@@ -1,5 +1,6 @@
 package recordrangers.tests;
-/*import org.junit.jupiter.api.*;
+/*
+import org.junit.jupiter.api.*;
 import java.sql.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -10,7 +11,7 @@ class StudentDAOTest {
     
     @BeforeEach
     void setUp() throws SQLException {
-        connection = DatabaseConnection.getConnection();
+        connection = DatabaseConnection.getInstance().getConnection();
         try (Statement stmt = connection.createStatement()) {
             stmt.execute("CREATE TABLE courses (course_id INT PRIMARY KEY, max_capacity INT)");
             stmt.execute("CREATE TABLE enrollments (student_id INT, course_id INT, PRIMARY KEY (student_id, course_id))");

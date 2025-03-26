@@ -48,7 +48,7 @@ public class CourseSearchView extends VerticalLayout {
         add(searchLayout, courseGrid);
     }
 
-    private void updateGrid(String searchQuery) {
+    public void updateGrid(String searchQuery) {
         // Filters the dummy courses based on searchQuery
         courseGrid.setItems(searchCoursesByString(searchQuery));
         courseGrid.setSizeUndefined();

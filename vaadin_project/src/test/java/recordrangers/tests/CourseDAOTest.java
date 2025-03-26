@@ -1,4 +1,4 @@
-package recordrangers.services;
+package recordrangers.tests;
 
 import org.junit.jupiter.api.*;
 import recordrangers.models.Course;
