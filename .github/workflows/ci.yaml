@@ -10,17 +10,18 @@ on:
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
-    env:
-      MAVEN_OPTS: "-Xmx2048m"
-      NODE_OPTIONS: "--max_old_space_size=2048"
+    #env:
+     # MAVEN_OPTS: "-Xmx2048m"
+     # NODE_OPTIONS: "--max_old_space_size=2048"
     
     steps:
     - name: Create Swap Space
       run: |
         sudo swapoff -a
-        sudo dd if=/dev/zero of=/swapfile bs=1M count=2048
+        sudo dd if=/dev/zero of=/swapfile bs=1M count=4096
         sudo mkswap /swapfile
         sudo swapon /swapfile
+        sudo chmod 600 /swapfile
         free -h
     - uses: actions/checkout@v4
 
