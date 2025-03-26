@@ -14,10 +14,12 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.server.VaadinSession;
 
 import recordrangers.models.Course;
-
+import recordrangers.models.User;
 import recordrangers.services.CourseDAO;
+import recordrangers.services.CourseRegistration;
 
 
 import java.sql.*;
@@ -41,6 +43,12 @@ public class CourseRegistrationView extends CourseSearchView {
             } else {
                 // Here you'd normally insert a record in a "registration" table
                 // with the user info and the course ID.
+            	User loggedInUser = (User)VaadinSession.getCurrent().getAttribute("loggedInUser");
+            	try {
+					CourseRegistration.registerStudent(loggedInUser.getUserId(), selected.getCourseId());
+				} catch (SQLException e1) {
+					e1.printStackTrace();
+				}
                 Notification.show("Registered for: " + selected.getCourseName());
             }
         });

@@ -8,13 +8,14 @@ import recordrangers.models.Course;
 
 public class CourseRegistration {
     
-    private Connection con;
+    private static Connection con;
 
     public CourseRegistration() throws SQLException {
-        this.con =  DatabaseConnection.getInstance().getConnection();
+    	con =  DatabaseConnection.getInstance().getConnection();
     }
 
-    public void registerStudent(int studentId, int courseId) throws SQLException {
+    public static void registerStudent(int studentId, int courseId) throws SQLException {
+    	con =  DatabaseConnection.getInstance().getConnection();
         // check that student is not already registered
         // check that course capacity is not full
         Course course = CourseDAO.getCourseDetails(courseId);
@@ -42,7 +43,7 @@ public class CourseRegistration {
         }
     }
 
-    public void registerStudentIntoLab(int studentId, int sectionId) throws SQLException {
+    public static void registerStudentIntoLab(int studentId, int sectionId) throws SQLException {
         String sql = "INSERT INTO LabEnrollment (student_id, section_id) VALUES (?, ?)";
         try (PreparedStatement pstmt = con.prepareStatement(sql)) {
             pstmt.setInt(1, studentId);
@@ -54,7 +55,7 @@ public class CourseRegistration {
     }
 
     // Helper method to return student enrollment in a course
-    public boolean isRegistered(int courseId, int studentId) throws SQLException {
+    public static boolean isRegistered(int courseId, int studentId) throws SQLException {
         // Return 1 if student is registered
         String sql = "SELECT 1 FROM Enrollments WHERE course_id = ? AND student_id = ? " + " AND status = 'Enrolled'";
         try (PreparedStatement pstmt = con.prepareStatement(sql)) {
@@ -70,35 +71,36 @@ public class CourseRegistration {
         return false;
     }
 
-    public void dropCourse(int studentId, int courseId) throws SQLException {
+    public static void dropCourse(int studentId, int courseId) throws SQLException {
         // Start a transaction
+    	con = DatabaseConnection.getInstance().getConnection();
         con.setAutoCommit(false);
 
         // Try the transaction and catch errors
         try {
             // First remove student from course
             removeStudentFromCourse(studentId, courseId);
-
             // Next drop their lab sections of this course
             removeStudentFromLabSections(studentId, courseId);
 
             // Lastly enroll next student from waitlist
             enrollNextStudentFromWaitlist(studentId, null, "Course");
+            
 
             // Commit the transaction 
             con.commit();
 
         } catch (SQLException e) {
             con.rollback(); // Undo's any changes made
-            throw new SQLException("Failed to drop the couse: " + e.getMessage());
+            e.printStackTrace();
         } finally {
             // Restore con auto commit mode
             con.setAutoCommit(true);
         }
     }
     
-    private void removeStudentFromCourse(int studentId, int courseId) throws SQLException {
-        String sql = "DELETE FROM Enrollments WHERE student_id = AND course_id = ?";
+    private static void removeStudentFromCourse(int studentId, int courseId) throws SQLException {
+        String sql = "DELETE FROM Enrollments WHERE student_id = ? AND course_id = ?";
         try (PreparedStatement pstmt = con.prepareStatement(sql)) {
             pstmt.setInt(1, studentId);
             pstmt.setInt(2, courseId);
@@ -106,7 +108,7 @@ public class CourseRegistration {
         }
     }
 
-    private void removeStudentFromLabSections(int studentId, int courseId) throws SQLException {
+    private static void removeStudentFromLabSections(int studentId, int courseId) throws SQLException {
         String sql = "SELECT section_id FROM LabSection WHERE lab_id IN " +
                      "(SELECT lab_id FROM Labs WHERE course_id = ?)";
         try (PreparedStatement pstmt = con.prepareStatement(sql)) {
@@ -123,7 +125,7 @@ public class CourseRegistration {
         }
     }
 
-    private void removeStudentFromLabSection(int studentId, int sectionId) throws SQLException {
+    private static void removeStudentFromLabSection(int studentId, int sectionId) throws SQLException {
         String sql = "DELETE FROM LabEnrollment WHERE student_id = ? AND section_id = ?";
         try (PreparedStatement pstmt = con.prepareStatement(sql)) {
             pstmt.setInt(1, studentId);
@@ -132,7 +134,7 @@ public class CourseRegistration {
         }
     }
 
-    public void enrollNextStudentFromWaitlist(int studentId, Integer sectionId, String type) throws SQLException {
+    public static void enrollNextStudentFromWaitlist(int studentId, Integer sectionId, String type) throws SQLException {
 
     }
  }
