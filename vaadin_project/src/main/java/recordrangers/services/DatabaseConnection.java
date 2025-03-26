@@ -16,7 +16,8 @@ public class DatabaseConnection {
 
     private DatabaseConnection() {
     	try {
-            this.connection = DriverManager.getConnection(url, user, password);
+
+            this.connection = DriverManager.getConnection(URL, USER, PASSWORD);
         } catch (SQLException e) {
             e.printStackTrace();
         }

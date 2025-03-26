@@ -22,7 +22,6 @@ jobs:
     services:
       database:
         image: mysql:8.0
-        container_name: mysql_db
         ports:
           - 3306:3306
         env:
@@ -47,7 +46,7 @@ jobs:
 
     - name: Set up MySQL database
       run: |
-        # Run MySQL in Docker, ensuring it's ready to use
+        # Wait for MySQL to be ready
         docker-compose -f docker-compose.yml up -d
         sleep 30  # Allow MySQL to initialize
 
