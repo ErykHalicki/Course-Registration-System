@@ -46,7 +46,15 @@ public class DatabaseConnection {
     }
 
     public Connection getConnection() throws SQLException {
-        return this.connection;
+        // If connection is closed or invalid, reopen
+        if (connection == null || connection.isClosed() || !connection.isValid(5)) {
+            synchronized (this) {
+                if (connection == null || connection.isClosed() || !connection.isValid(5)) {
+                    connection = tryConnections();
+                }
+            }
+        }
+        return connection;
     }
 
     public void closeConnection() {
