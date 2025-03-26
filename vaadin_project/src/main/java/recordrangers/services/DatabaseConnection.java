@@ -14,6 +14,7 @@ public class DatabaseConnection {
     // Private constructor to prevent instantiation
     private Connection connection;
 
+    @SuppressWarnings("CallToPrintStackTrace")
     private DatabaseConnection() {
     	try {
 
@@ -23,6 +24,7 @@ public class DatabaseConnection {
         }
     }
 
+    @SuppressWarnings("DoubleCheckedLocking")
     public static DatabaseConnection getInstance() {
         if (instance == null) {
             synchronized (DatabaseConnection.class) {

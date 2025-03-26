@@ -7,7 +7,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.List;
 
 import recordrangers.models.Course;
 
@@ -188,6 +187,51 @@ public class CourseDAO {
         }
                       
         return courses;
+    }
+    public static boolean addCourse(Course course) {
+        String sql = "INSERT INTO Course (course_code, course_name, num_credits, capacity, term_label, start_date, end_date) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        try (PreparedStatement pstmt = DatabaseConnection.getInstance().getConnection().prepareStatement(sql)) {
+            pstmt.setString(1, course.getCourseCode());
+            pstmt.setString(2, course.getCourseName());
+            pstmt.setInt(3, course.getNumCredits());
+            pstmt.setInt(4, course.getMaxCapacity());
+            pstmt.setString(5, course.getTermLabel());
+            pstmt.setDate(6, java.sql.Date.valueOf(course.getStartDate()));
+            pstmt.setDate(7, java.sql.Date.valueOf(course.getEndDate()));
+            return pstmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public static boolean updateCourse(Course course) {
+        String sql = "UPDATE Course SET course_code = ?, course_name = ?, num_credits = ?, capacity = ?, term_label = ?, start_date = ?, end_date = ? WHERE course_id = ?";
+        try (PreparedStatement pstmt = DatabaseConnection.getInstance().getConnection().prepareStatement(sql)) {
+            pstmt.setString(1, course.getCourseCode());
+            pstmt.setString(2, course.getCourseName());
+            pstmt.setInt(3, course.getNumCredits());
+            pstmt.setInt(4, course.getMaxCapacity());
+            pstmt.setString(5, course.getTermLabel());
+            pstmt.setDate(6, java.sql.Date.valueOf(course.getStartDate()));
+            pstmt.setDate(7, java.sql.Date.valueOf(course.getEndDate()));
+            pstmt.setInt(8, course.getCourseId());
+            return pstmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public static boolean deleteCourse(String courseCode) {
+        String sql = "DELETE FROM Course WHERE course_code = ?";
+        try (PreparedStatement pstmt = DatabaseConnection.getInstance().getConnection().prepareStatement(sql)) {
+            pstmt.setString(1, courseCode);
+            return pstmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     @SuppressWarnings("CallToPrintStackTrace")
