@@ -12,7 +12,6 @@ COPY .mvn .mvn
 COPY src src
 
 # Install dependencies (without building the whole project)
-RUN ./mvnw install
 
 # Copy the entire project
 
@@ -20,4 +19,4 @@ RUN ./mvnw install
 # Expose the port Vaadin runs on (default is 8080)
 EXPOSE 8080
 
-CMD ["./mvnw", "spring-boot:run"]
+CMD ["./mvnw", "test", "spring-boot:run"]

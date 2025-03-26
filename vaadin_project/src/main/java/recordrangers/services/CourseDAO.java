@@ -190,14 +190,4 @@ public class CourseDAO {
         return courses;
     }
 
-    @SuppressWarnings("CallToPrintStackTrace")
-    public static void main(String[] args){
-        try {
-            CourseDAO courseDAO = new CourseDAO();
-            ArrayList<Course> courses = courseDAO.getAllCourses();
-            System.out.println(courses);
-        } catch (SQLException e) {
-            System.out.println(e);
-    }
-}
 }
