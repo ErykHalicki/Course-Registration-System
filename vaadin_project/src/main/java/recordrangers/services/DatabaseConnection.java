@@ -4,18 +4,21 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class DatabaseConnection {
-    //private static final String URL = "jdbc:mysql://database:3306/UniversityDB";
-	private static final String URL = "jdbc:mysql://localhost:3306/UniversityDB";
-    private static final String USER = "root";
-    private static final String PASSWORD = "";
-
-    private static volatile DatabaseConnection instance;
+	private static volatile DatabaseConnection instance;
     // Private constructor to prevent instantiation
     private Connection connection;
 
     private DatabaseConnection() {
-        try {
-            this.connection = DriverManager.getConnection(URL, USER, PASSWORD);
+    	try {
+            String url;
+            String user = "root";
+            String password = "";
+            // Use MySQL for production
+            //jdbc:mysql://database:3306/UniversityDB
+            url = "jdbc:mysql://localhost:3306/UniversityDB";
+            user = "root";
+            password = "";
+            this.connection = DriverManager.getConnection(url, user, password);
         } catch (SQLException e) {
             e.printStackTrace();
         }

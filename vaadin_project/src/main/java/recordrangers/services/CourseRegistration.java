@@ -73,25 +73,26 @@ public class CourseRegistration {
 
     public static void dropCourse(int studentId, int courseId) throws SQLException {
         // Start a transaction
+    	con = DatabaseConnection.getInstance().getConnection();
         con.setAutoCommit(false);
 
         // Try the transaction and catch errors
         try {
             // First remove student from course
             removeStudentFromCourse(studentId, courseId);
-
             // Next drop their lab sections of this course
             removeStudentFromLabSections(studentId, courseId);
 
             // Lastly enroll next student from waitlist
             enrollNextStudentFromWaitlist(studentId, null, "Course");
+            
 
             // Commit the transaction 
             con.commit();
 
         } catch (SQLException e) {
             con.rollback(); // Undo's any changes made
-            throw new SQLException("Failed to drop the couse: " + e.getMessage());
+            e.printStackTrace();
         } finally {
             // Restore con auto commit mode
             con.setAutoCommit(true);
@@ -99,7 +100,7 @@ public class CourseRegistration {
     }
     
     private static void removeStudentFromCourse(int studentId, int courseId) throws SQLException {
-        String sql = "DELETE FROM Enrollments WHERE student_id = AND course_id = ?";
+        String sql = "DELETE FROM Enrollments WHERE student_id = ? AND course_id = ?";
         try (PreparedStatement pstmt = con.prepareStatement(sql)) {
             pstmt.setInt(1, studentId);
             pstmt.setInt(2, courseId);

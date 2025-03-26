@@ -25,9 +25,8 @@ public class CourseSearchView extends VerticalLayout {
 
     public CourseSearchView() throws SQLException {
         // Configure search field
-    	CourseDAO databaseInterface = new CourseDAO();
     	
-    	allCourses = databaseInterface.getAllCourses();
+    	allCourses = CourseDAO.getAllCourses();
     	
     	searchField.setValueChangeMode(ValueChangeMode.EAGER);
         searchField.setPlaceholder("Enter course name...");

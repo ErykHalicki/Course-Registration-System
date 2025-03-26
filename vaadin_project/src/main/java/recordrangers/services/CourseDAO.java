@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.List;
 
 import recordrangers.models.Course;
 
@@ -15,11 +16,12 @@ public class CourseDAO {
     public CourseDAO() throws SQLException{
         CourseDAO.connection =  DatabaseConnection.getInstance().getConnection();
     }
+    
     public ArrayList<Course> searchByCourseCode(String code) throws SQLException{
         ArrayList<Course> courses = new ArrayList<>();
         String sql = 
         "SELECT * FROM Course WHERE course_code = ?";
-        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+        try (PreparedStatement pstmt = DatabaseConnection.getInstance().getConnection().prepareStatement(sql)) {
         pstmt.setString(1, code);
             try (ResultSet rst = pstmt.executeQuery()){
                 while(rst.next()){
@@ -40,7 +42,7 @@ public class CourseDAO {
         ArrayList<Course> courses = new ArrayList<>();
         String sql = 
         "SELECT * FROM Course";
-        Statement stmt = connection.createStatement(); ;
+        Statement stmt = DatabaseConnection.getInstance().getConnection().createStatement(); ;
         try (ResultSet rst = stmt.executeQuery(sql)){
                 while(rst.next()){
                     int currentId = rst.getInt("course_id");
@@ -59,7 +61,7 @@ public class CourseDAO {
     @SuppressWarnings("CallToPrintStackTrace")
     public static Course getCourseDetails(int courseId) {
         String query = "SELECT * FROM Course WHERE course_id = ?";
-        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+        try (PreparedStatement stmt = DatabaseConnection.getInstance().getConnection().prepareStatement(query)) {
             stmt.setInt(1, courseId);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
@@ -80,7 +82,7 @@ public class CourseDAO {
     @SuppressWarnings("CallToPrintStackTrace")
     public static boolean updateCourseCapacity(int courseId, int newCapacity) {
         String query = "UPDATE Course SET capacity = ? WHERE course_id = ?";
-        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+        try (PreparedStatement stmt = DatabaseConnection.getInstance().getConnection().prepareStatement(query)) {
             stmt.setInt(1, newCapacity);
             stmt.setInt(2, courseId);
             return stmt.executeUpdate() > 0;
@@ -91,10 +93,10 @@ public class CourseDAO {
     }
 
     // Method to add a student to the waitlist if the course is full
-    public boolean addStudentToWaitlist(int studentId, int courseId) {
+    public static boolean addStudentToWaitlist(int studentId, int courseId) {
         // Check if the course is full
         String checkCapacityQuery = "SELECT enrollment, capacity FROM Course WHERE course_id = ?";
-        try (PreparedStatement checkStmt = connection.prepareStatement(checkCapacityQuery)) {
+        try (PreparedStatement checkStmt = DatabaseConnection.getInstance().getConnection().prepareStatement(checkCapacityQuery)) {
             checkStmt.setInt(1, courseId);
             ResultSet rs = checkStmt.executeQuery();
 
@@ -105,7 +107,7 @@ public class CourseDAO {
                 if (enrollment >= maxCapacity) {
                     // Course is full, insert student into waitlist
                     String insertWaitlistQuery = "INSERT INTO waitlists (student_id, course_id, request_date) VALUES (?, ?, CURRENT_TIMESTAMP)";
-                    try (PreparedStatement insertStmt = connection.prepareStatement(insertWaitlistQuery)) {
+                    try (PreparedStatement insertStmt = DatabaseConnection.getInstance().getConnection().prepareStatement(insertWaitlistQuery)) {
                         insertStmt.setInt(1, studentId);
                         insertStmt.setInt(2, courseId);
                         int affectedRows = insertStmt.executeUpdate();
@@ -127,7 +129,7 @@ public class CourseDAO {
         // Select the count of studentIds from the enrolled relation with matching courseId
         // Prepared statement not needed as user does not enter courseId
         String sql = "SELECT COUNT(student_id) as enrolled FROM Enrollments WHERE course_id = " + courseId; 
-        try (Statement stmt = connection.createStatement()) {
+        try (Statement stmt = DatabaseConnection.getInstance().getConnection().createStatement()) {
             ResultSet rst = stmt.executeQuery(sql);
             if (rst.next()) {
             	return rst.getInt("enrolled");
@@ -136,14 +138,8 @@ public class CourseDAO {
         }
     }
 
-    @SuppressWarnings("CallToPrintStackTrace")
-    public static void main(String[] args){
-        try {
-            CourseDAO courseDAO = new CourseDAO();
-            ArrayList<Course> courses = courseDAO.getAllCourses();
-            System.out.println(courses);
-        } catch (SQLException e) {
-            System.out.println(e);
-    }
-}
+	public static List<Course> getAllStudentCourses(int userId) throws SQLException{
+		//add actual SQL statement for getting a specific students courses
+		return getAllCourses();
+	}
 }

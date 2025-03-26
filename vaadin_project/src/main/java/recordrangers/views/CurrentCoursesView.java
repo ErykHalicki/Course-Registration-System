@@ -1,49 +1,61 @@
 package recordrangers.views;
 
+import java.sql.SQLException;
+import java.util.ArrayList;
+
+
 import com.vaadin.flow.component.button.Button;
+
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.html.H1;
+import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import recordrangers.models.Course;
+import com.vaadin.flow.server.VaadinSession;
 
+import recordrangers.models.Course;
+import recordrangers.models.User;
+import recordrangers.services.CourseDAO;
+import recordrangers.services.CourseRegistration;
+
+
+import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-@PageTitle("Current Courses")
+
+@PageTitle("Course Registration")
 @Route(value = "current-courses", layout = StudentHomeView.class)
-public class CurrentCoursesView extends VerticalLayout {
+public class CurrentCoursesView extends CourseSearchView {
+    private final Button dropButton = new Button("Drop Course");
 
-    private final Grid<Course> courseGrid;
-    private final List<Course> enrolledCourses;
+    public CurrentCoursesView() throws SQLException{
+    	User loggedInUser = (User)VaadinSession.getCurrent().getAttribute("loggedInUser");
+    	allCourses = CourseDAO.getAllStudentCourses(loggedInUser.getUserId());
+        // Register button logic
+        dropButton.addClickListener(e -> {
+            Course selected = courseGrid.asSingleSelect().getValue();
+            if (selected == null) {
+                Notification.show("Please select a course first.");
+            } else {
+            	try {
+					CourseRegistration.dropCourse(loggedInUser.getUserId(), selected.getCourseId());
+				} catch (SQLException e1) {
+					e1.printStackTrace();
+				}
+                Notification.show("Dropped: " + selected.getCourseName());
+            }
+        });
 
-    public CurrentCoursesView() {
-        // 1) Create some dummy data for demonstration
-        enrolledCourses = new ArrayList<>();
-        // 2) Initialize the grid and configure columns
-        courseGrid = new Grid<>(Course.class, false);
-        courseGrid.addColumn(Course::getCourseName).setHeader("Course Name");
-        courseGrid.addColumn(Course::getCourseCode).setHeader("Course Code");
-        courseGrid.addColumn(Course::getNumCredits).setHeader("Credits");
-        courseGrid.addColumn(Course::getTermLabel).setHeader("Term");
-        courseGrid.addColumn(Course::getStartDate).setHeader("Start Date");
-        courseGrid.addColumn(Course::getEndDate).setHeader("End Date");
-
-        // 3) Add a column with a Drop button to remove courses from the grid
-        courseGrid.addComponentColumn(course -> {
-            Button dropButton = new Button("Drop", event -> {
-                // Remove the selected course from the in-memory list
-                enrolledCourses.remove(course);
-                // Refresh the grid so it no longer displays the dropped course
-                courseGrid.getDataProvider().refreshAll();
-            });
-            return dropButton;
-        }).setHeader("Actions");
-
-        // 4) Populate the grid with the dummy list
-        courseGrid.setItems(enrolledCourses);
-
-        // 5) Add the grid to the layout
+        HorizontalLayout actionsLayout = new HorizontalLayout(getSearchField(),dropButton);
+        this.add(actionsLayout);
+        
         add(courseGrid);
+
     }
+
 }
