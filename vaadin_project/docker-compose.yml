@@ -26,6 +26,9 @@ services:
       SPRING_DATASOURCE_URL: jdbc:mysql://database:3306/UniversityDB
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: root
+    restart: unless-stopped
+    mem_limit: 4g
+    mem_reservation: 2g
 
 volumes:
   mysql_data:
