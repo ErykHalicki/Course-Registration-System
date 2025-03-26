@@ -1,20 +1,25 @@
 package recordrangers.tests;
-/*import org.junit.jupiter.api.*;
-import java.sql.*;
-import java.util.*;
-import static org.junit.jupiter.api.Assertions.*;
+import java.sql.Connection;
+import java.sql.Statement;
+import java.util.ArrayList;
 
-import recordrangers.models.*;
-import recordrangers.services.*;
+import org.junit.jupiter.api.AfterAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
-class CourseDAOTest {
-    private static Connection connection;
-    private static CourseDAO courseDAO;
+import recordrangers.models.Course;
+import recordrangers.services.CourseDAO;
+import recordrangers.services.DatabaseConnection;
+
+class CourseDAOTest{
+    private static Connection connection = (Connection) DatabaseConnection.getInstance();
 
     @BeforeAll
     static void setupDatabase() throws Exception {
-        connection = DatabaseConnection.getConnection();
-        courseDAO = new CourseDAO(connection);
         try (Statement stmt = connection.createStatement()) {
             stmt.execute("CREATE TABLE courses (course_id INT PRIMARY KEY, course_code VARCHAR(10), course_name VARCHAR(100), max_capacity INT, schedule VARCHAR(50))");
             stmt.execute("CREATE TABLE waitlists (student_id INT, course_id INT, request_date TIMESTAMP)");
@@ -33,7 +38,8 @@ class CourseDAOTest {
 
     @Test
     void testSearchByCourseName() throws Exception {
-        ArrayList<Course> courses = courseDAO.searchByCourseName("CS101");
+        CourseDAO courseDAO = new CourseDAO();
+        ArrayList<Course> courses = courseDAO.searchByCourseCode("CS101");
         assertFalse(courses.isEmpty(), "Should return at least one course");
         assertEquals("CS101", courses.get(0).getCourseCode());
     }
@@ -54,7 +60,8 @@ class CourseDAOTest {
 
     @Test
     void testAddStudentToWaitlist() throws Exception {
+        CourseDAO courseDAO = new CourseDAO();
         boolean added = courseDAO.addStudentToWaitlist(201, 101);
         assertTrue(added, "Student should be added to the waitlist");
     }
-}*/
+}

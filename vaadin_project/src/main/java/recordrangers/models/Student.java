@@ -20,7 +20,7 @@ import java.sql.Timestamp;
          this.status = status;
      }
      public enum Status{
-         ACTIVE, INACTIVE, GRADUATED
+         Active, Inactive, Graduated
      }
      public int getStudentId() {
          return studentId;
@@ -41,7 +41,7 @@ import java.sql.Timestamp;
          this.status = status;
      }
      public static Status getStatusFromResultSet(ResultSet rs) throws SQLException {
-        String typeStr = rs.getString("Status"); // Read from column
+        String typeStr = rs.getString("status"); // Read from column
         return (typeStr != null) ? Status.valueOf(typeStr) : null;
     }
      @Override
