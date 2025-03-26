@@ -34,7 +34,7 @@ jobs:
           --health-timeout=3s
           --health-retries=3
         volumes:
-          - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+          - ./vaadin_project/db/init.sql:/docker-entrypoint-initdb.d/init.sql
 
     steps:
     - uses: actions/checkout@v4
