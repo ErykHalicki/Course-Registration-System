@@ -1,60 +1,81 @@
 package recordrangers.tests;
-/*import org.junit.jupiter.api.*;
-import java.sql.*;
-import java.util.*;
+
+import org.junit.jupiter.api.*;
+import recordrangers.models.Course;
+import recordrangers.services.CourseDAO;
+import recordrangers.services.DatabaseConnection;
+
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
-import recordrangers.models.*;
-import recordrangers.services.*;
-
-class CourseDAOTest {
-    private static Connection connection;
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)  // Ensure tests run in order
+public class CourseDAOTest {
     private static CourseDAO courseDAO;
+    private static Connection connection;
 
     @BeforeAll
-    static void setupDatabase() throws Exception {
-        connection = DatabaseConnection.getConnection();
-        courseDAO = new CourseDAO(connection);
-        try (Statement stmt = connection.createStatement()) {
-            stmt.execute("CREATE TABLE courses (course_id INT PRIMARY KEY, course_code VARCHAR(10), course_name VARCHAR(100), max_capacity INT, schedule VARCHAR(50))");
-            stmt.execute("CREATE TABLE waitlists (student_id INT, course_id INT, request_date TIMESTAMP)");
-            stmt.execute("INSERT INTO courses VALUES (101, 'CS101', 'Intro to CS', 30, 'MWF 10-11 AM')");
-        }
-    }
-
-    @AfterAll
-    static void tearDownDatabase() throws Exception {
-        try (Statement stmt = connection.createStatement()) {
-            stmt.execute("DROP TABLE waitlists");
-            stmt.execute("DROP TABLE courses");
-        }
-        connection.close();
+    static void setUp() throws SQLException {
+        courseDAO = new CourseDAO();
+        connection = DatabaseConnection.getInstance().getConnection();
+        assertNotNull(connection, "Database connection should not be null");
     }
 
     @Test
-    void testSearchByCourseName() throws Exception {
-        ArrayList<Course> courses = courseDAO.searchByCourseName("CS101");
-        assertFalse(courses.isEmpty(), "Should return at least one course");
+    @Order(1)
+    void testInsertCourse() throws SQLException {
+        String sql = "INSERT INTO Course (course_code, course_name, capacity, term_label, start_date, end_date) VALUES ('CS101', 'Intro to CS', 50, 'Fall 2025', '2025-09-01', '2025-12-15')";
+        connection.createStatement().executeUpdate(sql);
+    }
+
+    @Test
+    @Order(2)
+    void testSearchByCourseCode() throws SQLException {
+        ArrayList<Course> courses = courseDAO.searchByCourseCode("CS101");
+        assertFalse(courses.isEmpty(), "Course should exist in the database");
         assertEquals("CS101", courses.get(0).getCourseCode());
     }
 
     @Test
-    void testGetCourseDetails() throws Exception {
-        Course course = CourseDAO.getCourseDetails(101);
-        assertNotNull(course, "Course should not be null");
-        assertEquals("CS101", course.getCourseCode());
-        assertEquals("Intro to CS", course.getCourseCode());
+    @Order(3)
+    void testGetAllCourses() throws SQLException {
+        List<Course> courses = CourseDAO.getAllCourses();
+        assertFalse(courses.isEmpty(), "Courses should be retrieved from database");
     }
 
     @Test
-    void testUpdateCourseCapacity() throws Exception {
-        boolean updated = CourseDAO.updateCourseCapacity(101, 50);
-        assertTrue(updated, "Capacity should be updated successfully");
+    @Order(4)
+    void testGetCourseDetails() {
+        Course course = CourseDAO.getCourseDetails(1);
+        assertNotNull(course, "Course should exist with ID 1");
+        assertEquals(1, course.getCourseId());
     }
 
     @Test
-    void testAddStudentToWaitlist() throws Exception {
-        boolean added = courseDAO.addStudentToWaitlist(201, 101);
-        assertTrue(added, "Student should be added to the waitlist");
+    @Order(5)
+    void testUpdateCourseCapacity() {
+        boolean updated = CourseDAO.updateCourseCapacity(1, 100);
+        assertTrue(updated, "Course capacity should be updated");
+
+        Course updatedCourse = CourseDAO.getCourseDetails(1);
+        assertNotNull(updatedCourse);
+        assertEquals(100, updatedCourse.getMaxCapacity(), "Updated capacity should be 100");
     }
-}*/
+
+
+    @Test
+    @Order(6)
+    void testCourseCapacity() throws SQLException {
+        int enrolled = CourseDAO.courseCapacity(1);
+        assertTrue(enrolled >= 0, "Enrollment count should be non-negative");
+    }
+
+    @AfterAll
+    static void cleanUp() throws SQLException {
+        connection.createStatement().executeUpdate("DELETE FROM Course WHERE course_code = 'CS101'");
+        connection.close();
+    }
+}

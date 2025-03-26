@@ -1,39 +1,87 @@
-/*
+package recordrangers.tests;
+
+import static org.junit.jupiter.api.Assertions.*;
+
 import java.sql.Connection;
-import java.sql.*;
-import java.util.ArrayList;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
+import recordrangers.services.CourseDAO;
+import recordrangers.services.CourseRegistration;
 import recordrangers.services.DatabaseConnection;
 
 public class CourseRegistrationTest {
+    private Connection con;
 
-    private static CourseRegistration c;
-    private static Connection con;
-
-    @BeforeClass
-    public void init() throws SQLException {
-        this.c = new CourseRegistration();
-        this.con = DatabaseConnection.getConnection();
+    @Test
+    void testRegisterStudent() throws SQLException {
+        int studentId = 1; // Replace with a valid test student ID
+        int courseId = 1; // Replace with a valid test course ID
+        CourseRegistration.dropCourse(studentId, courseId);
+        // Ensure student is not already registered
+        assertFalse(CourseRegistration.isRegistered(courseId, studentId));
+        
+        // Register student
+        CourseRegistration.registerStudent(studentId, courseId);
+        
+        // Verify student is now registered
+        assertTrue(CourseRegistration.isRegistered(courseId, studentId));
     }
 
     @Test
-    public void testRegisterStudent() throws SQLException {
-        c.registerStudent(1, 1);
-        Assert.assertTrue(studentIsEnrolled(1, 1));
+    void testDropCourse() throws SQLException {
+        int studentId = 4;
+        int courseId = 2;
+
+        // Register student
+        CourseRegistration.registerStudent(studentId, courseId);
+        assertTrue(CourseRegistration.isRegistered(courseId, studentId));
+
+        // Drop course
+        CourseRegistration.dropCourse(studentId, courseId);
+        assertFalse(CourseRegistration.isRegistered(courseId, studentId));
     }
 
-   public static boolean studentIsEnrolled(int studentId, int courseId) throws SQLException {
-    String sql = "SELECT 1 FROM Enrollments WHERE course_id= ? AND student_id = ? AND status = 'Enrolled'";
+    @Test
+    void testRegisterStudentIntoLab() throws SQLException {
+        int studentId = 1;
+        int sectionId = 1; // Valid lab section
+        
+        CourseRegistration.registerStudentIntoLab(studentId, sectionId);
 
-    try (PreparedStatement pstmt = con.prepareStatement(sql)) {
-        pstmt.setInt(1, courseId);
-        pstmt.setInt(2, studentId);
-        ResultSet rst = pstmt.executeQuery();
-        return rst.next(); // If a row exists then the registration worked
+        // Verify student is enrolled in lab
+        String sql = "SELECT * FROM LabEnrollment WHERE student_id = ? AND section_id = ?";
+        try (PreparedStatement pstmt = DatabaseConnection.getInstance().getConnection().prepareStatement(sql)) {
+            pstmt.setInt(1, studentId);
+            pstmt.setInt(2, sectionId);
+            ResultSet rst = pstmt.executeQuery();
+            assertTrue(rst.next());
+        }
     }
+
+    @Test
+    void testRemoveStudentFromLabSection() throws SQLException {
+        int studentId = 6;
+        int sectionId = 2;
+
+        // Enroll in lab first
+        CourseRegistration.registerStudentIntoLab(studentId, sectionId);
+
+        // Remove from lab
+        CourseRegistration.removeStudentFromLabSection(studentId, sectionId);
+
+        // Verify student is no longer enrolled
+        String sql = "SELECT 1 FROM LabEnrollment WHERE student_id = ? AND section_id = ?";
+        try (PreparedStatement pstmt = DatabaseConnection.getInstance().getConnection().prepareStatement(sql)) {
+            pstmt.setInt(1, studentId);
+            pstmt.setInt(2, sectionId);
+            ResultSet rst = pstmt.executeQuery();
+            assertFalse(rst.next());
+        }
     }
 }
-*/
