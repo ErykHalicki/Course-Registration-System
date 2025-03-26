@@ -186,8 +186,29 @@ public class CourseDAO {
             throw new SQLException("Error fecthing lab enrollments: " + e.getMessage());
         }
                       
+        // Add Waitlisted courses to course array as well
+        String waitlist = "SELECT c.course_name, c.course_code, c.num_credits, c.term_label, c.start_date, c.end_date " + 
+                         "FROM Course as c JOIN Waitlists as w ON c.course_id = w.course_id " + 
+                         "WHERE w.student_id = ?";
+        try(PreparedStatement pstmt = connection.prepareStatement(waitlist)) {
+            pstmt.setInt(1, studentId);
+            ResultSet rst = pstmt.executeQuery();
+            while(rst.next()) {
+                String name = rst.getString("course_name");
+                String code = rst.getString("course_code");
+                int credits = rst.getInt("num_credits");
+                String term = rst.getString("term_label");
+                LocalDate startDate = LocalDate.parse(rst.getString("start_date"));
+                LocalDate endDate = LocalDate.parse(rst.getString("end_date"));
+                Course course = new Course(name, code, credits, term, startDate, endDate);
+                courses.add(course);
+            }
+        } catch(SQLException e) {
+            throw new SQLException("Error fetching waitlisted courses: " + e.getMessage());
+        }
         return courses;
     }
+
     public static boolean addCourse(Course course) {
         String sql = "INSERT INTO Course (course_code, course_name, num_credits, capacity, term_label, start_date, end_date) VALUES (?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement pstmt = DatabaseConnection.getInstance().getConnection().prepareStatement(sql)) {
