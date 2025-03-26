@@ -10,8 +10,8 @@ on:
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
-    env:
-     MAVEN_OPTS: "-Xmx4096m"
+    #env:
+     # MAVEN_OPTS: "-Xmx4096m"
      # NODE_OPTIONS: "--max_old_space_size=2048"
     
     steps:
@@ -26,7 +26,7 @@ jobs:
         
     - name: Set swappiness
       run: |
-        sudo sysctl -w vm.swappiness=90
+        sudo sysctl -w vm.swappiness=99
         sudo sysctl -p
         
     - uses: actions/checkout@v4
