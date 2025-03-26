@@ -17,33 +17,37 @@ jobs:
     # Ensure Docker Compose V2 is available
     - name: Set up Docker Compose
       run: |
-        # Docker Compose V2 is typically pre-installed on GitHub Actions runners
         docker compose version
 
     # Build and start containers
     - name: Build and Start Containers
+      working-directory: ./vaadin_project
       run: |
         docker compose up -d --build
 
     # Optional: Wait for services to be ready
     - name: Wait for Services
+      working-directory: ./vaadin_project
       run: |
         sleep 30  # Give containers time to start up
         docker compose ps  # Check container status
 
     # Run tests or additional checks
     - name: Run Tests
+      working-directory: ./vaadin_project
       run: |
         docker compose exec -T app ./mvnw test
 
     # Optional: Check logs if something goes wrong
     - name: Display Logs on Failure
       if: failure()
+      working-directory: ./vaadin_project
       run: |
         docker compose logs
 
     # Clean up
     - name: Stop Containers
       if: always()
+      working-directory: ./vaadin_project
       run: |
         docker compose down
