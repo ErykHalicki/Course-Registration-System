@@ -11,11 +11,6 @@ COPY .mvn .mvn
 
 COPY src src
 
-# Install dependencies (without building the whole project)
-RUN ./mvnw install -DskipTests
-# Copy the entire project
-
-# Build the project
 # Expose the port Vaadin runs on (default is 8080)
 EXPOSE 8080
 
