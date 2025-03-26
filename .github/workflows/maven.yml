@@ -39,6 +39,9 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     
+    - name: Fix permissions on init.sql
+      run: chmod 644 db/init.sql
+
     - name: Set up JDK 19
       uses: actions/setup-java@v4
       with:
