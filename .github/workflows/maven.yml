@@ -33,6 +33,8 @@ jobs:
           --health-interval=5s
           --health-timeout=3s
           --health-retries=3
+        volumes:
+          - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
 
     steps:
     - uses: actions/checkout@v4
@@ -43,12 +45,6 @@ jobs:
         java-version: '19'
         distribution: 'temurin'
         cache: maven
-
-    - name: Set up MySQL database
-      run: |
-        # Wait for MySQL to be ready
-        docker-compose -f docker-compose.yml up -d
-        sleep 30  # Allow MySQL to initialize
 
     - name: Build with Maven
       run: mvn -B package --file vaadin_project/pom.xml
