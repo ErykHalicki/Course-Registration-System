@@ -3,6 +3,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
+import recordrangers.models.Course;
+
 
 public class AdminCourseUses {
     private Connection connection;
@@ -39,9 +41,21 @@ public class AdminCourseUses {
         }
     }
 
-    public void editCourse(String name, String code, int credits, String desc, int capacity, String startDate, 
-    String endDate, String term, String days, String startTime, String endTime, String location) throws SQLException{
+    public void editCourse(Course course) throws SQLException{
         
+        String name = course.getCourseName();
+        int credits = course.getNumCredits();
+        String desc = course.getDescription();
+        int capacity = course.getMaxCapacity();
+        String startDate = course.getEndDate().toString();
+        String endDate = course.getStartDate().toString();
+        String term = course.getTermLabel();
+        String days = course.getDays();
+        String startTime = course.getStartTime().toString();
+        String endTime = course.getEndTime().toString();
+        String location = course.getLocation();
+        String code = course.getCourseCode();
+
         String sql = "UPDATE Course SET " +
         "course_name = ?, " +
         "num_credits = ?, " +
