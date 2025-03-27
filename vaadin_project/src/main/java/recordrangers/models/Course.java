@@ -21,9 +21,12 @@ public class Course {
     private LocalTime endTime;
 
     // No-argument constructor
-    public Course() {
+    public Course(String name, String code, String location) {
+        this.courseName = name;
+        this.courseCode = code;
+        this.location = location;
     }
-
+    public Course() {}
     // Full constructor with all fields
     public Course(int courseId, String courseName, String courseCode, int numCredits, String description,
                   int maxCapacity, String schedule, String location, int enrollment,
