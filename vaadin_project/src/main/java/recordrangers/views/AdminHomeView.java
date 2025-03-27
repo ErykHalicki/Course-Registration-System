@@ -3,12 +3,14 @@ package recordrangers.views;
 import java.sql.SQLException;
 import com.vaadin.flow.component.UI;
 
+import java.util.ArrayList;
 import java.util.List;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.datepicker.DatePicker;
+import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.Span;
@@ -28,9 +30,11 @@ import com.vaadin.flow.component.timepicker.TimePicker;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.server.VaadinSession;
+
+import recordrangers.models.Student;
 import recordrangers.models.User;
 import recordrangers.services.Auth;
-
+import recordrangers.services.StudentSearch;
 import recordrangers.services.AdminCourseUses;
 
 @Route("admin-home")
@@ -128,13 +132,7 @@ public class AdminHomeView extends AppLayout{
         Tab profile = new Tab(VaadinIcon.CLIPBOARD_USER.create(), new RouterLink("Profile", AdminProfileView.class));
 
         // Student search
-        Button studentSearchButton = new Button("Search for Students", event -> showStudentSearch());
-        studentSearchButton.getStyle().set("color", "grey");
-        studentSearchButton.getStyle().set("background", "none");
-        studentSearchButton.getStyle().set("border", "none");
-        studentSearchButton.getStyle().set("box-shadow", "none");
-        studentSearchButton.getStyle().set("padding", "0");
-        Tab studentSearch = new Tab(VaadinIcon.USER.create(), studentSearchButton);
+        Tab studentSearch = new Tab(VaadinIcon.ACADEMY_CAP.create(), new RouterLink("Search for Students", AdminStudentSearchView.class));
         
         // Course search
         Tab courseSearch = new Tab(VaadinIcon.ACADEMY_CAP.create(), new RouterLink("Search for Courses", AdminCourseSearchView.class));
@@ -161,45 +159,6 @@ public class AdminHomeView extends AppLayout{
 
         // Add the tabs to the drawer
         addToDrawer(tabs);
-    }
-
-    private void showStudentSearch() {
-        clearContent(); // Clear the content area before adding new content
-
-        VerticalLayout searchLayout = new VerticalLayout();
-        searchLayout.add(new H1("Search for Students"));
-
-        TextField searchField = new TextField("Search by student name or ID");
-        searchField.getStyle().set("width", "250px");
-        Button searchButton = new Button("Search", VaadinIcon.SEARCH.create());
-        searchButton.getStyle().set("width", "250px");
-       
-        ComboBox<String> sortBy = new ComboBox<>("Sort By");
-        sortBy.setItems("Name", "ID", "Grade", "Course");
-        sortBy.setValue("Name");
-
-        // Grade filter
-        ComboBox<String> minGradeComboBox = new ComboBox<>("Minimum Grade");
-        ComboBox<String> maxGradeComboBox = new ComboBox<>("Maximum Grade");
-        List<String> letterGrades = List.of("A", "B", "C", "D", "F"); 
-        minGradeComboBox.setItems(letterGrades);
-        maxGradeComboBox.setItems(letterGrades);
-        minGradeComboBox.setValue("A"); 
-        maxGradeComboBox.setValue("F");
-
-        // Course filter
-        ComboBox<String> courseFilter = new ComboBox<>("Filter by Course");
-
-        // Add components to search layout
-        HorizontalLayout searchBar = new HorizontalLayout(searchField, searchButton);
-        searchBar.setDefaultVerticalComponentAlignment(FlexComponent.Alignment.BASELINE);
-        HorizontalLayout filterBar = new HorizontalLayout(sortBy, minGradeComboBox, maxGradeComboBox, courseFilter);
-        searchLayout.add(searchBar, filterBar);
-
-        // Display the results in a grid
-    
-
-        setContent(searchLayout);
     }
 
     private void showAddCourse() {

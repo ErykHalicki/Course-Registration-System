@@ -1,5 +1,4 @@
 USE UniversityDB;
-
 -- Create User Table
 CREATE TABLE User (
     user_id INT AUTO_INCREMENT PRIMARY KEY,

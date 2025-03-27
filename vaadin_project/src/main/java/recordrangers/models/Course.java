@@ -86,6 +86,17 @@ public class Course {
         this.endDate = endDate;
         this.schedule = schedule;
     }
+    
+    public Course(int courseId, String courseCode, String courseName, int credits, int capacity, String term, LocalDate startDate, LocalDate endDate) {
+        this.courseId = courseId;
+        this.courseCode = courseCode;
+        this.courseName = courseName;
+        this.numCredits = credits;
+        this.maxCapacity = capacity;
+        this.termLabel = term;
+        this.startDate = startDate;
+        this.endDate = endDate;
+    }
 
     // Getters and Setters for all fields
 
