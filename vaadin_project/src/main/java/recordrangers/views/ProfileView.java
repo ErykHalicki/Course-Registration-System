@@ -86,7 +86,11 @@ public class ProfileView extends VerticalLayout {
             }
 
             // Update the user's credentials via the DAO method
-            boolean updated = userDAO.updateCredentials(loggedInUser, newEmail, newPassword);
+            if(newPassword != "")
+            	loggedInUser.setPassword(newPassword);
+            if(newEmail != "")
+            	loggedInUser.setEmail(newEmail);
+            boolean updated = userDAO.updateUser(loggedInUser);
             if (updated) {
                 Notification.show("Profile updated successfully");
                 // Update the session attribute with the latest user info

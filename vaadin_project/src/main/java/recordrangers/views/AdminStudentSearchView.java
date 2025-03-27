@@ -24,8 +24,6 @@ public class AdminStudentSearchView extends VerticalLayout {
     // Search/filter fields
     private final TextField searchField = new TextField("Search by Name");
     private final ComboBox<String> sortByCombo = new ComboBox<>("Sort By");
-    private final ComboBox<String> minGradeCombo = new ComboBox<>("Minimum Grade");
-    private final ComboBox<String> maxGradeCombo = new ComboBox<>("Maximum Grade");
     private final ComboBox<String> courseNameCombo = new ComboBox<>("Course Name");
 
     private final Button searchButton = new Button("Search");
@@ -49,12 +47,6 @@ public class AdminStudentSearchView extends VerticalLayout {
         sortByCombo.setItems("first_name", "studentId", "enrollment_date");
         sortByCombo.setValue("first_name");
 
-        // Populate minGradeCombo and maxGradeCombo
-        List<String> grades = List.of("A", "B", "C", "D", "F");
-        minGradeCombo.setItems(grades);
-        minGradeCombo.setPlaceholder("Select minimum grade");
-        maxGradeCombo.setItems(grades);
-        maxGradeCombo.setPlaceholder("Select maximum grade");
 
         // Populate courseNameCombo (replace with dynamic list if needed)
         courseNameCombo.setItems("MATH", "COSC", "ENG", "ECON");
@@ -64,8 +56,6 @@ public class AdminStudentSearchView extends VerticalLayout {
         VerticalLayout filtersLayout = new VerticalLayout(
                 searchField,
                 sortByCombo,
-                minGradeCombo,
-                maxGradeCombo,
                 courseNameCombo,
                 searchButton
         );
@@ -91,12 +81,10 @@ public class AdminStudentSearchView extends VerticalLayout {
     private void updateGrid() {
         String searchTerm = searchField.getValue().trim();
         String sortBy = sortByCombo.getValue();
-        String minGrade = minGradeCombo.getValue() != null ? minGradeCombo.getValue() : "";
-        String maxGrade = maxGradeCombo.getValue() != null ? maxGradeCombo.getValue() : "";
         String courseName = courseNameCombo.getValue() != null ? courseNameCombo.getValue() : "";
 
         try {
-            ArrayList<Student> students = studentSearch.searchStudents(searchTerm, sortBy, minGrade, maxGrade, courseName);
+            ArrayList<Student> students = studentSearch.searchStudents(searchTerm, sortBy, courseName);
             studentGrid.setItems(students);
         } catch (SQLException ex) {
             ex.printStackTrace();
