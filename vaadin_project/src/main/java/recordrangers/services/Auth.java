@@ -1,17 +1,26 @@
 package recordrangers.services;
 
-import recordrangers.models.User;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 
+import recordrangers.models.User;
 import recordrangers.models.User.UserType;
 
 public class Auth{
 	
     private static Connection con;
+
+    static {
+        try {
+            con = DatabaseConnection.getInstance().getConnection();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Failed to initialize database connection", e);
+        }
+    }
     
     
     public static User signIn(String email, String password) throws SQLException{

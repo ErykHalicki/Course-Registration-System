@@ -7,7 +7,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.List;
 
 import recordrangers.models.Course;
 
@@ -190,7 +189,85 @@ public class CourseDAO {
             throw new SQLException("Error fecthing lab enrollments: " + e.getMessage());
         }
                       
+        // Add Waitlisted courses to course array as well
+        String waitlist = "SELECT c.course_name, c.course_code, c.num_credits, c.term_label, c.start_date, c.end_date " + 
+                         "FROM Course as c JOIN Waitlists as w ON c.course_id = w.course_id " + 
+                         "WHERE w.student_id = ?";
+        try(PreparedStatement pstmt = connection.prepareStatement(waitlist)) {
+            pstmt.setInt(1, studentId);
+            ResultSet rst = pstmt.executeQuery();
+            while(rst.next()) {
+                String name = rst.getString("course_name");
+                String code = rst.getString("course_code");
+                int credits = rst.getInt("num_credits");
+                String term = rst.getString("term_label");
+                LocalDate startDate = LocalDate.parse(rst.getString("start_date"));
+                LocalDate endDate = LocalDate.parse(rst.getString("end_date"));
+                Course course = new Course(name, code, credits, term, startDate, endDate);
+                courses.add(course);
+            }
+        } catch(SQLException e) {
+            throw new SQLException("Error fetching waitlisted courses: " + e.getMessage());
+        }
         return courses;
     }
+
+
+    public static boolean addCourse(Course course) {
+        String sql = "INSERT INTO Course (course_code, course_name, num_credits, capacity, term_label, start_date, end_date) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        try (PreparedStatement pstmt = DatabaseConnection.getInstance().getConnection().prepareStatement(sql)) {
+            pstmt.setString(1, course.getCourseCode());
+            pstmt.setString(2, course.getCourseName());
+            pstmt.setInt(3, course.getNumCredits());
+            pstmt.setInt(4, course.getMaxCapacity());
+            pstmt.setString(5, course.getTermLabel());
+            pstmt.setDate(6, java.sql.Date.valueOf(course.getStartDate()));
+            pstmt.setDate(7, java.sql.Date.valueOf(course.getEndDate()));
+            return pstmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public static boolean updateCourse(Course course) {
+        String sql = "UPDATE Course SET course_code = ?, course_name = ?, num_credits = ?, capacity = ?, term_label = ?, start_date = ?, end_date = ? WHERE course_id = ?";
+        try (PreparedStatement pstmt = DatabaseConnection.getInstance().getConnection().prepareStatement(sql)) {
+            pstmt.setString(1, course.getCourseCode());
+            pstmt.setString(2, course.getCourseName());
+            pstmt.setInt(3, course.getNumCredits());
+            pstmt.setInt(4, course.getMaxCapacity());
+            pstmt.setString(5, course.getTermLabel());
+            pstmt.setDate(6, java.sql.Date.valueOf(course.getStartDate()));
+            pstmt.setDate(7, java.sql.Date.valueOf(course.getEndDate()));
+            pstmt.setInt(8, course.getCourseId());
+            return pstmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public static boolean deleteCourse(String courseCode) {
+        String sql = "DELETE FROM Course WHERE course_code = ?";
+        try (PreparedStatement pstmt = DatabaseConnection.getInstance().getConnection().prepareStatement(sql)) {
+            pstmt.setString(1, courseCode);
+            return pstmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    @SuppressWarnings("CallToPrintStackTrace")
+    public static void main(String[] args){
+        try {
+            CourseDAO courseDAO = new CourseDAO();
+            ArrayList<Course> courses = courseDAO.getAllCourses();
+            System.out.println(courses);
+        } catch (SQLException e) {
+            System.out.println(e);
+    }
+}
 
 }

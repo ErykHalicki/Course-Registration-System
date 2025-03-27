@@ -19,7 +19,6 @@ public class DatabaseConnection {
 		    private DatabaseConnection() {
 		        connection = tryConnections();
 		    }
-
 		    private Connection tryConnections() {
 		        for (String url : POSSIBLE_URLS) {
 		            try {
@@ -34,6 +33,7 @@ public class DatabaseConnection {
 		        throw new RuntimeException("Could not connect to any of the specified URLs");
 		    }
 
+    @SuppressWarnings("DoubleCheckedLocking")
     public static DatabaseConnection getInstance() {
         if (instance == null) {
             synchronized (DatabaseConnection.class) {
