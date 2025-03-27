@@ -1,5 +1,4 @@
 USE UniversityDB;
-
 -- Create User Table
 CREATE TABLE User (
     user_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -155,3 +154,24 @@ INSERT INTO Admin (admin_id, role) VALUES
 (5, 'Student Admin'), -- 5
 (9, 'Student Admin'), -- 9
 (10, 'Director of Humanities'); -- 10
+
+INSERT INTO Labs (course_id, lab_name) VALUES
+(1, 'Physics Lab 1'),
+(2, 'Chemistry Lab 1'),
+(3, 'Biology Lab 1'),
+(5, 'Mathematics Lab 1'),
+(6, 'Physics Lab 2'),
+(7, 'Chemistry Lab 2'),
+(8, 'Biology Lab 2');
+
+INSERT INTO LabSection (lab_id, capacity, days, start_time, end_time, location) VALUES
+(1, 30, 'Monday, Wednesday', '10:00:00', '12:00:00', 'Room 101'),
+(1, 25, 'Tuesday, Thursday', '13:00:00', '15:00:00', 'Room 102'),
+(2, 20, 'Monday, Wednesday', '14:00:00', '16:00:00', 'Room 201'),
+(2, 35, 'Tuesday, Thursday', '09:00:00', '11:00:00', 'Room 202'),
+(3, 25, 'Monday, Friday', '08:00:00', '10:00:00', 'Room 301'),
+(3, 30, 'Tuesday, Thursday', '10:00:00', '12:00:00', 'Room 302'),
+(4, 20, 'Wednesday, Friday', '11:00:00', '13:00:00', 'Room 401'),
+(4, 40, 'Monday, Wednesday', '15:00:00', '17:00:00', 'Room 402'),
+(5, 30, 'Monday, Thursday', '13:00:00', '15:00:00', 'Room 501'),
+(5, 25, 'Tuesday, Friday', '16:00:00', '18:00:00', 'Room 502');

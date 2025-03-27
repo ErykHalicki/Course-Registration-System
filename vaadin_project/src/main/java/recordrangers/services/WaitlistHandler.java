@@ -16,7 +16,7 @@ public class WaitlistHandler {
         this.con = dbConnection.getConnection();
     }
 
-    public void addToWaitlist(int studentId, int courseId, int sectionId, String type) throws SQLException {
+    public static void addToWaitlist(int studentId, int courseId, int sectionId, String type) throws SQLException {
         // Check that type is valid
         if (!type.equals("Lab") && !type.equals("Course")) {
             throw new IllegalArgumentException("Type must be of Course or Lab");
@@ -31,7 +31,7 @@ public class WaitlistHandler {
             sql = "INSERT INTO Waitlist (student_id, course_id, section_id, type, position) VALUES (?, ?, ?, ?, ?)";
         }
         
-        try (PreparedStatement pstmt = con.prepareStatement(sql)) {
+        try (PreparedStatement pstmt = DatabaseConnection.getInstance().getConnection().prepareStatement(sql)) {
             pstmt.setInt(1, studentId);
             pstmt.setInt(2, courseId);
             if (type.equals("Course")) {
@@ -48,7 +48,7 @@ public class WaitlistHandler {
         }
     }
 
-    public int getNextWaitlistPosition(int courseId, int sectionId, String type) throws SQLException {
+    public static int getNextWaitlistPosition(int courseId, int sectionId, String type) throws SQLException {
         String sql; // Gets max position + 1 or 0 if null using coalesce
         if (type.equals("Course")) {
             sql = "SELECT COALESCE(MAX(position), 0) + 1 as nextPosition FROM Waitlist " + 
@@ -58,7 +58,7 @@ public class WaitlistHandler {
             "WHERE course_id = ? AND section_id = ? AND type = ?";
         }
 
-        try (PreparedStatement pstmt = con.prepareStatement(sql)) {
+        try (PreparedStatement pstmt = DatabaseConnection.getInstance().getConnection().prepareStatement(sql)) {
             if (type.equals("Course")) {
                 pstmt.setInt(1, courseId);
                 pstmt.setString(2, type);

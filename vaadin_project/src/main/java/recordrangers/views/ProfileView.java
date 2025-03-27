@@ -1,27 +1,41 @@
 package recordrangers.views;
 
 import com.vaadin.flow.component.avatar.Avatar;
+import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.EmailField;
+import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.VaadinSession;
 
 import recordrangers.models.User;
+import recordrangers.services.UserDAO;
 
 @PageTitle("Profile")
 @Route(value = "profile", layout = StudentHomeView.class)
 public class ProfileView extends VerticalLayout {
 
     public ProfileView() {
+    	UserDAO userDAO;
+    	try {
+            userDAO = new UserDAO();
+        } catch (Exception e) {
+            Notification.show("Error initializing user service");
+            return;
+        }
     	User loggedInUser = (User)VaadinSession.getCurrent().getAttribute("loggedInUser");
     	
         // Profile Photo (Avatar)
-        Avatar avatar = new Avatar("John Doe"); 
+    	String first_name = loggedInUser.getFirstName();
+    	String last_name = loggedInUser.getLastName();
+    	
+        Avatar avatar = new Avatar(first_name + " " + last_name);
         // 'frontend/images' folder, then set the path here:
         avatar.setImage("images/profile-photo.png");  // need to figure out how to add images from database
 
@@ -44,17 +58,52 @@ public class ProfileView extends VerticalLayout {
         EmailField emailField = new EmailField("Email");
         emailField.setValue(loggedInUser.getEmail());
         emailField.setReadOnly(true);
+        
+        // New Email Field for entering the updated email
+        EmailField newEmailField = new EmailField("Update Email");
+
+        // New Password Fields (left blank by default)
+        PasswordField newPasswordField = new PasswordField("New Password");
+        PasswordField confirmPasswordField = new PasswordField("Confirm Password");
 
         // Add the fields to the form
-        formLayout.add(firstNameField, lastNameField, emailField);
+        formLayout.add(firstNameField, lastNameField, emailField, newEmailField, newPasswordField, confirmPasswordField);
 
-        // Optional: Adjust how many columns the form uses
-        // formLayout.setResponsiveSteps(new FormLayout.ResponsiveStep("0", 1, FormLayout.ResponsiveStep.LabelsPosition.TOP));
+        Button saveButton = new Button("Save Changes", event -> {
+            // If a new email is provided, use it; otherwise, retain the original email
+            String newEmailInput = newEmailField.getValue().trim();
+            String newEmail = newEmailInput.isEmpty() ? loggedInUser.getEmail() : newEmailInput;
+            String newPassword = newPasswordField.getValue();
+            String confirmPassword = confirmPasswordField.getValue();
 
-        // Add components to the main layout
-        add(headerLayout, formLayout);
+            // If updating password, validate that both password fields match
+            if (!newPassword.isEmpty() || !confirmPassword.isEmpty()) {
+                if (!newPassword.equals(confirmPassword)) {
+                    Notification.show("Passwords do not match");
+                    return;
+                }
+                
+            }
 
-        // Optional styling or spacing
+            // Update the user's credentials via the DAO method
+            boolean updated = userDAO.updateCredentials(loggedInUser, newEmail, newPassword);
+            if (updated) {
+                Notification.show("Profile updated successfully");
+                // Update the session attribute with the latest user info
+                loggedInUser.setEmail(newEmail);
+                if (!newPassword.isEmpty()) {
+                    loggedInUser.setPassword(newPassword);
+                }
+                VaadinSession.getCurrent().setAttribute("loggedInUser", loggedInUser);
+                newEmailField.clear();
+                newPasswordField.clear();
+                confirmPasswordField.clear();
+            } else {
+                Notification.show("Failed to update profile");
+            }
+        });
+
+        add(headerLayout, formLayout, saveButton);
         setSpacing(true);
         setPadding(true);
     }

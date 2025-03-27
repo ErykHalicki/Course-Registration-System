@@ -80,7 +80,7 @@ public class AdminCourseUsesTest {
             String code = rst.getString(1);
             String name = rst.getString(2);
             out += code + " " + name + "\n";
-            System.out.println(out);
+            //System.out.println(out);
          }
       } catch (SQLException e) {
          System.err.println(e.getMessage());
