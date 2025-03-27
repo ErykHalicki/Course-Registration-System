@@ -35,7 +35,7 @@ public class AdminCourseSearchView extends VerticalLayout {
         
         Button addButton = new Button("Add Course", event -> {
             try {
-                openCourseDialog(new Course(), false);
+                openCourseDialog(new Course(null), false);
             } catch (SQLException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();

@@ -17,7 +17,7 @@ public class CourseDAO {
         CourseDAO.connection =  DatabaseConnection.getInstance().getConnection();
     }
     
-    public ArrayList<Course> searchByCourseCode(String code) throws SQLException{
+    public static ArrayList<Course> searchByCourseCode(String code) throws SQLException{
         ArrayList<Course> courses = new ArrayList<>();
         String sql = 
         "SELECT * FROM Course WHERE course_code = ?";
@@ -191,9 +191,9 @@ public class CourseDAO {
                       
         // Add Waitlisted courses to course array as well
         String waitlist = "SELECT c.course_name, c.course_code, c.num_credits, c.term_label, c.start_date, c.end_date " + 
-                         "FROM Course as c JOIN Waitlists as w ON c.course_id = w.course_id " + 
+                         "FROM Course as c JOIN Waitlist as w ON c.course_id = w.course_id " + 
                          "WHERE w.student_id = ?";
-        try(PreparedStatement pstmt = connection.prepareStatement(waitlist)) {
+        try(PreparedStatement pstmt = DatabaseConnection.getInstance().getConnection().prepareStatement(waitlist)) {
             pstmt.setInt(1, studentId);
             ResultSet rst = pstmt.executeQuery();
             while(rst.next()) {

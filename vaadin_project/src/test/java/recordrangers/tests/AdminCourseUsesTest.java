@@ -1,5 +1,6 @@
 package recordrangers.tests;
-
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -13,6 +14,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
+import recordrangers.models.Course;
 import recordrangers.services.AdminCourseUses;
 import recordrangers.services.DatabaseConnection;
 
@@ -30,8 +32,21 @@ public class AdminCourseUsesTest {
    @Test
    public void testAddCourse() throws SQLException{
       // Add new course
-    q.addCourse("Intro to Databases", "COSC 304", 3, "Introduction to SQL and relational databases", 120, "2024-09-10", 
-    "2024-12-20", "2024 Winter T1", "Monday, Wesnesday", "9:30", "11:00", "Lib 304");
+	   
+	   q.addCourse(new Course(
+			    "Intro to Databases", // courseName
+			    "COSC 304", // courseCode
+			    3, // numCredits
+			    "An introduction to relational databases, SQL, and database design.", // description
+			    50, // maxCapacity
+			    "Lib 304", // location
+			    LocalDate.of(2025, 9, 6), // startDate
+			    LocalDate.of(2025, 12, 15), // endDate
+			    "Fall 2025", // termLabel
+			    "MWF", // days (Monday, Wednesday, Friday)
+			    LocalTime.of(10, 0), // startTime (10:00 AM)
+			    LocalTime.of(11, 30) // endTime (11:30 AM)
+			));
 
     // Verify the course was added
     String course = "COSC 304";
@@ -42,8 +57,20 @@ public class AdminCourseUsesTest {
    @Test
    public void testEditCourse() throws SQLException{
     // Edit the course location
-    q.editCourse("Intro to Databases", "COSC 304", 3, "Introduction to SQL and relational databases", 120, "2024-09-10", 
-    "2024-12-20", "2024 Winter T1", "Monday, Wesnesday", "9:30", "11:00", "ASC 140");
+	   q.editCourse(new Course(
+			    "Intro to Databases", // courseName
+			    "COSC 304", // courseCode
+			    3, // numCredits
+			    "An introduction to relational databases, SQL, and database design.", // description
+			    50, // maxCapacity
+			    "ASC 140", // location
+			    LocalDate.of(2025, 9, 6), // startDate
+			    LocalDate.of(2025, 12, 15), // endDate
+			    "Fall 2025", // termLabel
+			    "MWF", // days (Monday, Wednesday, Friday)
+			    LocalTime.of(10, 0), // startTime (10:00 AM)
+			    LocalTime.of(11, 30) // endTime (11:30 AM)
+			));
     String sql = "SELECT location FROM Course WHERE course_code = 'COSC 304'";
 
     // Verify location was updated
@@ -59,8 +86,21 @@ public class AdminCourseUsesTest {
    @Test
    public void testDeleteCourse() throws SQLException{
       // Delete course
-	  q.addCourse("Intro to Databases", "COSC 304", 3, "Introduction to SQL and relational databases", 120, "2024-09-10", 
-			    "2024-12-20", "2024 Winter T1", "Monday, Wesnesday", "9:30", "11:00", "Lib 304");
+	   
+	   q.addCourse(new Course(
+			    "Intro to Databases", // courseName
+			    "COSC 304", // courseCode
+			    3, // numCredits
+			    "An introduction to relational databases, SQL, and database design.", // description
+			    50, // maxCapacity
+			    "Lib 304", // location
+			    LocalDate.of(2025, 9, 6), // startDate
+			    LocalDate.of(2025, 12, 15), // endDate
+			    "Fall 2025", // termLabel
+			    "MWF", // days (Monday, Wednesday, Friday)
+			    LocalTime.of(10, 0), // startTime (10:00 AM)
+			    LocalTime.of(11, 30) // endTime (11:30 AM)
+			));
 	  assertTrue(listAllCourses().contains("COSC 304"));
       q.deleteCourse("COSC 304");
 
