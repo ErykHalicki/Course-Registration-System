@@ -36,6 +36,7 @@ public class CurrentCoursesView extends CourseSearchView {
     public CurrentCoursesView() throws SQLException{
     	User loggedInUser = (User)VaadinSession.getCurrent().getAttribute("loggedInUser");
     	allCourses = CourseDAO.getEnrolledCourses(loggedInUser.getUserId());
+    	updateGrid("");
         // Register button logic
         dropButton.addClickListener(e -> {
             Course selected = courseGrid.asSingleSelect().getValue();
@@ -44,6 +45,9 @@ public class CurrentCoursesView extends CourseSearchView {
             } else {
             	try {
 					CourseRegistration.dropCourse(loggedInUser.getUserId(), selected.getCourseId());
+					allCourses = CourseDAO.getEnrolledCourses(loggedInUser.getUserId());
+					updateGrid("");
+					//System.out.println(allCourses);
 				} catch (SQLException e1) {
 					e1.printStackTrace();
 				}

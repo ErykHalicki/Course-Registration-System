@@ -145,22 +145,25 @@ public class CourseDAO {
   
     public static ArrayList<Course> getEnrolledCourses(int studentId) throws SQLException {
         ArrayList<Course> courses = new ArrayList<>();
-        String sql = "SELECT course_name, course_code, num_credits, term_label, start_date, end_date " + 
+        String sql = "SELECT course.course_id, course_name, capacity, course_code, num_credits, term_label, start_date, end_date " + 
                      "FROM Course JOIN Enrollments " + 
                      "ON Course.course_id = Enrollments.course_id " + 
                      "WHERE Enrollments.student_id = ?";
-        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+        try (PreparedStatement pstmt = DatabaseConnection.getInstance().getConnection().prepareStatement(sql)) {
             pstmt.setInt(1, studentId);
             ResultSet rst = pstmt.executeQuery();
             while(rst.next()) {
                 String name = rst.getString("course_name");
                 String code = rst.getString("course_code");
                 int credits = rst.getInt("num_credits");
+                int course_id = rst.getInt("course_id");
                 String term = rst.getString("term_label");
+                int capacity = rst.getInt("capacity");
                 LocalDate startDate = LocalDate.parse(rst.getString("start_date"));
                 LocalDate endDate = LocalDate.parse(rst.getString("end_date"));
-                Course course = new Course(name, code, credits, term, startDate, endDate);
+                Course course = new Course(course_id, code, name, credits, capacity, term, startDate, endDate);
                 courses.add(course);
+                System.out.println(course.getCourseName());
             }
         } catch(SQLException e) {
             throw new SQLException("Error fetching course enrollments: " + e.getMessage());
@@ -168,9 +171,9 @@ public class CourseDAO {
         // Add lab enrollments to course array as well
         String labs = "SELECT l.lab_name, c.course_code, c.term_label, c.start_date, c.end_date " + 
                       "FROM Labs as l JOIN Course as c ON l.course_id = c.course_id JOIN LabSection as ls ON l.lab_id = ls.lab_id " +
-                      "JOIN LabEnrollment as ON le.section_id = ls.section_id  " + 
+                      "JOIN LabEnrollment as le ON le.section_id = ls.section_id  " + 
                       "WHERE le.student_id = ?";
-        try(PreparedStatement pstmt = connection.prepareStatement(labs)) {
+        try(PreparedStatement pstmt = DatabaseConnection.getInstance().getConnection().prepareStatement(labs)) {
             pstmt.setInt(1, studentId);
             ResultSet rst = pstmt.executeQuery();
             while(rst.next()) {

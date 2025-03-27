@@ -11,7 +11,7 @@ public class DatabaseConnection {
 		        "jdbc:mysql://mysql_db:3306/UniversityDB"
 		    };
 		    private static final String USER = "root";
-		    private static final String PASSWORD = "root";
+		    private static final String PASSWORD = "";
 
 		    private static volatile DatabaseConnection instance;
 		    private Connection connection;

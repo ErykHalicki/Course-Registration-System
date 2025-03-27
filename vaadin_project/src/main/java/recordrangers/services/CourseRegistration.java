@@ -83,10 +83,10 @@ public class CourseRegistration {
             // First remove student from course
             removeStudentFromCourse(studentId, courseId);
             // Next drop their lab sections of this course
-            removeStudentFromLabSections(studentId, courseId);
+            //removeStudentFromLabSections(studentId, courseId);
 
             // Lastly enroll next student from waitlist
-            enrollNextStudentFromWaitlist(studentId, null, "Course");
+            //enrollNextStudentFromWaitlist(studentId, null, "Course");
             
 
             // Commit the transaction 
@@ -103,6 +103,7 @@ public class CourseRegistration {
     
     private static void removeStudentFromCourse(int studentId, int courseId) throws SQLException {
     	con =  DatabaseConnection.getInstance().getConnection();
+    	System.out.println("Trying to drop course: "+ courseId);
         String sql = "DELETE FROM Enrollments WHERE student_id = ? AND course_id = ?";
         try (PreparedStatement pstmt = con.prepareStatement(sql)) {
             pstmt.setInt(1, studentId);
