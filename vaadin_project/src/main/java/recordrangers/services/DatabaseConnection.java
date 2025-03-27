@@ -10,8 +10,12 @@ public class DatabaseConnection {
 		        "jdbc:mysql://database:3306/UniversityDB",
 		        "jdbc:mysql://mysql_db:3306/UniversityDB"
 		    };
+	private static final String[] POSSIBLE_PASSWORDS = {
+		        "",
+			"root"
+		    };
 		    private static final String USER = "root";
-		    private static final String PASSWORD = "";
+		    private static final String PASSWORD = "root";
 
 		    private static volatile DatabaseConnection instance;
 		    private Connection connection;
@@ -20,10 +24,11 @@ public class DatabaseConnection {
 		        connection = tryConnections();
 		    }
 		    private Connection tryConnections() {
+			for(String pswd : POSSIBLE_PASSWORDS){
 		        for (String url : POSSIBLE_URLS) {
 		            try {
 		                System.out.println("Attempting to connect to: " + url);
-		                Connection conn = DriverManager.getConnection(url, USER, PASSWORD);
+		                Connection conn = DriverManager.getConnection(url, USER, pswd);
 		                System.out.println("Successfully connected to: " + url);
 		                return conn;
 		            } catch (SQLException e) {
@@ -31,6 +36,7 @@ public class DatabaseConnection {
 		            }
 		        }
 		        throw new RuntimeException("Could not connect to any of the specified URLs");
+		    }
 		    }
 
     @SuppressWarnings("DoubleCheckedLocking")
