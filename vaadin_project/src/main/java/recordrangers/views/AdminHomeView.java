@@ -1,9 +1,13 @@
 package recordrangers.views;
 
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.LocalTime;
+
 import com.vaadin.flow.component.UI;
 
 import java.util.List;
+
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.button.Button;
@@ -28,6 +32,9 @@ import com.vaadin.flow.component.timepicker.TimePicker;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.server.VaadinSession;
+import com.vaadin.flow.theme.lumo.LumoUtility;
+
+import recordrangers.models.Course;
 import recordrangers.models.User;
 import recordrangers.services.Auth;
 
@@ -268,51 +275,59 @@ public class AdminHomeView extends AppLayout{
         locationField.setRequired(true);
 
         // Submit button
-        Button submitButton = new Button("Create Course", event -> {
-            // Validate the form
-            if (courseNameField.isEmpty()) {
-                Notification.show("Please fill in all fields.", 3000, Notification.Position.TOP_CENTER);
-            } else if (courseCodeField.isEmpty()) {
-                Notification.show("Please fill in all fields.", 3000, Notification.Position.TOP_CENTER);
-            } else if (descriptionField.isEmpty()) {
-                Notification.show("Please fill in all fields.", 3000, Notification.Position.TOP_CENTER);
-            } else if (termLabelField.isEmpty()) {
-                Notification.show("Please fill in all fields.", 3000, Notification.Position.TOP_CENTER);
-            } else if (creditsField.isEmpty()) {
-                Notification.show("Please fill in all fields.", 3000, Notification.Position.TOP_CENTER);
-            } else if (startDatePicker.isEmpty()) {
-                Notification.show("Please fill in all fields.", 3000, Notification.Position.TOP_CENTER);
-            } else if (endDatePicker.isEmpty()) {
-                Notification.show("Please fill in all fields.", 3000, Notification.Position.TOP_CENTER);
-            } else if (daysOfWeekComboBox.isEmpty()) {
-                Notification.show("Please fill in all fields.", 3000, Notification.Position.TOP_CENTER);
-            } else if (startTimePicker.isEmpty()) {
-                Notification.show("Please fill in all fields.", 3000, Notification.Position.TOP_CENTER);
-            } else if (endTimePicker.isEmpty()) {
-                Notification.show("Please fill in all fields.", 3000, Notification.Position.TOP_CENTER);
-            } else if (locationField.isEmpty()) {
-                Notification.show("Please fill in all fields.", 3000, Notification.Position.TOP_CENTER);
-            } else {
-                // Get attributes
-                String courseName = courseNameField.getValue();
-                String courseCode = courseCodeField.getValue();
-                String description = descriptionField.getValue();
-                String termLabel = termLabelField.getValue();
-                int credits = Integer.parseInt(creditsField.getValue());
-                int capacity = Integer.parseInt(capacityField.getValue());
-                String startDate = startDatePicker.getValue().toString();
-                String endDate = endDatePicker.getValue().toString();
-                String daysOfWeek = daysOfWeekComboBox.getValue();
-                String startTime = startTimePicker.getValue().toString();
-                String endTime = endTimePicker.getValue().toString();
-                String location = locationField.getValue();
-
-                try {
-                    adminCourseUses.addCourse(courseName, courseCode, credits, description, capacity, startDate, endDate, termLabel, daysOfWeek, startTime, endTime, location);
-                } catch (SQLException ex) {
+        Button submitButton;
+            submitButton = new Button("Create Course", event -> {
+                // Validate the form
+                if (courseNameField.isEmpty()) {
+                    Notification.show("Please fill in all fields.", 3000, Notification.Position.TOP_CENTER);
+                } else if (courseCodeField.isEmpty()) {
+                    Notification.show("Please fill in all fields.", 3000, Notification.Position.TOP_CENTER);
+                } else if (descriptionField.isEmpty()) {
+                    Notification.show("Please fill in all fields.", 3000, Notification.Position.TOP_CENTER);
+                } else if (termLabelField.isEmpty()) {
+                    Notification.show("Please fill in all fields.", 3000, Notification.Position.TOP_CENTER);
+                } else if (creditsField.isEmpty()) {
+                    Notification.show("Please fill in all fields.", 3000, Notification.Position.TOP_CENTER);
+                } else if (startDatePicker.isEmpty()) {
+                    Notification.show("Please fill in all fields.", 3000, Notification.Position.TOP_CENTER);
+                } else if (endDatePicker.isEmpty()) {
+                    Notification.show("Please fill in all fields.", 3000, Notification.Position.TOP_CENTER);
+                } else if (daysOfWeekComboBox.isEmpty()) {
+                    Notification.show("Please fill in all fields.", 3000, Notification.Position.TOP_CENTER);
+                } else if (startTimePicker.isEmpty()) {
+                    Notification.show("Please fill in all fields.", 3000, Notification.Position.TOP_CENTER);
+                } else if (endTimePicker.isEmpty()) {
+                    Notification.show("Please fill in all fields.", 3000, Notification.Position.TOP_CENTER);
+                } else if (locationField.isEmpty()) {
+                    Notification.show("Please fill in all fields.", 3000, Notification.Position.TOP_CENTER);
+                } else {
+                    // Get attributes
+                    String courseName = courseNameField.getValue();
+                    String courseCode = courseCodeField.getValue();
+                    String description = descriptionField.getValue();
+                    String termLabel = termLabelField.getValue();
+                    int credits = Integer.parseInt(creditsField.getValue());
+                    int capacity = Integer.parseInt(capacityField.getValue());
+                    String startDate = startDatePicker.getValue().toString();
+                    String endDate = endDatePicker.getValue().toString();
+                    String daysOfWeek = daysOfWeekComboBox.getValue();
+                    String startTime = startTimePicker.getValue().toString();
+                    String endTime = endTimePicker.getValue().toString();
+                    String location = locationField.getValue();
+                    
+                    try {
+                        LocalDate startT = LocalDate.parse(startDate);
+                        LocalDate endT = LocalDate.parse(endDate);
+                        LocalTime startD = LocalTime.parse(startTime);
+                        LocalTime endD = LocalTime.parse(endTime);
+                        Course course = new Course(courseName, courseCode, credits, description, capacity, location, startT, endT, termLabel, daysOfWeek, startD, endD);
+                        AdminCourseUses acu = new AdminCourseUses();
+                        acu.addCourse(course);
+                    } catch (SQLException ex) {
+                        
+                    }
                 }
-            }
-        });
+            });
 
         // Add components to the layout
         formLayout.add(courseNameField, courseCodeField, descriptionField, termLabelField, creditsField, capacityField, datePickers,

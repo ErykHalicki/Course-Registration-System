@@ -3,6 +3,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
+import recordrangers.models.Course;
+
 
 public class AdminCourseUses {
     private Connection connection;
@@ -11,12 +13,23 @@ public class AdminCourseUses {
         this.connection = DatabaseConnection.getInstance().getConnection();
     }
 
-    public void addCourse(String name, String code, int credits, String desc, int capacity, String startDate, 
-    String endDate, String term, String days, String startTime, String endTime, String location) 
-    throws SQLException {
+    public void addCourse(Course course) throws SQLException {
     	connection = DatabaseConnection.getInstance().getConnection();
         String sql = "INSERT INTO Course (course_name, course_code, num_credits, description, capacity, start_date, end_date, term_label, days, start_time, end_time, location) " +
         "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+
+        String name = course.getCourseName();
+        String code = course.getCourseCode();
+        int credits = course.getNumCredits();
+        String desc = course.getDescription();
+        int capacity = course.getMaxCapacity();
+        String startDate = course.getStartDate().toString();
+        String endDate = course.getEndDate().toString();
+        String term = course.getTermLabel();
+        String days = course.getDays();
+        String startTime = course.getStartTime().toString();
+        String endTime = course.getEndTime().toString();
+        String location = course.getLocation();
 
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
             pstmt.setString(1, name);

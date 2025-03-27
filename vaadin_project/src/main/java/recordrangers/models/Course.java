@@ -46,6 +46,25 @@ public class Course {
         this.endTime = endTime;
     }
 
+    public Course(String courseName, String courseCode, int numCredits, String description,
+    int maxCapacity, String location, 
+    LocalDate startDate, LocalDate endDate, String termLabel, String days,
+    LocalTime startTime, LocalTime endTime) {
+
+        this.courseName = courseName;
+        this.courseCode = courseCode;
+        this.numCredits = numCredits;
+        this.description = description;
+        this.maxCapacity = maxCapacity;
+        this.location = location;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.termLabel = termLabel;
+        this.days = days;
+        this.startTime = startTime;
+        this.endTime = endTime;
+    }
+
     // Overloaded constructors
     public Course(String courseCode) {
         this.courseCode = courseCode;
