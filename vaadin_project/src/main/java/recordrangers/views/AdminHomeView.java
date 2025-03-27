@@ -145,7 +145,7 @@ public class AdminHomeView extends AppLayout{
         Tab studentSearch = new Tab(VaadinIcon.ACADEMY_CAP.create(), new RouterLink("Search for Students", AdminStudentSearchView.class));
         
         // Course search
-        Tab courseSearch = new Tab(VaadinIcon.ACADEMY_CAP.create(), new RouterLink("Search for Courses", AdminCourseSearchView.class));
+        Tab courseSearch = new Tab(VaadinIcon.ACADEMY_CAP.create(), new RouterLink("Search / Delete a Courses", AdminCourseSearchView.class));
 
         // Create course
         Button addCourseButton = new Button("Add a Course", event -> showAddCourse());
@@ -154,17 +154,13 @@ public class AdminHomeView extends AppLayout{
         addCourseButton.getStyle().set("border", "none");
         addCourseButton.getStyle().set("box-shadow", "none");
         addCourseButton.getStyle().set("padding", "0");
-        Tab addCourse = new Tab(VaadinIcon.PLUS_CIRCLE_O.create(), addCourseButton);
-
-        // Delete course 
-        Tab deleteCourse = new Tab(VaadinIcon.MINUS_CIRCLE.create(), new RouterLink("Delete a Course", AdminHomeView.class));
+        Tab addCourse = new Tab(VaadinIcon.PLUS_CIRCLE_O.create(), new RouterLink("Add a Course", AdminCourseAddingView.class));
 
         Tabs tabs = new Tabs();
         tabs.add(profile);
         tabs.add(studentSearch);
         tabs.add(courseSearch);
         tabs.add(addCourse);
-        tabs.add(deleteCourse);
         tabs.setOrientation(Tabs.Orientation.VERTICAL);
 
         // Add the tabs to the drawer

@@ -22,7 +22,7 @@ public class StudentSearch {
      * @return An ArrayList of matching Student objects.
      * @throws SQLException if a database error occurs.
      */
-    public ArrayList<Student> searchStudents(String searchTerm, String sortBy, String minGrade, String maxGrade, String courseName) throws SQLException {
+    public ArrayList<Student> searchStudents(String searchTerm, String sortBy, String courseName) throws SQLException {
         ArrayList<Student> students = new ArrayList<>();
         StringBuilder query = new StringBuilder();
         query.append("SELECT u.user_id AS studentId, ");
@@ -38,12 +38,6 @@ public class StudentSearch {
         query.append("LEFT JOIN Course c ON e.course_id = c.course_id ");
         query.append("WHERE (u.first_name LIKE ? OR u.last_name LIKE ?) ");
         
-        if (minGrade != null && !minGrade.isEmpty()) {
-            query.append("AND e.grade >= ? ");
-        }
-        if (maxGrade != null && !maxGrade.isEmpty()) {
-            query.append("AND e.grade <= ? ");
-        }
         if (courseName != null && !courseName.isEmpty()) {
             query.append("AND c.course_code LIKE ? ");
         }
@@ -55,12 +49,7 @@ public class StudentSearch {
             String pattern = "%" + searchTerm + "%";
             stmt.setString(index++, pattern);
             stmt.setString(index++, pattern);
-            if (minGrade != null && !minGrade.isEmpty()) {
-                stmt.setString(index++, minGrade);
-            }
-            if (maxGrade != null && !maxGrade.isEmpty()) {
-                stmt.setString(index++, maxGrade);
-            }
+            
             if (courseName != null && !courseName.isEmpty()) {
                 stmt.setString(index++, courseName);
             }

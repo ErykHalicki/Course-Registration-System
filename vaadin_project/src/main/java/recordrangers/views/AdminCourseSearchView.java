@@ -80,7 +80,9 @@ public class AdminCourseSearchView extends VerticalLayout {
         }).setHeader("Actions");
     }
 
+
     private void updateGrid(String searchQuery) {
+
         if (searchQuery == null || searchQuery.trim().isEmpty()) {
             courseGrid.setItems(allCourses);
         } else {
