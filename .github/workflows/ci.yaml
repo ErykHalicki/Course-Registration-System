@@ -26,7 +26,7 @@ jobs:
         
     - name: Set swappiness
       run: |
-        sudo sysctl -w vm.swappiness=90
+        sudo sysctl -w vm.swappiness=100
         sudo sysctl -p
         
     - uses: actions/checkout@v4
