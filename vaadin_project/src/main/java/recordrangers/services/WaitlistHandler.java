@@ -105,7 +105,7 @@ public class WaitlistHandler {
                     if (type.equals("Course")) {
                         cr.registerStudent(studentId, courseId);
                     } else if (type.equals("Lab")) {
-                        cr.registerStudentIntoLab(studentId, sectionId);
+                        cr.registerStudent(studentId, sectionId);
                     }
 
                     removeFromWaitlist(waitlistId);
