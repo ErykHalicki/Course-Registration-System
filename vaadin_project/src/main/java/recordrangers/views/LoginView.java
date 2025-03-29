@@ -42,7 +42,8 @@ public class LoginView extends Composite<LoginOverlay> {
 
             User user;
             try {
-                user = auth.signIn(username, password);
+                user = Auth.signIn(username, password);
+                VaadinSession.getCurrent().setAttribute("loggedInUser", user);
                 Notification.show("got user: " + user.getUserId());
                 // check if signIn returns null, if so send notification
                 if (user == null) {
@@ -51,10 +52,10 @@ public class LoginView extends Composite<LoginOverlay> {
                     // route to either student home page or admin home page
                 	VaadinSession.getCurrent().setAttribute("loggedInUser", user);
                 	
-                    if (auth.isStudent(user.getUserId())) {
+                    if (Auth.isStudent(user.getUserId())) {
                         // route to student home page     	
                     	getUI().ifPresent(ui -> ui.navigate("student-home"));
-                    } else if (auth.isAdmin(user.getUserId())) {
+                    } else if (Auth.isAdmin(user.getUserId())) {
                         // route to admin home page
                     	getUI().ifPresent(ui -> ui.navigate("admin-home"));
                     } else {
