@@ -5,16 +5,11 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 import com.vaadin.flow.component.UI;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.datepicker.DatePicker;
-import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.Span;
@@ -25,9 +20,6 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.Tabs;
-
-import com.vaadin.flow.router.NotFoundException;
-
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.component.timepicker.TimePicker;
@@ -35,17 +27,10 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.server.VaadinSession;
 
-import com.vaadin.flow.theme.lumo.LumoUtility;
-
 import recordrangers.models.Course;
-
-
-import recordrangers.models.Student;
-
 import recordrangers.models.User;
-import recordrangers.services.Auth;
-import recordrangers.services.StudentSearch;
 import recordrangers.services.AdminCourseUses;
+import recordrangers.services.Auth;
 
 @Route("admin-home")
 public class AdminHomeView extends AppLayout{
@@ -158,11 +143,15 @@ public class AdminHomeView extends AppLayout{
         */
         Tab addCourse = new Tab(VaadinIcon.PLUS_CIRCLE_O.create(), new RouterLink("Add a Course", AdminCourseAddingView.class));
 
+        // View student grades
+        Tab studentGrades = new Tab(VaadinIcon.DIPLOMA_SCROLL.create(), new RouterLink("Student Grades", AdminStudentReportsView.class));
+
         Tabs tabs = new Tabs();
         tabs.add(profile);
         tabs.add(studentSearch);
         tabs.add(courseSearch);
         tabs.add(addCourse);
+        tabs.add(studentGrades);
         tabs.setOrientation(Tabs.Orientation.VERTICAL);
 
         // Add the tabs to the drawer
