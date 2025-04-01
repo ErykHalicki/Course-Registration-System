@@ -99,8 +99,71 @@ public class Auth{
     }
     
     public int createAccount(String username, String email, String password) throws SQLException{
-    	//add database insertion code here
-         return 1;
+    	Connection con = DatabaseConnection.getInstance().getConnection();
         
+        // First, check if the email already exists
+        String checkEmailQuery = "SELECT COUNT(*) FROM User WHERE email = ?";
+        try (PreparedStatement checkStmt = con.prepareStatement(checkEmailQuery)) {
+            checkStmt.setString(1, email);
+            try (ResultSet rs = checkStmt.executeQuery()) {
+                if (rs.next() && rs.getInt(1) > 0) {
+                    // Email already exists
+                    return -1;
+                }
+            }
+        }
+        
+        // Prepare the insert query
+        String insertQuery = "INSERT INTO User " +
+                "(first_name, last_name, email, password, profile_photo, " +
+                "created_at, updated_last, user_type) " +
+                "VALUES (?, ?, ?, ?, ?, " +
+                "CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, ?)";
+
+			try (PreparedStatement pstmt = con.prepareStatement(insertQuery, PreparedStatement.RETURN_GENERATED_KEYS)) {
+			// Set parameters
+			pstmt.setString(1, username);
+			
+			// Generate a random last name
+			String lastName = "lastname";
+			pstmt.setString(2, lastName);
+			
+			pstmt.setString(3, email);
+			pstmt.setString(4, password);
+			
+			// Add a default profile photo URL or path
+			String defaultProfilePhoto = "https://example.com/default-profile";
+			pstmt.setString(5, defaultProfilePhoto);
+			
+			// User type remains the same
+			pstmt.setString(6, "Student");
+			
+			// Execute the insert
+			int affectedRows = pstmt.executeUpdate();
+			
+			if (affectedRows == 0) {
+			   throw new SQLException("Creating user failed, no rows affected.");
+			}
+            
+            // Retrieve the auto-generated user_id
+            try (ResultSet generatedKeys = pstmt.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    int userId = generatedKeys.getInt(1);
+                    
+                    // Optional: Insert into Student table
+                    String insertStudentQuery = "INSERT INTO Student " +
+                                                "(student_id, enrollment_date, status) " +
+                                                "VALUES (?, CURRENT_DATE, 'Active')";
+                    try (PreparedStatement studentStmt = con.prepareStatement(insertStudentQuery)) {
+                        studentStmt.setInt(1, userId);
+                        studentStmt.executeUpdate();
+                    }
+                    
+                    return userId;
+                } else {
+                    throw new SQLException("Creating user failed, no ID obtained.");
+                }
+            }
+        }
     }
 }
