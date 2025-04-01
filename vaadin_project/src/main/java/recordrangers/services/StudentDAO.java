@@ -23,8 +23,8 @@ public class StudentDAO{
     @SuppressWarnings("CallToPrintStackTrace")
         public static String enrollStudent(int studentId, int courseId) {
             String queryCheckEnrollment = "SELECT * FROM enrollments WHERE student_id = ? AND course_id = ?";
-            String queryCourseCapacity = "SELECT COUNT(*) AS enrolled, max_capacity FROM enrollments " +
-                                         "JOIN courses ON enrollments.course_id = courses.course_id WHERE courses.course_id = ?";
+            String queryCourseCapacity = "SELECT COUNT(*) AS enrolled, capacity AS max_capacity FROM enrollments " +
+                                         "JOIN course ON enrollments.course_id = course.course_id WHERE course.course_id = ?";
             String queryEnroll = "INSERT INTO enrollments (student_id, course_id) VALUES (?, ?)";
             String queryWaitlist = "INSERT INTO waitlists (student_id, course_id) VALUES (?, ?)";
             
@@ -80,9 +80,9 @@ public class StudentDAO{
                 String lastName = rs.getString("last_name");
                 String email = rs.getString("email");
                 String password = rs.getString("password");
-                String profilePicture = rs.getString("profile_picture");
-                Timestamp timeCreated = rs.getTimestamp("time_created");
-                Timestamp timeUpdated = rs.getTimestamp("time_updated");
+                String profilePicture = rs.getString("profile_photo");
+                Timestamp timeCreated = rs.getTimestamp("created_at");
+                Timestamp timeUpdated = rs.getTimestamp("updated_last");
                 Date enrollment_date = rs.getDate("enrollment_date");
                 Status status = Student.getStatusFromResultSet(rs);
                 students.add(new Student(userId, firstName, lastName, email, password, profilePicture, timeCreated, timeUpdated, enrollment_date, status));
@@ -90,6 +90,35 @@ public class StudentDAO{
         }
         return students;
     }
+    public static String unenrollStudent(int studentId, int courseId) {
+        String queryCheckEnrollment = "SELECT * FROM enrollments WHERE student_id = ? AND course_id = ?";
+        String queryUnenroll = "DELETE FROM enrollments WHERE student_id = ? AND course_id = ?";
+        try (PreparedStatement checkStmt = connection.prepareStatement(queryCheckEnrollment);
+             PreparedStatement unenrollStmt = connection.prepareStatement(queryUnenroll)) {
+             
+            // Check if the student is enrolled in the course.
+            checkStmt.setInt(1, studentId);
+            checkStmt.setInt(2, courseId);
+            ResultSet rs = checkStmt.executeQuery();
+            if (rs.next()) {
+                // Student is enrolled; perform unenrollment.
+                unenrollStmt.setInt(1, studentId);
+                unenrollStmt.setInt(2, courseId);
+                int rowsAffected = unenrollStmt.executeUpdate();
+                if (rowsAffected > 0) {
+                    return "Student successfully unenrolled.";
+                } else {
+                    return "Unenrollment failed.";
+                }
+            } else {
+                return "Student is not enrolled in this course.";
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return "Database error: " + e.getMessage();
+        }
+    }
+
 public static void main(String[] args) {
     try {
         StudentDAO dao = new StudentDAO();
