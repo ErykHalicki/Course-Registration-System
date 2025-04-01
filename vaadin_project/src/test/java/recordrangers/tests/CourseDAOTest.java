@@ -33,6 +33,8 @@ public class CourseDAOTest {
     @Test
     @Order(1)
     void testInsertCourse() throws SQLException {
+    	ArrayList<Course> courses = CourseDAO.searchByCourseCode("CS101");
+        if(courses.isEmpty())
     	CourseDAO.addCourse(new Course(
     		    "CS101", 
     		    "Introduction to Computer Science", 
@@ -42,6 +44,7 @@ public class CourseDAOTest {
     		    LocalDate.parse("2025-12-15")
     		));
     }
+    
     @Test
     @Order(2)
     void testSearchByCourseCode() throws SQLException {

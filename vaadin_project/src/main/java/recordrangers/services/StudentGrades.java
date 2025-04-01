@@ -1,14 +1,18 @@
 package recordrangers.services;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import org.springframework.stereotype.Service;
+
 import recordrangers.models.Enrollment;
 import recordrangers.models.StudentGradeReport;
 import recordrangers.models.StudentInfo;
 
+@Service
 public class StudentGrades {
 
     private final Connection con;
@@ -62,7 +66,7 @@ public class StudentGrades {
         ArrayList<Enrollment> enrollments = new ArrayList<>();
         
         String sql = "SELECT c.course_code, c.course_name, c.num_credits, e.grade, e.status " +
-                     "FROM Enrollments as e JOIN Course as c ON e.course_id = c.course_id" +
+                     "FROM Enrollments as e JOIN Course as c ON e.course_id = c.course_id " +
                      "WHERE e.student_id = ? " +
                      "ORDER BY c.course_code";
 
