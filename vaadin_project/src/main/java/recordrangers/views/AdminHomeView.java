@@ -145,6 +145,9 @@ public class AdminHomeView extends AppLayout{
 
         // View student grades
         Tab studentGrades = new Tab(VaadinIcon.DIPLOMA_SCROLL.create(), new RouterLink("Student Grades", AdminStudentReportsView.class));
+        
+        Tab manageStudents = new Tab(VaadinIcon.USERS.create(), new RouterLink("Manage Students", AdminManageStudentsView.class));
+
 
         Tabs tabs = new Tabs();
         tabs.add(profile);
@@ -152,6 +155,7 @@ public class AdminHomeView extends AppLayout{
         tabs.add(courseSearch);
         tabs.add(addCourse);
         tabs.add(studentGrades);
+        tabs.add(manageStudents);
         tabs.setOrientation(Tabs.Orientation.VERTICAL);
 
         // Add the tabs to the drawer
