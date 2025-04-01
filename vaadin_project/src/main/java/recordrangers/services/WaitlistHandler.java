@@ -78,7 +78,7 @@ public class WaitlistHandler {
         }
     }
 
-    public void enrollNextStudentFromWaitlist(int courseId, int sectionId, String type) throws SQLException {
+    public static void enrollNextStudentFromWaitlist(int courseId, int sectionId, String type) throws SQLException {
         String sql;
         if (type.equals("Course")) {
             sql = "SELECT waitlist_id, student_id FROM Waitlist WHERE course_id = ? AND type = ? " + 
@@ -88,7 +88,7 @@ public class WaitlistHandler {
             "ORDER BY position ASC LIMIT 1";
         }
 
-        try (PreparedStatement pstmt = con.prepareStatement(sql)) {
+        try (PreparedStatement pstmt = DatabaseConnection.getInstance().getConnection().prepareStatement(sql)) {
             pstmt.setInt(1, courseId);
             if (type.equals("Course")) {
                 pstmt.setString(2, type);
@@ -105,7 +105,7 @@ public class WaitlistHandler {
                     if (type.equals("Course")) {
                         cr.registerStudent(studentId, courseId);
                     } else if (type.equals("Lab")) {
-                        cr.registerStudentIntoLab(studentId, sectionId);
+                        cr.registerStudent(studentId, sectionId);
                     }
 
                     removeFromWaitlist(waitlistId);
@@ -116,9 +116,9 @@ public class WaitlistHandler {
         }
     }
 
-    public void removeFromWaitlist(int waitlistId) throws SQLException {
+    public static void removeFromWaitlist(int waitlistId) throws SQLException {
         String sql = "REMOVE FROM Waitlist WHERE waitlist_id = ?";
-        try (PreparedStatement pstmt = con.prepareStatement(sql)) {
+        try (PreparedStatement pstmt = DatabaseConnection.getInstance().getConnection().prepareStatement(sql)) {
             pstmt.setInt(1, waitlistId);
             pstmt.executeUpdate();
         } catch (SQLException e) {
