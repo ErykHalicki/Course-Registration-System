@@ -25,18 +25,19 @@ public class DatabaseConnection {
 		    }
 		    private Connection tryConnections() {
 			for(String pswd : POSSIBLE_PASSWORDS){
-		        for (String url : POSSIBLE_URLS) {
-		            try {
-		                System.out.println("Attempting to connect to: " + url);
-		                Connection conn = DriverManager.getConnection(url, USER, pswd);
-		                System.out.println("Successfully connected to: " + url);
-		                return conn;
-		            } catch (SQLException e) {
-		                System.out.println("Connection failed for " + url + ": " + e.getMessage());
-		            }
-		        }
-		        throw new RuntimeException("Could not connect to any of the specified URLs");
-		    }
+				for (String url : POSSIBLE_URLS) {
+		            		try {
+		                		System.out.println("Attempting to connect to: " + url);
+		                		Connection conn = DriverManager.getConnection(url, USER, pswd);
+		                		System.out.println("Successfully connected to: " + url);
+		                		return conn;
+		            		} catch (SQLException e) {
+		                		System.out.println("Connection failed for " + url + ": " + e.getMessage());
+		            		}
+		        	}
+		        	throw new RuntimeException("Could not connect to any of the specified URLs");
+			}
+			return connection;
 		    }
 
     @SuppressWarnings("DoubleCheckedLocking")
