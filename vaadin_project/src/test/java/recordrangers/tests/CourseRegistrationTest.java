@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 
 import recordrangers.services.CourseDAO;
 import recordrangers.services.CourseRegistration;
+import recordrangers.services.LabRegistration;
 import recordrangers.services.DatabaseConnection;
 
 public class CourseRegistrationTest {
@@ -52,7 +53,7 @@ public class CourseRegistrationTest {
         int studentId = 1;
         int sectionId = 1; // Valid lab section
         
-        CourseRegistration.registerStudentIntoLab(studentId, sectionId);
+        LabRegistration.registerStudentIntoLab(studentId, sectionId);
 
         // Verify student is enrolled in lab
         String sql = "SELECT * FROM LabEnrollment WHERE student_id = ? AND section_id = ?";
@@ -70,10 +71,10 @@ public class CourseRegistrationTest {
         int sectionId = 2;
 
         // Enroll in lab first
-        CourseRegistration.registerStudentIntoLab(studentId, sectionId);
+        LabRegistration.registerStudentIntoLab(studentId, sectionId);
 
         // Remove from lab
-        CourseRegistration.removeStudentFromLabSection(studentId, sectionId);
+        LabRegistration.removeStudentFromLabSection(studentId, sectionId);
 
         // Verify student is no longer enrolled
         String sql = "SELECT 1 FROM LabEnrollment WHERE student_id = ? AND section_id = ?";
