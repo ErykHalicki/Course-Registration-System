@@ -10,10 +10,12 @@ import org.junit.Test;
 import recordrangers.models.Course;
 import recordrangers.services.CourseDAO;
 import recordrangers.services.CourseRegistration;
+import recordrangers.services.LabRegistration;
 
 public class EnrollmentTest {
 
     private CourseRegistration cr;
+    private LabRegistration lr;
 
     @BeforeClass
     public void init() throws SQLException {
@@ -34,7 +36,7 @@ public class EnrollmentTest {
 
     @Test
     public void testLabEnrollment() throws SQLException {
-        cr.registerStudentIntoLab(3, 1);
+        lr.registerStudentIntoLab(3, 1);
         ArrayList<Course> courses = CourseDAO.getEnrolledCourses(3);
         boolean found = courses.stream().anyMatch(c -> 
             c.getCourseName().equals("COSC 101 Lab LO1") &&
