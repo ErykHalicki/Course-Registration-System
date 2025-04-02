@@ -25,7 +25,7 @@ public class StudentSearch {
     public ArrayList<Student> searchStudents(String searchTerm, String sortBy, String courseName) throws SQLException {
         ArrayList<Student> students = new ArrayList<>();
         StringBuilder query = new StringBuilder();
-        query.append("SELECT u.user_id AS studentId, ");
+        query.append("SELECT DISTINCT u.user_id AS studentId, ");
         query.append("u.first_name AS firstName, ");
         query.append("u.last_name AS lastName, ");
         query.append("u.email, ");
