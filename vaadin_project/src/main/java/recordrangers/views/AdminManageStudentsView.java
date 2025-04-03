@@ -11,6 +11,7 @@ import recordrangers.models.Course;
 import recordrangers.models.Student;
 import recordrangers.services.StudentDAO;
 import recordrangers.services.CourseDAO;
+import recordrangers.services.CourseRegistration;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -24,7 +25,7 @@ public class AdminManageStudentsView extends VerticalLayout {
     private CourseDAO courseDAO;
     private Grid<Student> studentGrid = new Grid<>(Student.class);
 
-    public AdminManageStudentsView() {
+    public AdminManageStudentsView() throws SQLException{
         try {
             // Instantiate the DAOs
             studentDAO = new StudentDAO();
@@ -58,8 +59,15 @@ public class AdminManageStudentsView extends VerticalLayout {
                     Course selectedCourse = enrollCombo.getValue();
                     if (selectedCourse != null) {
                         // Use StudentDAO.enrollStudent to enroll the student.
-                        String result = studentDAO.enrollStudent(student.getStudentId(), selectedCourse.getCourseId());
-                        Notification.show(result);
+                        String result;
+						try {
+							result = CourseRegistration.registerStudent(student.getStudentId(), selectedCourse.getCourseId());
+							Notification.show(result);
+						} catch (SQLException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+                        
                         // Optionally refresh the grid or enrollment details.
                     } else {
                         Notification.show("Please select a course to enroll in.");
@@ -86,7 +94,7 @@ public class AdminManageStudentsView extends VerticalLayout {
                     Course selectedCourse = unenrollCombo.getValue();
                     if (selectedCourse != null) {
                         // Call the new unenrollStudent method from StudentDAO.
-                        String result = studentDAO.unenrollStudent(student.getStudentId(), selectedCourse.getCourseId());
+                        String result = StudentDAO.unenrollStudent(student.getStudentId(), selectedCourse.getCourseId());
                         Notification.show(result);
                         // Optionally refresh the grid or enrollment details.
                     } else {

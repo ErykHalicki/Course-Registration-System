@@ -16,7 +16,7 @@ public class CourseRegistration {
         labService = new LabRegistration();
     }
 
-    public static void registerStudent(int studentId, int courseId) throws SQLException {
+    public static String registerStudent(int studentId, int courseId) throws SQLException {
         con = DatabaseConnection.getInstance().getConnection();
         // check that student is not already registered
         // check that course capacity is not full
@@ -26,12 +26,12 @@ public class CourseRegistration {
 
         // Check that the course is not full, if so return
         if (enrolled >= capacity) {
-            throw new SQLException("Course is full. Cannot register student.");
+        	return "Course is full. Cannot register student.";
         }
 
         // Check that student is not already enrolled in this course
         if (isRegistered(courseId, studentId)) {
-            throw new SQLException("Student is already enrolled in this course.");
+        	return "Student is already enrolled in this course.";
         }
         
         String sql = "INSERT INTO Enrollments (student_id, course_id, status) VALUES (?, ?, ?)";
@@ -44,6 +44,7 @@ public class CourseRegistration {
             System.out.println("Error registering a student: " + e.getMessage());
             throw e;
         }
+        return "successfully registered student";
     }
 
     // Helper method to return student enrollment in a course
