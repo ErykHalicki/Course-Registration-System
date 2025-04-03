@@ -78,7 +78,7 @@ public class CourseRegistration {
             LabRegistration.removeStudentFromLabSections(studentId, courseId);
 
             // Lastly enroll next student from waitlist
-            //WaitlistHandler.enrollNextStudentFromWaitlist(studentId, null, "Course");
+            //WaitlistHandler.enrollNextStudentFromWaitlist(studentId, 0, "Course");
             
             // Commit the transaction 
             con.commit();

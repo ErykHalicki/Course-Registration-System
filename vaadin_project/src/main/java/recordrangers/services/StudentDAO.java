@@ -26,7 +26,7 @@ public class StudentDAO{
             String queryCourseCapacity = "SELECT COUNT(*) AS enrolled, capacity AS max_capacity FROM enrollments " +
                                          "JOIN course ON enrollments.course_id = course.course_id WHERE course.course_id = ?";
             String queryEnroll = "INSERT INTO enrollments (student_id, course_id) VALUES (?, ?)";
-            String queryWaitlist = "INSERT INTO waitlists (student_id, course_id) VALUES (?, ?)";
+            String queryWaitlist = "INSERT INTO waitlist (student_id, course_id, position) VALUES (?, ?, ?)";
             
             try (PreparedStatement checkStmt = connection.prepareStatement(queryCheckEnrollment);
              PreparedStatement capacityStmt = connection.prepareStatement(queryCourseCapacity);
@@ -58,6 +58,7 @@ public class StudentDAO{
                     // Add student to waitlist
                     waitlistStmt.setInt(1, studentId);
                     waitlistStmt.setInt(2, courseId);
+                    waitlistStmt.setInt(3, WaitlistHandler.getNextWaitlistPosition(courseId, courseId, "Course"));
                     waitlistStmt.executeUpdate();
                     return "Course is full. Student added to waitlist.";
                 }

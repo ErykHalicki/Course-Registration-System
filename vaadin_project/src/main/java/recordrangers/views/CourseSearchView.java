@@ -40,9 +40,12 @@ public class CourseSearchView extends VerticalLayout {
         searchLayout.setSpacing(true);
 
         // Configure grid
-        courseGrid.setColumns("courseName", "courseCode", "numCredits", "termLabel", "startTime", "endTime");
+
+        courseGrid.setColumns("courseName", "courseCode", "enrollment","maxCapacity", "numCredits", "termLabel", "startDate", "endDate");
+        courseGrid.setItems(allCourses);
+        updateGrid("");
         courseGrid.setSizeUndefined();
-        courseGrid.setItems(searchCoursesByString("")); // Initial dummy data
+        //courseGrid.setItems(searchCoursesByString("")); // Initial dummy data
 
         // Add components to the layout
         add(searchLayout, courseGrid);

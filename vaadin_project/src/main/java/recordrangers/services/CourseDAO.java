@@ -6,9 +6,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.List;
 
 import recordrangers.models.Course;
+import recordrangers.models.LabSession;
 
 public class CourseDAO {
     private static Connection connection;
@@ -55,6 +58,7 @@ public class CourseDAO {
                 LocalDate endDate = LocalDate.parse(rst.getString("end_date"));
                 String schedule = rst.getString("term_label")+" : "+rst.getString("start_date")+" - "+rst.getString("end_date");
                 Course currentCourse = new Course(currentId, currentCode, currentName, credits, capacity, term, startDate, endDate, schedule);
+                currentCourse.setEnrollment(courseCapacity(currentId));
                 courses.add(currentCourse);
             }
         }
@@ -134,6 +138,7 @@ public class CourseDAO {
         }
         
         // Add lab enrollments
+        /*
         String labs = "SELECT l.lab_name, c.course_code, c.term_label, c.start_date, c.end_date " + 
                       "FROM Labs as l JOIN Course as c ON l.course_id = c.course_id JOIN LabSection as ls ON l.lab_id = ls.lab_id " +
                       "JOIN LabEnrollment as le ON le.section_id = ls.section_id  " + 
@@ -157,8 +162,50 @@ public class CourseDAO {
         
         // Add waitlisted courses (delegated to WaitlistDAO)
         courses.addAll(WaitlistDAO.getWaitlistedCourses(studentId));
+        */
         
         return courses;
+    }
+    
+    public static List<LabSession> getAllEnrolledLabs(int studentId) throws SQLException {
+        List<LabSession> labSessions = new ArrayList<>();
+
+        String labs = "SELECT l.lab_name, c.course_code, c.term_label, c.start_date, c.end_date, ls.section_id, ls.lab_id, ls.capacity, ls.days, ls.start_time, ls.end_time, ls.location " + 
+                      "FROM Labs as l " +
+                      "JOIN Course as c ON l.course_id = c.course_id " +
+                      "JOIN LabSection as ls ON l.lab_id = ls.lab_id " +
+                      "JOIN LabEnrollment as le ON le.section_id = ls.section_id " + 
+                      "WHERE le.student_id = ?";
+
+        try (PreparedStatement pstmt = DatabaseConnection.getInstance().getConnection().prepareStatement(labs)) {
+            pstmt.setInt(1, studentId);
+            ResultSet rst = pstmt.executeQuery();
+            while (rst.next()) {
+                String labName = rst.getString("lab_name");
+                String courseCode = rst.getString("course_code");
+                String term = rst.getString("term_label");
+                LocalDate startDate = LocalDate.parse(rst.getString("start_date"));
+                LocalDate endDate = LocalDate.parse(rst.getString("end_date"));
+                int sectionId = rst.getInt("section_id");
+                int labId = rst.getInt("lab_id");
+                int capacity = rst.getInt("capacity");
+                String days = rst.getString("days");
+                LocalTime startTime = rst.getObject("start_time", LocalTime.class);
+                LocalTime endTime = rst.getObject("end_time", LocalTime.class);
+                String location = rst.getString("location");
+
+                // Create a LabSession object using the fetched data
+                LabSession labSession = new LabSession(sectionId, labId, capacity, days, startTime, endTime, location, labName);
+                labSessions.add(labSession);
+            }
+        } catch (SQLException e) {
+            throw new SQLException("Error fetching lab enrollments: " + e.getMessage());
+        }
+
+        // Optionally, add waitlisted courses if needed (delegated to WaitlistDAO)
+        // labSessions.addAll(WaitlistDAO.getWaitlistedCourses(studentId));
+
+        return labSessions;
     }
 
     public static boolean addCourse(Course course) {
