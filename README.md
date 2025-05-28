@@ -1,6 +1,3 @@
-# Course Registration System 
-
-COSC 310 project
 
 # Course Enrollment and Management System
 
