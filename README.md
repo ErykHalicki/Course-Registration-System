@@ -1,4 +1,4 @@
-# RecordRangers
+# Course Registration System 
 
 COSC 310 project
 
